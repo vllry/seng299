@@ -4,7 +4,7 @@ GETTING STARTED
 
 2.) Install git on your computer.
 
-3.) Run the following:
+3.) Run
 $ git clone git@github.com:vllry/seng299.git
 This will download the current project files and git metadata.
 
@@ -23,9 +23,13 @@ When you want to submit your changes/additions, run
 $git add *
 $git commit
 
-You will be prompted to write a commit message. PLEASE USE THIS TO SUMARIZE WHAT YOU HAVE DONE! It is EXTREMELY helpful in keeping track of progress and locating when a bug was introduced.
+You will be prompted to write a commit message. PLEASE USE THIS TO SUMMARIZE WHAT YOU HAVE DONE! It is EXTREMELY helpful in keeping track of progress and locating when a bug was introduced.
 
 Finally, run
 $git push
 
 Git is very good at merging people's edits. For example, if one person edits one function and another person edits a different function in the same file, those changes can be consolidated automatically. However, sometimes conflicts happen that need human intervention to be resolved. That is a little too complicated to cover in this readme. Google what to do and/or ask Vallery when it happens.
+
+
+
+http://gitref.org/ is an excellent reference
