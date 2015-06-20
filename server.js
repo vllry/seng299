@@ -7,7 +7,11 @@ var app = express();
 
 app.use(bodyParser.urlencoded({extended: true }));
 app.use(bodyParser.json());
-app.use(morgan('dev'));
+app.use(morgan('dev')); // log all the requests
+
+app.get('/', function(req, res) {
+	res.sendFile(__dirname + '/public/views/index.html');
+});
 
 app.listen(config.port, function(err) {
 	if(err) {
