@@ -1,9 +1,18 @@
 var express = require('express'),
 	morgan = require('morgan'),
 	bodyParser = require('body-parser'),
-	config = require('./config');
+	config = require('./config'),
+	mongoose = require('mongoose');
 
 var app = express();
+
+mongoose.connect(config.database, function(err) {
+	if(err) {
+		console.log(err);
+	} else {
+		console.log('Connecting to the database ...');
+	}
+});
 
 app.use(bodyParser.urlencoded({extended: true }));
 app.use(bodyParser.json());
