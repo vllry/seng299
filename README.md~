@@ -1,0 +1,14 @@
+GETTING STARTED
+
+1.) Set up a Github account.
+
+2.) Install git on your computer.
+
+3.) Run the following:
+$ git clone git@github.com:vllry/seng299.git
+This will download the current project files and git metadata.
+
+
+
+USING GIT
+
