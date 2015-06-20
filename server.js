@@ -1,8 +1,12 @@
 var express = require('express'),
 	morgan = require('morgan'),
 	bodyParser = require('body-parser'),
-	config = require('./config'),
 	mongoose = require('mongoose');
+
+var config = require('./config'), // store info about database, port  
+	user = require('./app/models/user'), // store user schema
+	booking = require('./app/models/booking'), // store booking schema
+	equipment = require('./app/models/equipment');
 
 var app = express();
 
