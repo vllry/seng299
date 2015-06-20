@@ -1,15 +1,10 @@
-var express = require('express'),
-	morgan = require('morgan'),
-	bodyParser = require('body-parser'),
-	mongoose = require('mongoose');
+/* Run server & Connect to database */
 
-var config = require('./config'), // store info about database, port  
-	user = require('./app/models/user'), // store user schema
-	booking = require('./app/models/booking'), // store booking schema
-	equipment = require('./app/models/equipment'), // store equipment schema
-	studyRoom = require('./app/models/studyRoom'); // store studyRoom schema
+var mongoose = require('mongoose');
 
-var app = express();
+var app = require('./app'),
+	config = require('./application/models/config'); // get database, port info
+
 
 mongoose.connect(config.database, function(err) {
 	if(err) {
@@ -19,13 +14,6 @@ mongoose.connect(config.database, function(err) {
 	}
 });
 
-app.use(bodyParser.urlencoded({extended: true }));
-app.use(bodyParser.json());
-app.use(morgan('dev')); // log all the requests
-
-app.get('/', function(req, res) {
-	res.sendFile(__dirname + '/public/views/index.html');
-});
 
 app.listen(config.port, function(err) {
 	if(err) {
