@@ -1,4 +1,5 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose'),
+	bcrypt = require('bcrypt-nodejs'); // for password hashing
 
 var booking = require('./booking');
 
@@ -15,6 +16,18 @@ var UserSchema = new Schema({
 	admin_status: Boolean,
 	booking_restriction: Date,
 	booking_list:[booking]
+
+});
+
+UserSchema.pre('save', function(next) {
+
+	var user = this;
+	if(!user.isModified('user_password')) return next();
+	bcrypt.hash(user.user_password, null, null, function(err, hash) {
+		if(err) return next(err);
+		user.user_password = hash;
+		next();
+	});
 
 });
 
