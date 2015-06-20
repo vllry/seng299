@@ -6,7 +6,8 @@ var express = require('express'),
 var config = require('./config'), // store info about database, port  
 	user = require('./app/models/user'), // store user schema
 	booking = require('./app/models/booking'), // store booking schema
-	equipment = require('./app/models/equipment');
+	equipment = require('./app/models/equipment'), // store equipment schema
+	studyRoom = require('./app/models/studyRoom'); // store studyRoom schema
 
 var app = express();
 
