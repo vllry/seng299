@@ -31,7 +31,7 @@ app.use('/', routes);
 app.use('/users', users);
 
 
-app.use('/static', express.static(__dirname + '/views/static'));
+app.use('/static', express.static(__dirname + '/static'));
 
 
 module.exports = app;

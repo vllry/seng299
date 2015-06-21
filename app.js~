@@ -26,9 +26,12 @@ app.set('view engine', 'html');
 
 
 var routes = require('./routes/index');
-//app.use('/', routes);
+var users = require('./routes/users');
+app.use('/', routes);
+app.use('/users', users);
 
-app.use(express.static(__dirname + '/views'));
+
+app.use('/static', express.static(__dirname + '/views/static'));
 
 
 module.exports = app;
