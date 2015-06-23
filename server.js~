@@ -1,4 +1,4 @@
-/* Run server & connect to database */
+/* Run server & Connect to database */
 
 var mongoose = require('mongoose');
 
