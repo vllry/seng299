@@ -37,8 +37,38 @@ var collection = db.collection("bookings");
   // Insert a single document
   collection.insert({hello:'world_no_safe'});
 /*db.open(function(err, db) {
+=======
+});
+
+/*var Db = require('mongodb').Db,
+    MongoClient = require('mongodb').MongoClient,
+    Server = require('mongodb').Server,
+    ReplSetServers = require('mongodb').ReplSetServers,
+    ObjectID = require('mongodb').ObjectID,
+    Binary = require('mongodb').Binary,
+    GridStore = require('mongodb').GridStore,
+    Grid = require('mongodb').Grid,
+    Code = require('mongodb').Code,
+    //BSON = require('mongodb').pure().BSON,
+    assert = require('assert');
+
+var mongoclient = new MongoClient(new Server("ds047722.mongolab.com", 47722), {native_parser: true});
+var db = new Db('test', new Server('ds047722.mongolab.com', 47722));
+// Fetch a collection to insert document into
+db.open(function(err, db) {
+>>>>>>> abda94c23630ec536e5bab654fd2397ffc9a7ac4
   var collection = db.collection("bookings");
   // Insert a single document
   collection.insert({hello:'world_no_safe'});
  });*/
 
+  // Wait for a second before finishing up, to ensure we have written the item to disk
+ /* setTimeout(function() {
+
+    // Fetch the document
+    collection.findOne({hello:'world_no_safe'}, function(err, item) {
+      assert.equal(null, err);
+      assert.equal('world_no_safe', item.hello);
+      db.close();
+    })
+  }, 100);*/
