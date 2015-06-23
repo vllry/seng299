@@ -37,7 +37,7 @@ db.open(function(err, db) {
   var collection = db.collection("bookings");
   // Insert a single document
   collection.insert({hello:'world_no_safe'});
- }
+});
 
 /*var Db = require('mongodb').Db,
     MongoClient = require('mongodb').MongoClient,
