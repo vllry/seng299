@@ -10,6 +10,7 @@
     "express": "^4.12.4",
     "http": "0.0.0",
     "mongodb": "^2.0.34",
+    "mongodb-uri": "^0.9.7",
     "mongoose": "^4.0.5",
     "morgan": "^1.6.0",
     "path": "^0.11.14",
