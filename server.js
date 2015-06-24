@@ -1,4 +1,5 @@
 /* Run server & Connect to database */
+/* Please consult Vallery and/or Kenneth before commiting changes to this file*/
 
 var mongoose = require('mongoose');
 
@@ -34,8 +35,9 @@ mongoose.connect(mongooseUri, options);
 
 var db = mongoose.connection;
 var collection = db.collection("bookings");
-  // Insert a single document
-  collection.insert({hello:'world_no_safe'});
+//Insert a single test document
+//collection.insert({hello:'world_no_safe'});
+
 /*db.open(function(err, db) {
 =======
 });
