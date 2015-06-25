@@ -1,21 +1,55 @@
-/* Run server & Connect to database */
-/* Please consult Vallery and/or Kenneth before commiting changes to this file*/
+// BASE SETUP
+// ======================================
 
-var mongoose = require('mongoose');
+// CALL THE PACKAGES --------------------
+var express    = require('express');		// call express
+var app        = express(); 				// define our app using express
+var bodyParser = require('body-parser'); 	// get body-parser
+var morgan     = require('morgan'); 		// used to see requests
+var mongoose   = require('mongoose');
+var config 	   = require('./config');
+var path 	   = require('path');
 
-var app = require('./app'),
-  config = require('./application/models/config'); // get database, port info
+// APP CONFIGURATION ==================
+// ====================================
+// use body parser so we can grab information from POST requests
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
+// configure our app to handle CORS requests
+app.use(function(req, res, next) {
+	res.setHeader('Access-Control-Allow-Origin', '*');
+	res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+	res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
+	next();
+});
 
-/*mongoose.connect(config.database, function(err) {
-  if(err) {
-    console.log(err);
-  } else {
-    console.log('Connecting to the database ...');
-  }
-});*/
+// log all requests to the console 
+app.use(morgan('dev'));
 
+// connect to our database (hosted on modulus.io)
+mongoose.connect(config.database); 
 
+// set static files location
+// used for requests that our frontend will make
+app.use(express.static(__dirname + '/public'));
+
+// ROUTES FOR OUR API =================
+// ====================================
+
+// API ROUTES ------------------------
+var apiRoutes = require('./app/routes/api')(app, express);
+app.use('/api', apiRoutes);
+
+// MAIN CATCHALL ROUTE --------------- 
+// SEND USERS TO FRONTEND ------------
+// has to be registered after API ROUTES
+app.get('*', function(req, res) {
+	res.sendFile(path.join(__dirname + '/public/app/views/index.html'));
+});
+
+// START THE SERVER
+// ====================================
 app.listen(config.port, function(err) {
   if(err) {
     console.log(err);
@@ -23,56 +57,3 @@ app.listen(config.port, function(err) {
     console.log("Server is running on port " + config.port + " ...");
   }
 });
-
-var uriUtil = require('mongodb-uri');
-var options = { server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } }, 
-                replset: { socketOptions: { keepAlive: 1, connectTimeoutMS : 30000 } } }; 
-
-var mongodbUri = 'mongodb://admin:123123@ds047722.mongolab.com:47722/library_booking';
-var mongooseUri = uriUtil.formatMongoose(mongodbUri);
-
-mongoose.connect(mongooseUri, options);
-
-var db = mongoose.connection;
-var collection = db.collection("bookings");
-//Insert a single test document
-//collection.insert({hello:'world_no_safe'});
-
-/*db.open(function(err, db) {
-=======
-});
-
-<<<<<<< HEAD
-=======
-/*var Db = require('mongodb').Db,
-    MongoClient = require('mongodb').MongoClient,
-    Server = require('mongodb').Server,
-    ReplSetServers = require('mongodb').ReplSetServers,
-    ObjectID = require('mongodb').ObjectID,
-    Binary = require('mongodb').Binary,
-    GridStore = require('mongodb').GridStore,
-    Grid = require('mongodb').Grid,
-    Code = require('mongodb').Code,
-    //BSON = require('mongodb').pure().BSON,
-    assert = require('assert');
-
-var mongoclient = new MongoClient(new Server("ds047722.mongolab.com", 47722), {native_parser: true});
-var db = new Db('test', new Server('ds047722.mongolab.com', 47722));
-// Fetch a collection to insert document into
-db.open(function(err, db) {
->>>>>>> abda94c23630ec536e5bab654fd2397ffc9a7ac4
-  var collection = db.collection("bookings");
-  // Insert a single document
-  collection.insert({hello:'world_no_safe'});
- });*/
-
-  // Wait for a second before finishing up, to ensure we have written the item to disk
- /* setTimeout(function() {
-
-    // Fetch the document
-    collection.findOne({hello:'world_no_safe'}, function(err, item) {
-      assert.equal(null, err);
-      assert.equal('world_no_safe', item.hello);
-      db.close();
-    })
-  }, 100);*/

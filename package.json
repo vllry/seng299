@@ -1,33 +1,14 @@
 {
-  "name": "seng299",
+  "name": "Lab7",
   "version": "1.0.0",
-  "description": "",
+  "description": "Lab 7 Exercise",
   "main": "server.js",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
-    "body-parser": "^1.13.1",
-    "consolidate": "^0.13.1",
-    "express": "^4.12.4",
-    "http": "0.0.0",
-    "mongodb": "^2.0.34",
-    "mongodb-uri": "^0.9.7",
-    "mongoose": "^4.0.5",
-    "morgan": "^1.6.0",
-    "path": "^0.11.14",
-    "swig": "^1.4.2"
-  },
-  "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/vllry/seng299.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/vllry/seng299/issues"
-  },
-  "homepage": "https://github.com/vllry/seng299"
+    "body-parser": "~1.9.3",
+    "express": "~4.10.3",
+    "jsonwebtoken": "^1.2.0",
+    "mongoose": "~3.8.19",
+    "morgan": "~1.5.0"
+  }
 }
