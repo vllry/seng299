@@ -17,7 +17,7 @@ var path 	   = require('path');
 // ====================================
 
 // use session management
-app.use(session({secret: config.secret'}));
+app.use(session({secret: config.secret}));
 // https://codeforgeek.com/2014/09/manage-session-using-node-js-express-4/
 
 // use body parser so we can grab information from POST requests
