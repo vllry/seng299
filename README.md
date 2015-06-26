@@ -18,18 +18,18 @@ Please let me know if you are going to make non-trivial changes, or want to edit
 	server.js
 	package.json
 	app/
-	\	models/
-	\		schemas/
-	\			mongo collection schema files
-	\	routes/
-	\		api.js - routes and logic for the api
+		models/
+			schemas/
+				mongo collection schema files
+		routes/
+			api.js - routes and logic for the api
 	public/
-	\	app/
-	\		controllers/
-	\			???
-	\		services/
-	\			???
-	\		views/
-	\			Angular html file tree
-	\	assets/
-	\		Static site content (css/fonts/js)
+		app/
+			controllers/
+				???
+			services/
+				???
+			views/
+				Angular html file tree
+		assets/
+			Static site content (css/fonts/js)
