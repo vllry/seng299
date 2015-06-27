@@ -1,5 +1,8 @@
 /*
 Master file for routing of /api
+
+Maintainer: Vallery
+Maintainer: Frances
 */
 
 var bodyParser = require('body-parser'); 	// get body-parser
@@ -10,6 +13,20 @@ var databaseFacade = require('../models/database-facade.js');
 
 // secret for creating tokens
 var secret = config.secret;
+
+function createToken(user) {
+	var token = jwt.sign({
+		id: user.id,
+		username: user.username,
+		firstName: user.firstName,
+		lastName: user.lastName,
+		type: user.type,
+		department: user.department
+		}, secretKey, {
+			expirtesInMinute: 1440
+	});
+	return token;
+}
 
 module.exports = function(app, express) {
 
@@ -37,7 +54,18 @@ module.exports = function(app, express) {
 			var user = new User();		// create a new instance of the User model
 			user.name = req.body.name;  // set the users name (comes from the request)
 			user.username = req.body.username;  // set the users username (comes from the request)
-			user.password = req.body.password;  // set the users password (comes from the request)
+			user.password = req.body.password;  // set the users password (comes from the request)c
+			
+			/*var user = new User({
+				userid: req.body.id;
+				password: req.body.password,
+				firstName: req.body.firstName,
+				lastName: req.body.lastName,
+				usertype: req.body.usertype,
+				department: req.body.department
+			});		// create a new instance of the User model
+*/
+
 			user.save(function(err) {
 				if (err) {
 					// duplicate entry
@@ -63,6 +91,32 @@ module.exports = function(app, express) {
 		 // get all the users (accessed at GET http://localhost:8080/api/users)
 		.get(function(req, res) {
 			databaseFacade.get_users(res);
+		});
+		
+	apiRouter.route('/users/login')
+		
+		
+		.post(function(req, res) {
+			User.findOne({
+				username: req.body.username
+			}).select('password').exec(function(err, user) {
+				if(err) throw err;
+				if(!user) {
+					res.send({ message: "User does not exist!" });
+				} else if (user) {
+					var validPassword = user.comparePassword(req.body.password);
+					if(!validPassword) {
+						res.send({ message: "Invalid Password!" });
+					} else {
+						var token = createToken(user);
+						res.json({
+							success: true,
+							message: "Successfully login!",
+							token: token
+						});
+					}
+				}
+			});
 		});
 
 
