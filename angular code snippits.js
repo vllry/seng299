@@ -83,7 +83,7 @@ vm.addStudent = function() {
 
  // STEP 1
 
- angular.module('app.routes', ['ngRoute'])
+angular.module('app.routes', ['ngRoute'])
 
 // Configuring the routes
 .config(function($routeProvider, $locationProvider){

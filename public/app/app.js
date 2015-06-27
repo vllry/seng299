@@ -1,6 +1,6 @@
-angular.module('userApp', [])
+angular.module('userApp', ['app.routes'])
 
-.controller('mainController', function(){
+.controller('homeController', function(){
 
 	var vm = this;
 
@@ -8,4 +8,10 @@ angular.module('userApp', [])
 	vm.message ="Library Study Room Booking"
 
 	
-});
+})
+
+.controller('aboutController', function(){
+
+	var vm = this;
+
+	;
