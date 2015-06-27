@@ -6,6 +6,7 @@ var bodyParser = require('body-parser'); 	// get body-parser
 var User       = require('../models/schemas/user');
 var jwt        = require('jsonwebtoken');
 var config     = require('../../config');
+var databaseFacade = require('../models/database-facade.js');
 
 // secret for creating tokens
 var secret = config.secret;
@@ -50,13 +51,18 @@ module.exports = function(app, express) {
 			});
 		})
 
-		// get all the users (accessed at GET http://localhost:8080/api/users)
+		/* // get all the users (accessed at GET http://localhost:8080/api/users)
 		.get(function(req, res) {
 			User.find({}, function(err, users) {
 				if (err) res.send(err);
 				// return the users
 				res.json(users);
 			});
+		});*/
+
+		 // get all the users (accessed at GET http://localhost:8080/api/users)
+		.get(function(req, res) {
+			databaseFacade.get_users(res);
 		});
 
 

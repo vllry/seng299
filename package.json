@@ -1,7 +1,7 @@
 {
-  "name": "Lab7",
+  "name": "Library booking system",
   "version": "1.0.0",
-  "description": "Lab 7 Exercise",
+  "description": Group 5's SENG 299 project",
   "main": "server.js",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
