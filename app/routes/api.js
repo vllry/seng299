@@ -1,10 +1,15 @@
+/*
+Master file for routing of /api
+*/
+
 var bodyParser = require('body-parser'); 	// get body-parser
-var User       = require('../models/user');
+var User       = require('../models/schemas/user');
 var jwt        = require('jsonwebtoken');
 var config     = require('../../config');
+var databaseFacade = require('../models/database-facade.js');
 
-// super secret for creating tokens
-var superSecret = config.secret;
+// secret for creating tokens
+var secret = config.secret;
 
 module.exports = function(app, express) {
 
@@ -17,18 +22,22 @@ module.exports = function(app, express) {
 		res.json({ message: 'Welcome to the User API for Lab 7' });	
 	});
 
+
+
+
+
+	// /users =========================================================
+
 	// on routes that end in /users
 	// ----------------------------------------------------
 	apiRouter.route('/users')
 
 		// create a user (accessed at POST http://localhost:8080/users)
 		.post(function(req, res) {
-			
 			var user = new User();		// create a new instance of the User model
 			user.name = req.body.name;  // set the users name (comes from the request)
 			user.username = req.body.username;  // set the users username (comes from the request)
 			user.password = req.body.password;  // set the users password (comes from the request)
-
 			user.save(function(err) {
 				if (err) {
 					// duplicate entry
@@ -37,23 +46,26 @@ module.exports = function(app, express) {
 					else 
 						return res.send(err);
 				}
-
 				// return a message
 				res.json({ message: 'User created!' });
 			});
-
 		})
 
-		// get all the users (accessed at GET http://localhost:8080/api/users)
+		/* // get all the users (accessed at GET http://localhost:8080/api/users)
 		.get(function(req, res) {
-
 			User.find({}, function(err, users) {
 				if (err) res.send(err);
-
 				// return the users
 				res.json(users);
 			});
+		});*/
+
+		 // get all the users (accessed at GET http://localhost:8080/api/users)
+		.get(function(req, res) {
+			databaseFacade.get_users(res);
 		});
+
+
 
 	// on routes that end in /users/:user_id
 	// ----------------------------------------------------
@@ -87,7 +99,6 @@ module.exports = function(app, express) {
 					// return a message
 					res.json({ message: 'User updated!' });
 				});
-
 			});
 		})
 
@@ -97,11 +108,14 @@ module.exports = function(app, express) {
 				_id: req.params.user_id
 			}, function(err, user) {
 				if (err) res.send(err);
-
 				res.json({ message: 'Successfully deleted' });
 			});
 		});
 
+
+
+
+	// /me ===================================================
 	// api endpoint to get user information
 	apiRouter.get('/me', function(req, res) {
 		res.send(req.decoded);
