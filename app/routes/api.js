@@ -120,6 +120,25 @@ module.exports = function(app, express) {
 		});
 
 
+	// user authentication middleware
+	apiRouter.use(function(req, res, next) {
+        console.log("Somebody just came to our app!");
+        var token = req.body.token || req.param('token') || req.headers['x-access-token'];
+        if(token) {
+            jwt.verify(token, secret, function(err, decoded) {
+                if(err) {
+                    res.status(403).send({ success: false, message: "Failed to authenticate user"});
+                } else {
+                    req.decoded = decoded;
+                    next();
+                }
+            });
+        } else {
+            res.status(403).send({ success: false, message: "No Token Provided"});
+        }
+    });
+
+
 
 	// on routes that end in /users/:user_id
 	// ----------------------------------------------------
