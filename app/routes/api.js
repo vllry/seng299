@@ -22,7 +22,7 @@ function createToken(user) {
 		lastName: user.lastName,
 		type: user.type,
 		department: user.department
-		}, secretKey, {
+		}, secret, {
 			expirtesInMinute: 1440
 	});
 	return token;
