@@ -1,7 +1,7 @@
 /*
 Master file for routing of /api
 
-Please LOOK AT THE SCHEMAS before referring to them! Mongo will not give an error if you use the wrong name, and it can mess up the database.
+Please LOOK AT THE SCHEMAS in app/models/schemas before referring to them! Mongo will not give an error if you use the wrong name, and it can mess up the database.
 
 Maintainer: Vallery
 Maintainer: Frances
@@ -72,17 +72,7 @@ module.exports = function(app, express) {
 				department: req.body.department
 			});
 
-			user.save(function(err) {
-				if (err) {
-					// duplicate entry
-					if (err.code == 11000) 
-						return res.json({ success: false, message: 'A user with that userid already exists. '});
-					else 
-						return res.send(err);
-				}
-				// return a message
-				res.json({ message: 'User created!' });
-			});
+			databaseFacade.register_user(res, user);
 		})
 
 
