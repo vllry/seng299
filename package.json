@@ -1,5 +1,5 @@
 {
-  "name": "Library booking system",
+  "name": "LibraryBookingSystem",
   "version": "1.0.0",
   "description": "Group 5's SENG 299 project",
   "main": "server.js",
@@ -7,9 +7,9 @@
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "~1.9.3",
     "express": "~4.10.3",
-    "express-session": "latest",
+    "express-session": "^1.11.3",
     "jsonwebtoken": "^1.2.0",
-    "mongoose": "~3.8.19",
+    "mongoose": "^3.8.23",
     "morgan": "~1.5.0"
   }
 }

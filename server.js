@@ -17,8 +17,10 @@ var path 	   = require('path');
 // ====================================
 
 // use session management
-app.use(session({secret: config.secret}));
+//app.use(session({secret: config.secret}));
 // https://codeforgeek.com/2014/09/manage-session-using-node-js-express-4/
+app.use(session({secret: config.secret, saveUninitialized: true, resave: true}));
+//https://orchestrate.io/blog/2014/06/26/build-user-authentication-with-node-js-express-passport-and-orchestrate/
 
 // use body parser so we can grab information from POST requests
 app.use(bodyParser.urlencoded({ extended: true }));
