@@ -1,3 +1,7 @@
+'use strict';
+
+//declare modules
+
 angular.module('userApp', ['app.routes'])
 
 .controller('homeController', function(){
@@ -14,4 +18,6 @@ angular.module('userApp', ['app.routes'])
 
 	var vm = this;
 
-	;
+	vm.message = "THIS IS THE ABOUT PAGE"
+
+});
