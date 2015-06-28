@@ -43,34 +43,39 @@ module.exports = function(app, express) {
 
 
 
-	// /users =========================================================
+	// /user =========================================================
 
-	// on routes that end in /users
+	// on routes that end in /user
 	// ----------------------------------------------------
-	apiRouter.route('/users')
+	apiRouter.route('/user')
 
-		// create a user (accessed at POST http://localhost:8080/users)
+		 // get all the users (accessed at GET http://localhost:8080/api/user)
+		.get(function(req, res) {
+			databaseFacade.get_users(res);
+		});
+
+
+
+
+
+	apiRouter.route('/user/register')
+
+		// create a user (accessed at POST /user/register)
 		.post(function(req, res) {
-			var user = new User();		// create a new instance of the User model
-			user.name = req.body.name;  // set the users name (comes from the request)
-			user.username = req.body.username;  // set the users username (comes from the request)
-			user.password = req.body.password;  // set the users password (comes from the request)c
-			
-			/*var user = new User({
-				userid: req.body.id;
+			var user = new User({
+				userid: req.body.id,
 				password: req.body.password,
-				firstName: req.body.firstName,
-				lastName: req.body.lastName,
-				usertype: req.body.usertype,
+				firstName: req.body.firstname,
+				lastName: req.body.lastname,
+				userType: req.body.usertype,
 				department: req.body.department
-			});		// create a new instance of the User model
-*/
+			});
 
 			user.save(function(err) {
 				if (err) {
 					// duplicate entry
 					if (err.code == 11000) 
-						return res.json({ success: false, message: 'A user with that username already exists. '});
+						return res.json({ success: false, message: 'A user with that userid already exists. '});
 					else 
 						return res.send(err);
 				}
@@ -79,23 +84,12 @@ module.exports = function(app, express) {
 			});
 		})
 
-		/* // get all the users (accessed at GET http://localhost:8080/api/users)
-		.get(function(req, res) {
-			User.find({}, function(err, users) {
-				if (err) res.send(err);
-				// return the users
-				res.json(users);
-			});
-		});*/
 
-		 // get all the users (accessed at GET http://localhost:8080/api/users)
-		.get(function(req, res) {
-			databaseFacade.get_users(res);
-		});
-		
-	apiRouter.route('/users/login')
-		
-		
+
+
+
+	apiRouter.route('/user/login')
+
 		.post(function(req, res) {
 			User.findOne({
 				username: req.body.username
@@ -121,9 +115,11 @@ module.exports = function(app, express) {
 
 
 
-	// on routes that end in /users/:user_id
+
+
+	// on routes that end in /user/:user_id
 	// ----------------------------------------------------
-	apiRouter.route('/users/:user_id')
+	apiRouter.route('/user/:user_id')
 
 		// get the user with that id
 		.get(function(req, res) {
