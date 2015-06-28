@@ -1,6 +1,8 @@
 /*
 Master file for routing of /api
 
+Please LOOK AT THE SCHEMAS before referring to them! Mongo will not give an error if you use the wrong name, and it can mess up the database.
+
 Maintainer: Vallery
 Maintainer: Frances
 */
@@ -16,8 +18,7 @@ var secret = config.secret;
 
 function createToken(user) {
 	var token = jwt.sign({
-		id: user.id,
-		username: user.username,
+		id: user.userid,
 		firstName: user.firstName,
 		lastName: user.lastName,
 		type: user.type,
@@ -92,7 +93,7 @@ module.exports = function(app, express) {
 
 		.post(function(req, res) {
 			User.findOne({
-				username: req.body.username
+				userid: req.body.id
 			}).select('password').exec(function(err, user) {
 				if(err) throw err;
 				if(!user) {
@@ -158,7 +159,7 @@ module.exports = function(app, express) {
 
 				// set the new user information if it exists in the request
 				if (req.body.name) user.name = req.body.name;
-				if (req.body.username) user.username = req.body.username;
+				if (req.body.id) user.userid = req.body.id;
 				if (req.body.password) user.password = req.body.password;
 
 				// save the user
