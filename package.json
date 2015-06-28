@@ -1,12 +1,11 @@
 {
   "name": "Library booking system",
   "version": "1.0.0",
-  "description": Group 5's SENG 299 project",
+  "description": "Group 5's SENG 299 project",
   "main": "server.js",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "~1.9.3",
-    "bson": "^0.4.6",
     "express": "~4.10.3",
     "express-session": "latest",
     "jsonwebtoken": "^1.2.0",
