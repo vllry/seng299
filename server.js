@@ -10,6 +10,7 @@ var morgan     = require('morgan'); 		// used to see requests
 var mongoose   = require('mongoose');
 var config 	   = require('./config');
 var path 	   = require('path');
+var cookieParser = require('cookie-parser');
 
 
 
@@ -19,6 +20,7 @@ var path 	   = require('path');
 // use session management
 //app.use(session({secret: config.secret}));
 // https://codeforgeek.com/2014/09/manage-session-using-node-js-express-4/
+app.use(cookieParser());
 app.use(session({secret: config.secret, saveUninitialized: true, resave: true}));
 //https://orchestrate.io/blog/2014/06/26/build-user-authentication-with-node-js-express-passport-and-orchestrate/
 
