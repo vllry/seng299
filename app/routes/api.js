@@ -96,11 +96,7 @@ module.exports = function(app, express) {
 
 		.post(function(req, res) {
 			User.findOne({
-<<<<<<< HEAD
 				userid: req.body.userid
-=======
-				'userid': req.body.userid
->>>>>>> origin/master
 			}).select('password').exec(function(err, user) {
 				if(err) throw err;
 				if(!user) {
