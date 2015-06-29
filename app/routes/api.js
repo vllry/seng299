@@ -91,8 +91,11 @@ module.exports = function(app, express) {
 
 
 
+	//This code currently requires the user to have a token to access ANY part of the UI
+	//Please fix this before re-enabling
+
 	// user authentication middleware
-	apiRouter.use(function(req, res, next) {
+	/*apiRouter.use(function(req, res, next) {
         console.log("Somebody just came to our app!");
         var token = req.body.token || req.param('token') || req.headers['x-access-token'];
         if(token) {
@@ -107,7 +110,7 @@ module.exports = function(app, express) {
         } else {
             res.status(403).send({ success: false, message: "No Token Provided"});
         }
-    });
+    });*/
 
 
 	// on routes that end in /user
