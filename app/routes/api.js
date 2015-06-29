@@ -47,31 +47,15 @@ module.exports = function(app, express) {
 
 	// test route to make sure everything is working 
 	// accessed at GET http://localhost:8080/api
-	/*
 	apiRouter.get('/', function(req, res) {
 		res.json({ message: 'Welcome to the User API for Lab 7' });	
 	});
-	*/
 
 
 
 
 
 	// /user =========================================================
-
-	// on routes that end in /user
-	// ----------------------------------------------------
-	apiRouter.route('/user')
-
-		 // get all the users (accessed at GET http://localhost:8080/api/user)
-		.get(function(req, res) {
-			databaseFacade.get_users(res);
-		});
-
-
-
-
-
 	apiRouter.route('/user/register')
 
 		// create a user (accessed at POST /user/register)
@@ -138,40 +122,14 @@ module.exports = function(app, express) {
     });
 
 
+	// on routes that end in /user
+	// ----------------------------------------------------
+    apiRouter.route('/user')
 
-	//create booking
-	
-    apiRouter.route('/')
-    
-        .post(function(req, res) {
-            var booking = new Booking({
-                bookedBy: req.decoded.userid,
-                startTime: req.body.startTime,
-                roomId: req.body.roomId
-            });
-            booking.save(function(err) {
-                if(err) {
-                    res.send(err);
-                    return;
-                }
-                res.json({ message: "New Booking Created!" });
-            });
-        })
-    
-        .get(function(req, res) {
-            Booking.find({ creator: req.decoded.userid }, function(err, bookings) {
-                if(err) {
-                    res.send(err);
-                    return;
-                }
-                res.json(bookings);
-            });
-        })
-
-
-
-
-
+		 // get all the users (accessed at GET http://localhost:8080/api/user)
+		.get(function(req, res) {
+			databaseFacade.get_users(res);
+		});
 
 
 
@@ -215,6 +173,84 @@ module.exports = function(app, express) {
 			User.remove({
 				_id: req.params.user_id
 			}, function(err, user) {
+				if (err) res.send(err);
+				res.json({ message: 'Successfully deleted' });
+			});
+		});
+
+
+	// /booking =========================================================
+	
+	// on routes that end in /booking
+	// ----------------------------------------------------
+
+	//create booking
+    apiRouter.route('/booking')
+    
+        .post(function(req, res) {
+            var booking = new Booking({
+                bookedBy: req.decoded.userid,
+                startTime: req.body.startTime,
+                roomId: req.body.roomId
+            });
+            booking.save(function(err) {
+                if(err) {
+                    res.send(err);
+                    return;
+                }
+                res.json({ message: "New Booking Created!" });
+            });
+        })
+    
+        .get(function(req, res) {
+            Booking.find({ userid: req.decoded.userid }, function(err, bookings) {
+                if(err) {
+                    res.send(err);
+                    return;
+                }
+                res.json(bookings);
+            });
+        });
+
+    // on routes that end in /booking/:booking_id
+	// ----------------------------------------------------
+	apiRouter.route('/booking/:booking_id')
+
+		// get the booking with that id
+		.get(function(req, res) {
+			Booking.findById(req.params.booking_id, function(err, booking) {
+				if (err) res.send(err);
+
+				// return that booking
+				res.json(booking);
+			});
+		})
+
+		// update the booking with this id
+		.put(function(req, res) {
+			Booking.findById(req.params.booking_id, function(err, booking) {
+
+				if (err) res.send(err);
+
+				// set the new booking information if it exists in the request
+				if (req.body.roomId) booking.roomId = req.body.roomId;
+				if (req.body.startTime) booking.startTime = req.body.startTime;
+
+				// save the user
+				booking.save(function(err) {
+					if (err) res.send(err);
+
+					// return a message
+					res.json({ message: 'Booking updated!' });
+				});
+			});
+		})
+
+		// delete the user with this id
+		.delete(function(req, res) {
+			Booking.remove({
+				_id: req.params.booking_id
+			}, function(err, booking) {
 				if (err) res.send(err);
 				res.json({ message: 'Successfully deleted' });
 			});
