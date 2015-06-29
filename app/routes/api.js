@@ -9,6 +9,7 @@ Maintainer: Frances
 
 var bodyParser = require('body-parser'); 	// get body-parser
 var User       = require('../models/schemas/user');
+var Booking    = require('../models/schemas/booking');
 var jwt        = require('jsonwebtoken');
 var config     = require('../../config');
 var databaseFacade = require('../models/database-facade.js');
@@ -19,10 +20,10 @@ var secret = config.secret;
 function createToken(user) {
 	var token = jwt.sign({
 		id: user.userid,
-		firstName: user.firstName,
+		/*firstName: user.firstName,
 		lastName: user.lastName,
 		type: user.type,
-		department: user.department
+		department: user.department */
 		}, secret, {
 			expirtesInMinute: 1440
 	});
@@ -36,9 +37,11 @@ module.exports = function(app, express) {
 
 	// test route to make sure everything is working 
 	// accessed at GET http://localhost:8080/api
+	/*
 	apiRouter.get('/', function(req, res) {
 		res.json({ message: 'Welcome to the User API for Lab 7' });	
 	});
+	*/
 
 
 
@@ -66,10 +69,10 @@ module.exports = function(app, express) {
 			var user = new User({
 				userid: req.body.id,
 				password: req.body.password,
-				firstName: req.body.firstname,
+				/*firstName: req.body.firstname,
 				lastName: req.body.lastname,
 				userType: req.body.usertype,
-				department: req.body.department
+				department: req.body.department*/
 			});
 
 			databaseFacade.register_user(res, user);
@@ -83,7 +86,7 @@ module.exports = function(app, express) {
 
 		.post(function(req, res) {
 			User.findOne({
-				userid: req.body.id
+				userid: req.body.userid
 			}).select('password').exec(function(err, user) {
 				if(err) throw err;
 				if(!user) {
@@ -105,6 +108,7 @@ module.exports = function(app, express) {
 		});
 
 
+
 	// user authentication middleware
 	apiRouter.use(function(req, res, next) {
         console.log("Somebody just came to our app!");
@@ -122,6 +126,40 @@ module.exports = function(app, express) {
             res.status(403).send({ success: false, message: "No Token Provided"});
         }
     });
+
+
+
+	//create booking
+	
+    apiRouter.route('/')
+    
+        .post(function(req, res) {
+            var booking = new Booking({
+                bookedBy: req.decoded.userid,
+                startTime: req.body.startTime,
+                roomId: req.body.roomId
+            });
+            booking.save(function(err) {
+                if(err) {
+                    res.send(err);
+                    return;
+                }
+                res.json({ message: "New Booking Created!" });
+            });
+        })
+    
+        .get(function(req, res) {
+            Booking.find({ creator: req.decoded.userid }, function(err, bookings) {
+                if(err) {
+                    res.send(err);
+                    return;
+                }
+                res.json(bookings);
+            });
+        })
+
+
+
 
 
 
