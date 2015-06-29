@@ -26,19 +26,6 @@ var databaseFacade = require('../models/database-facade.js');
 // secret for creating tokens
 var secret = config.secret;
 
-function createToken(user) {
-	var token = jwt.sign({
-		id: user.userid,
-		firstName: user.firstName,
-		lastName: user.lastName,
-		type: user.type,
-		department: user.department
-		}, secret, {
-			expirtesInMinute: 1440
-	});
-	return token;
-}
-
 module.exports = function(app, express) {
 
 	var apiRouter = express.Router();
@@ -62,7 +49,7 @@ module.exports = function(app, express) {
 
 		 // get all the users (accessed at GET http://localhost:8080/api/user)
 		.get(function(req, res) {
-			databaseFacade.get_users(res);
+			databaseFacade.getUsers(res);
 		});
 
 
@@ -82,7 +69,7 @@ module.exports = function(app, express) {
 				department: req.body.department
 			});
 
-			databaseFacade.register_user(res, user);
+			databaseFacade.userRegister(res, user);
 		})
 
 
@@ -92,26 +79,7 @@ module.exports = function(app, express) {
 	apiRouter.route('/user/login')
 
 		.post(function(req, res) {
-			User.findOne({
-				'userid': req.body.userid
-			}).select('password').exec(function(err, user) {
-				if(err) throw err;
-				if(!user) {
-					res.send({ message: "User does not exist!" });
-				} else if (user) {
-					var validPassword = user.comparePassword(req.body.password);
-					if(!validPassword) {
-						res.send({ message: "Invalid Password!" });
-					} else {
-						var token = createToken(user);
-						res.json({
-							success: true,
-							message: "Successfully login!",
-							token: token
-						});
-					}
-				}
-			});
+			databaseFacade.userLogin(res, req.body.userid, req.body.password);
 		});
 
 
