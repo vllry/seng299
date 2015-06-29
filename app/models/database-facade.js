@@ -18,6 +18,7 @@ function mongoCallback(res, err, responses, success) {
 			}
 		}
 		res.send(err); //catchall
+		return;
 		//console.log("Unexpected mongo error");
 	}
 	res.json(success);
