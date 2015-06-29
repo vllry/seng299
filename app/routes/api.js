@@ -19,16 +19,13 @@ Maintainer: Frances
 
 
 Notes:
-	Vallery, I moved the code around 
-		/user after user authentication because I think user without logging in should not
-		be able to look at the list of users
 
 	/api
-		/user (after user authentication middleware)
+		/user (after user authentication middleware, for admin only)
 			/login
 			/register
 			/<userid>
-		/booking
+		/booking (before user authentication middleware since view bookings does not need to be logged in)
 			/create
 
 */
@@ -52,20 +49,35 @@ module.exports = function(app, express) {
 
 	// test route to make sure everything is working 
 	// accessed at GET http://localhost:8080/api
+	/*
 	apiRouter.get('/', function(req, res) {
 		res.json({ message: 'Welcome to the User API for Lab 7' });	
 	});
+	*/
+	// /booking =========================================================
+	apiRouter.route('/booking')
+	
+		// view bookings (accessed at GET /booking)
+		// accessible without token
+		.get(function(req, res) {
+            		Booking.find({ userid: req.decoded.userid }, function(err, bookings) {
+                	if(err) {
+                    		res.send(err);
+                    		return;
+                	}
+                	res.json(bookings);
+            	});
+        });
 
 
 
 
 
 	// /user =========================================================
-
-
 	apiRouter.route('/user/register')
 
 		// create a user (accessed at POST /user/register)
+		// accessible without token
 		.post(function(req, res) {
 			var user = new User({
 				userid: req.body.userid,
@@ -85,6 +97,8 @@ module.exports = function(app, express) {
 
 	apiRouter.route('/user/login')
 
+		// log in (accessed at POST /user/login)
+		// accessible without token
 		.post(function(req, res) {
 			databaseFacade.userLogin(res, req.body.userid, req.body.password);
 		});
@@ -114,7 +128,8 @@ module.exports = function(app, express) {
 	// ----------------------------------------------------
 	apiRouter.route('/user')
 
-		 // get all the users (accessed at GET http://localhost:8080/api/user)
+		 // get all the users (accessed at GET /user)
+		 // accessible only for those with tokens
 		.get(function(req, res) {
 			databaseFacade.getUsers(res);
 		});
@@ -125,7 +140,8 @@ module.exports = function(app, express) {
 	// ----------------------------------------------------
 	apiRouter.route('/user/:user_id')
 
-		// get the user with that id
+		// get the user with that id (accessed at GET /user/:user_id)
+		// accessible only for those with tokens
 		.get(function(req, res) {
 			User.findById(req.params.user_id, function(err, user) {
 				if (err) res.send(err);
@@ -135,7 +151,8 @@ module.exports = function(app, express) {
 			});
 		})
 
-		// update the user with this id
+		// update the user with this id (accessed at PUT /user/:user_id)
+		// accessble only for those with tokens
 		.put(function(req, res) {
 			User.findById(req.params.user_id, function(err, user) {
 
@@ -156,7 +173,8 @@ module.exports = function(app, express) {
 			});
 		})
 
-		// delete the user with this id
+		// delete the user with this id (accessed at DELETE /user/:user_id)
+		// accessible only for those with tokens
 		.delete(function(req, res) {
 			User.remove({
 				_id: req.params.user_id
@@ -169,7 +187,7 @@ module.exports = function(app, express) {
 
 	// /booking =========================================================
 
-
+	/*
 	apiRouter.route('/booking')
 		.get(function(req, res) {
             Booking.find({ userid: req.decoded.userid }, function(err, bookings) {
@@ -180,35 +198,39 @@ module.exports = function(app, express) {
                 res.json(bookings);
             });
         });
+        */
 
 	
 	// on routes that end in /booking/create
 	// ----------------------------------------------------
-	//create booking
-    apiRouter.route('/booking/create')
+	
+    	apiRouter.route('/booking/create')
     
-        .post(function(req, res) {
-            var booking = new Booking({
-                bookedBy: req.decoded.userid,
-                startTime: req.body.startTime,
-                roomId: req.body.roomId
-            });
-            booking.save(function(err) {
-                if(err) {
-                    res.send(err);
-                    return;
-                }
-                res.json({ message: "New Booking Created!" });
-            });
+        	// create a booking (accessed at POST /booking/create)
+        	// accessible only for those with tokens
+        	.post(function(req, res) {
+            		var booking = new Booking({
+                		bookedBy: req.decoded.userid,
+                		startTime: req.body.startTime,
+                		roomId: req.body.roomId
+            		});
+            	booking.save(function(err) {
+                	if(err) {
+                    		res.send(err);
+                    		return;
+                	}
+                	res.json({ message: "New Booking Created!" });
+            	});
         });
     
 
 
-    // on routes that end in /booking/:booking_id
+    	// on routes that end in /booking/:booking_id
 	// ----------------------------------------------------
 	apiRouter.route('/booking/:booking_id')
 
-		// get the booking with that id
+		// get the booking with that id (accessed at GET /booking/:booking_id)
+		// accessible only for those with tokens
 		.get(function(req, res) {
 			Booking.findById(req.params.booking_id, function(err, booking) {
 				if (err) res.send(err);
@@ -218,7 +240,8 @@ module.exports = function(app, express) {
 			});
 		})
 
-		// update the booking with this id
+		// update the booking with this id (accessed at PUT /booking/:booking_id)
+		// accessible only for those with tokens
 		.put(function(req, res) {
 			Booking.findById(req.params.booking_id, function(err, booking) {
 
@@ -238,7 +261,8 @@ module.exports = function(app, express) {
 			});
 		})
 
-		// delete the user with this id
+		// delete the user with this id(accessed at DELETE /booking/:booking_id)
+		// accessible only for those with tokens
 		.delete(function(req, res) {
 			Booking.remove({
 				_id: req.params.booking_id
@@ -252,7 +276,8 @@ module.exports = function(app, express) {
 
 
 	// /me ===================================================
-	// api endpoint to get user information
+	// api endpoint to get user information (accessed at GET /me)
+	// accessible only for those with tokens
 	apiRouter.get('/me', function(req, res) {
 		res.send(req.decoded);
 	});
