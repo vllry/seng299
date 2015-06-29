@@ -25,7 +25,13 @@ angular.module('app.routes', ['ngRoute'])
 	  	controllerAs: 'login'
 	  })
 
-	  .otherwise({ redirectTo: '/login' });
+	  .when("/signup", {
+	  	templateUrl: 'app/views/pages/signup.html',
+	  	controller: 'signupController',
+	  	controllerAs: 'signup'
+	  })
+
+	  .otherwise({ redirectTo: '/' });
 
 	// Added to remove the # from URLs
 	$locationProvider.html5Mode(true);
