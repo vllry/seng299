@@ -3,8 +3,18 @@ Master file for routing of /api
 
 Please LOOK AT THE SCHEMAS in app/models/schemas before referring to them! Mongo will not give an error if you use the wrong name, and it can mess up the database.
 
+
+
 Maintainer: Vallery
 Maintainer: Frances
+
+
+
+/api
+	/user
+		/login
+		/register
+		/<userid>
 */
 
 var bodyParser = require('body-parser'); 	// get body-parser
@@ -67,7 +77,7 @@ module.exports = function(app, express) {
 		// create a user (accessed at POST /user/register)
 		.post(function(req, res) {
 			var user = new User({
-				userid: req.body.id,
+				userid: req.body.userid,
 				password: req.body.password,
 				/*firstName: req.body.firstname,
 				lastName: req.body.lastname,
@@ -86,7 +96,11 @@ module.exports = function(app, express) {
 
 		.post(function(req, res) {
 			User.findOne({
+<<<<<<< HEAD
 				userid: req.body.userid
+=======
+				'userid': req.body.userid
+>>>>>>> origin/master
 			}).select('password').exec(function(err, user) {
 				if(err) throw err;
 				if(!user) {
