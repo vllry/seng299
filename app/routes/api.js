@@ -70,10 +70,10 @@ module.exports = function(app, express) {
 			var user = new User({
 				userid: req.body.userid,
 				password: req.body.password,
-				/*firstName: req.body.firstname,
+				firstName: req.body.firstname,
 				lastName: req.body.lastname,
 				userType: req.body.usertype,
-				department: req.body.department*/
+				department: req.body.department
 			});
 
 			databaseFacade.userRegister(res, user);
