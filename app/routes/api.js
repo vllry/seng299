@@ -15,16 +15,20 @@ Maintainer: Frances
 		/login
 		/register
 		/<userid>
+		/booking/create
 */
 
 var bodyParser = require('body-parser'); 	// get body-parser
 var User       = require('../models/schemas/user');
+var Booking    = require('../models/schemas/booking');
 var jwt        = require('jsonwebtoken');
 var config     = require('../../config');
 var databaseFacade = require('../models/database-facade.js');
 
 // secret for creating tokens
 var secret = config.secret;
+
+
 
 module.exports = function(app, express) {
 
@@ -63,10 +67,10 @@ module.exports = function(app, express) {
 			var user = new User({
 				userid: req.body.userid,
 				password: req.body.password,
-				firstName: req.body.firstname,
+				/*firstName: req.body.firstname,
 				lastName: req.body.lastname,
 				userType: req.body.usertype,
-				department: req.body.department
+				department: req.body.department*/
 			});
 
 			databaseFacade.userRegister(res, user);
@@ -81,6 +85,7 @@ module.exports = function(app, express) {
 		.post(function(req, res) {
 			databaseFacade.userLogin(res, req.body.userid, req.body.password);
 		});
+
 
 
 	// user authentication middleware
@@ -100,6 +105,40 @@ module.exports = function(app, express) {
             res.status(403).send({ success: false, message: "No Token Provided"});
         }
     });
+
+
+
+	//create booking
+	
+    apiRouter.route('/booking/create')
+    
+        .post(function(req, res) {
+            var booking = new Booking({
+                bookedBy: req.decoded.userid,
+                startTime: req.body.startTime,
+                roomId: req.body.roomId
+            });
+            booking.save(function(err) {
+                if(err) {
+                    res.send(err);
+                    return;
+                }
+                res.json({ message: "New Booking Created!" });
+            });
+        })
+    
+        .get(function(req, res) {
+            Booking.find({ creator: req.decoded.userid }, function(err, bookings) {
+                if(err) {
+                    res.send(err);
+                    return;
+                }
+                res.json(bookings);
+            });
+        })
+
+
+
 
 
 
@@ -127,7 +166,7 @@ module.exports = function(app, express) {
 
 				// set the new user information if it exists in the request
 				if (req.body.name) user.name = req.body.name;
-				if (req.body.id) user.userid = req.body.id;
+				if (req.body.userid) user.userid = req.body.userid;
 				if (req.body.password) user.password = req.body.password;
 
 				// save the user
