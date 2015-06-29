@@ -1,15 +1,49 @@
 /*
 Master file for routing of /api
+
+Please LOOK AT THE SCHEMAS in app/models/schemas before referring to them! Mongo will not give an error if you use the wrong name, and it can mess up the database.
+
+
+
+Maintainer: Vallery
+Maintainer: Frances
+
+
+
+/api
+	/user
+		/login
+		/register
+		/<userid>
+		/booking/create
+
+
+Notes:
+	Vallery, I moved the code around 
+		/user after user authentication because I think user without logging in should not
+		be able to look at the list of users
+
+	/api
+		/user (after user authentication middleware)
+			/login
+			/register
+			/<userid>
+		/booking
+			/create
+
 */
 
 var bodyParser = require('body-parser'); 	// get body-parser
 var User       = require('../models/schemas/user');
+var Booking    = require('../models/schemas/booking');
 var jwt        = require('jsonwebtoken');
 var config     = require('../../config');
 var databaseFacade = require('../models/database-facade.js');
 
 // secret for creating tokens
 var secret = config.secret;
+
+
 
 module.exports = function(app, express) {
 
@@ -26,50 +60,70 @@ module.exports = function(app, express) {
 
 
 
-	// /users =========================================================
+	// /user =========================================================
 
-	// on routes that end in /users
-	// ----------------------------------------------------
-	apiRouter.route('/users')
 
-		// create a user (accessed at POST http://localhost:8080/users)
+	apiRouter.route('/user/register')
+
+		// create a user (accessed at POST /user/register)
 		.post(function(req, res) {
-			var user = new User();		// create a new instance of the User model
-			user.name = req.body.name;  // set the users name (comes from the request)
-			user.username = req.body.username;  // set the users username (comes from the request)
-			user.password = req.body.password;  // set the users password (comes from the request)
-			user.save(function(err) {
-				if (err) {
-					// duplicate entry
-					if (err.code == 11000) 
-						return res.json({ success: false, message: 'A user with that username already exists. '});
-					else 
-						return res.send(err);
-				}
-				// return a message
-				res.json({ message: 'User created!' });
+			var user = new User({
+				userid: req.body.userid,
+				password: req.body.password,
+				firstName: req.body.firstname,
+				lastName: req.body.lastname,
+				userType: req.body.usertype,
+				department: req.body.department
 			});
+
+			databaseFacade.userRegister(res, user);
 		})
 
-		/* // get all the users (accessed at GET http://localhost:8080/api/users)
-		.get(function(req, res) {
-			User.find({}, function(err, users) {
-				if (err) res.send(err);
-				// return the users
-				res.json(users);
-			});
-		});*/
 
-		 // get all the users (accessed at GET http://localhost:8080/api/users)
-		.get(function(req, res) {
-			databaseFacade.get_users(res);
+
+
+
+	apiRouter.route('/user/login')
+
+		.post(function(req, res) {
+			databaseFacade.userLogin(res, req.body.userid, req.body.password);
 		});
 
 
 
-	// on routes that end in /users/:user_id
+	// user authentication middleware
+	apiRouter.use(function(req, res, next) {
+        console.log("Somebody just came to our app!");
+        var token = req.body.token || req.param('token') || req.headers['x-access-token'];
+        if(token) {
+            jwt.verify(token, secret, function(err, decoded) {
+                if(err) {
+                    res.status(403).send({ success: false, message: "Failed to authenticate user"});
+                } else {
+                    req.decoded = decoded;
+                    next();
+                }
+            });
+        } else {
+            res.status(403).send({ success: false, message: "No Token Provided"});
+        }
+    });
+
+
+	// on routes that end in /user
 	// ----------------------------------------------------
-	apiRouter.route('/users/:user_id')
+	apiRouter.route('/user')
+
+		 // get all the users (accessed at GET http://localhost:8080/api/user)
+		.get(function(req, res) {
+			databaseFacade.getUsers(res);
+		});
+
+
+
+	// on routes that end in /user/:user_id
+	// ----------------------------------------------------
+	apiRouter.route('/user/:user_id')
 
 		// get the user with that id
 		.get(function(req, res) {
@@ -89,7 +143,7 @@ module.exports = function(app, express) {
 
 				// set the new user information if it exists in the request
 				if (req.body.name) user.name = req.body.name;
-				if (req.body.username) user.username = req.body.username;
+				if (req.body.id) user.userid = req.body.id;
 				if (req.body.password) user.password = req.body.password;
 
 				// save the user
@@ -107,6 +161,88 @@ module.exports = function(app, express) {
 			User.remove({
 				_id: req.params.user_id
 			}, function(err, user) {
+				if (err) res.send(err);
+				res.json({ message: 'Successfully deleted' });
+			});
+		});
+
+
+	// /booking =========================================================
+
+
+	apiRouter.route('/booking')
+		.get(function(req, res) {
+            Booking.find({ userid: req.decoded.userid }, function(err, bookings) {
+                if(err) {
+                    res.send(err);
+                    return;
+                }
+                res.json(bookings);
+            });
+        });
+
+	
+	// on routes that end in /booking/create
+	// ----------------------------------------------------
+	//create booking
+    apiRouter.route('/booking/create')
+    
+        .post(function(req, res) {
+            var booking = new Booking({
+                bookedBy: req.decoded.userid,
+                startTime: req.body.startTime,
+                roomId: req.body.roomId
+            });
+            booking.save(function(err) {
+                if(err) {
+                    res.send(err);
+                    return;
+                }
+                res.json({ message: "New Booking Created!" });
+            });
+        });
+    
+
+
+    // on routes that end in /booking/:booking_id
+	// ----------------------------------------------------
+	apiRouter.route('/booking/:booking_id')
+
+		// get the booking with that id
+		.get(function(req, res) {
+			Booking.findById(req.params.booking_id, function(err, booking) {
+				if (err) res.send(err);
+
+				// return that booking
+				res.json(booking);
+			});
+		})
+
+		// update the booking with this id
+		.put(function(req, res) {
+			Booking.findById(req.params.booking_id, function(err, booking) {
+
+				if (err) res.send(err);
+
+				// set the new booking information if it exists in the request
+				if (req.body.roomId) booking.roomId = req.body.roomId;
+				if (req.body.startTime) booking.startTime = req.body.startTime;
+
+				// save the user
+				booking.save(function(err) {
+					if (err) res.send(err);
+
+					// return a message
+					res.json({ message: 'Booking updated!' });
+				});
+			});
+		})
+
+		// delete the user with this id
+		.delete(function(req, res) {
+			Booking.remove({
+				_id: req.params.booking_id
+			}, function(err, booking) {
 				if (err) res.send(err);
 				res.json({ message: 'Successfully deleted' });
 			});

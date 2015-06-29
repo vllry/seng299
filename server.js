@@ -10,6 +10,7 @@ var morgan     = require('morgan'); 		// used to see requests
 var mongoose   = require('mongoose');
 var config 	   = require('./config');
 var path 	   = require('path');
+var cookieParser = require('cookie-parser');
 
 
 
@@ -17,8 +18,11 @@ var path 	   = require('path');
 // ====================================
 
 // use session management
-app.use(session({secret: config.secret}));
+//app.use(session({secret: config.secret}));
 // https://codeforgeek.com/2014/09/manage-session-using-node-js-express-4/
+app.use(cookieParser());
+app.use(session({secret: config.secret, saveUninitialized: true, resave: true}));
+//https://orchestrate.io/blog/2014/06/26/build-user-authentication-with-node-js-express-passport-and-orchestrate/
 
 // use body parser so we can grab information from POST requests
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -52,7 +56,7 @@ app.use('/api', apiRoutes);
 // MAIN CATCHALL ROUTE --------------- 
 // SEND USERS TO FRONTEND ------------
 // has to be registered after API ROUTES
-app.get('*', function(req, res) {
+app.get('/', function(req, res) {
 	res.sendFile(path.join(__dirname + '/public/app/views/index.html'));
 });
 
