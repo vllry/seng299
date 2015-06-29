@@ -15,6 +15,7 @@ Maintainer: Frances
 		/login
 		/register
 		/<userid>
+		/booking/create
 */
 
 var bodyParser = require('body-parser'); 	// get body-parser
@@ -27,18 +28,7 @@ var databaseFacade = require('../models/database-facade.js');
 // secret for creating tokens
 var secret = config.secret;
 
-function createToken(user) {
-	var token = jwt.sign({
-		id: user.userid,
-		/*firstName: user.firstName,
-		lastName: user.lastName,
-		type: user.type,
-		department: user.department */
-		}, secret, {
-			expirtesInMinute: 1440
-	});
-	return token;
-}
+
 
 module.exports = function(app, express) {
 
@@ -56,6 +46,23 @@ module.exports = function(app, express) {
 
 
 	// /user =========================================================
+<<<<<<< HEAD
+=======
+
+	// on routes that end in /user
+	// ----------------------------------------------------
+	apiRouter.route('/user')
+
+		 // get all the users (accessed at GET http://localhost:8080/api/user)
+		.get(function(req, res) {
+			databaseFacade.getUsers(res);
+		});
+
+
+
+
+
+>>>>>>> origin/master
 	apiRouter.route('/user/register')
 
 		// create a user (accessed at POST /user/register)
@@ -69,7 +76,7 @@ module.exports = function(app, express) {
 				department: req.body.department*/
 			});
 
-			databaseFacade.register_user(res, user);
+			databaseFacade.userRegister(res, user);
 		})
 
 
@@ -79,26 +86,7 @@ module.exports = function(app, express) {
 	apiRouter.route('/user/login')
 
 		.post(function(req, res) {
-			User.findOne({
-				userid: req.body.userid
-			}).select('password').exec(function(err, user) {
-				if(err) throw err;
-				if(!user) {
-					res.send({ message: "User does not exist!" });
-				} else if (user) {
-					var validPassword = user.comparePassword(req.body.password);
-					if(!validPassword) {
-						res.send({ message: "Invalid Password!" });
-					} else {
-						var token = createToken(user);
-						res.json({
-							success: true,
-							message: "Successfully login!",
-							token: token
-						});
-					}
-				}
-			});
+			databaseFacade.userLogin(res, req.body.userid, req.body.password);
 		});
 
 
@@ -181,11 +169,15 @@ module.exports = function(app, express) {
 
 	// /booking =========================================================
 	
+<<<<<<< HEAD
 	// on routes that end in /booking
 	// ----------------------------------------------------
 
 	//create booking
     apiRouter.route('/booking')
+=======
+    apiRouter.route('/booking/create')
+>>>>>>> origin/master
     
         .post(function(req, res) {
             var booking = new Booking({
@@ -232,9 +224,16 @@ module.exports = function(app, express) {
 
 				if (err) res.send(err);
 
+<<<<<<< HEAD
 				// set the new booking information if it exists in the request
 				if (req.body.roomId) booking.roomId = req.body.roomId;
 				if (req.body.startTime) booking.startTime = req.body.startTime;
+=======
+				// set the new user information if it exists in the request
+				if (req.body.name) user.name = req.body.name;
+				if (req.body.userid) user.userid = req.body.userid;
+				if (req.body.password) user.password = req.body.password;
+>>>>>>> origin/master
 
 				// save the user
 				booking.save(function(err) {
