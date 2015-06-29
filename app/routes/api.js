@@ -16,6 +16,21 @@ Maintainer: Frances
 		/register
 		/<userid>
 		/booking/create
+
+
+Notes:
+	Vallery, I moved the code around 
+		/user after user authentication because I think user without logging in should not
+		be able to look at the list of users
+
+	/api
+		/user (after user authentication middleware)
+			/login
+			/register
+			/<userid>
+		/booking
+			/create
+
 */
 
 var bodyParser = require('body-parser'); 	// get body-parser
@@ -46,23 +61,8 @@ module.exports = function(app, express) {
 
 
 	// /user =========================================================
-<<<<<<< HEAD
-=======
-
-	// on routes that end in /user
-	// ----------------------------------------------------
-	apiRouter.route('/user')
-
-		 // get all the users (accessed at GET http://localhost:8080/api/user)
-		.get(function(req, res) {
-			databaseFacade.getUsers(res);
-		});
 
 
-
-
-
->>>>>>> origin/master
 	apiRouter.route('/user/register')
 
 		// create a user (accessed at POST /user/register)
@@ -112,11 +112,11 @@ module.exports = function(app, express) {
 
 	// on routes that end in /user
 	// ----------------------------------------------------
-    apiRouter.route('/user')
+	apiRouter.route('/user')
 
 		 // get all the users (accessed at GET http://localhost:8080/api/user)
 		.get(function(req, res) {
-			databaseFacade.get_users(res);
+			databaseFacade.getUsers(res);
 		});
 
 
@@ -168,16 +168,24 @@ module.exports = function(app, express) {
 
 
 	// /booking =========================================================
-	
-<<<<<<< HEAD
-	// on routes that end in /booking
-	// ----------------------------------------------------
 
+
+	apiRouter.route('/booking')
+		.get(function(req, res) {
+            Booking.find({ userid: req.decoded.userid }, function(err, bookings) {
+                if(err) {
+                    res.send(err);
+                    return;
+                }
+                res.json(bookings);
+            });
+        });
+
+	
+	// on routes that end in /booking/create
+	// ----------------------------------------------------
 	//create booking
-    apiRouter.route('/booking')
-=======
     apiRouter.route('/booking/create')
->>>>>>> origin/master
     
         .post(function(req, res) {
             var booking = new Booking({
@@ -192,17 +200,9 @@ module.exports = function(app, express) {
                 }
                 res.json({ message: "New Booking Created!" });
             });
-        })
-    
-        .get(function(req, res) {
-            Booking.find({ userid: req.decoded.userid }, function(err, bookings) {
-                if(err) {
-                    res.send(err);
-                    return;
-                }
-                res.json(bookings);
-            });
         });
+    
+
 
     // on routes that end in /booking/:booking_id
 	// ----------------------------------------------------
@@ -224,16 +224,9 @@ module.exports = function(app, express) {
 
 				if (err) res.send(err);
 
-<<<<<<< HEAD
 				// set the new booking information if it exists in the request
 				if (req.body.roomId) booking.roomId = req.body.roomId;
 				if (req.body.startTime) booking.startTime = req.body.startTime;
-=======
-				// set the new user information if it exists in the request
-				if (req.body.name) user.name = req.body.name;
-				if (req.body.userid) user.userid = req.body.userid;
-				if (req.body.password) user.password = req.body.password;
->>>>>>> origin/master
 
 				// save the user
 				booking.save(function(err) {
