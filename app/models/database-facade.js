@@ -56,29 +56,30 @@ exports.getUsers = function(res) {
 
 exports.userRegister = function(res, user) {
 	user.save(function(err) {
-		var errors = {11000 : { success: false, message: 'A user with that userid already exists!'}};
-		mongoCallback(res, err, errors, { message: 'User created!' });
+		var errors = {11000 : { success: false, message: 'A user with that userid already exists'}};
+		mongoCallback(res, err, errors, { success : true, message: 'User created' });
 	});
 };
 
 
 
 exports.userLogin = function(res,userid,password) {
+	console.log(userid + ' is attempting to log in');
 	schemaUser.findOne({
 		'userid': userid
 	}).select('password').exec(function(err, user) {
 		if(err) throw err;
 		if(!user) {
-			res.send({ message: "User does not exist!" });
+			res.send({ message: "User does not exist" });
 		} else if (user) {
 			var validPassword = user.comparePassword(password);
 			if(!validPassword) {
-				res.send({ message: "Invalid Password!" });
+				res.send({ message: "Invalid password" });
 			} else {
 				var token = createToken(user);
 				res.json({
 					success: true,
-					message: "Successfully login!",
+					message: "Logged in",
 					token: token
 				});
 			}
