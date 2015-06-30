@@ -23,6 +23,7 @@ angular.module('userApp', ['app.routes'])
 })
 
 .controller('loginController', function(){
+	var vm = this;
 
 
 })
