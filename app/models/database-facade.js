@@ -63,6 +63,15 @@ exports.userRegister = function(res, user) {
 
 
 
+exports.bookingCreate = function(res, booking) {
+	booking.save(function(err) {
+		var errors = {11000 : { success: false, message: 'A booking at that time already exists'}};
+		mongoCallback(res, err, errors, { success : true, message: 'Booking created' });
+	});
+};
+
+
+
 exports.userLogin = function(res,netlinkid,password) {
 	console.log(netlinkid + ' is attempting to log in');
 	schemaUser.findOne({

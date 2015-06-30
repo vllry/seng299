@@ -1,21 +1,31 @@
 var mongoose     = require('mongoose');
 var Schema       = mongoose.Schema;
-//var bcrypt 		 = require('bcrypt-nodejs');
 
 // booking schema 
 var BookingSchema   = new Schema({
 	//id: { type: String, index: { unique: true }},
-	// bookedBy: { type: String, required: true, select: true },
 	bookedBy: { type: Schema.Types.ObjectId, ref: 'User', select: true },
-	// startTime: { type: Date, required: true },
-	startTime: { type: Date, default: Date.now },
+	startTime: { type: Date, required: true },
 	duration: Number,
-	roomId: { type: String, required: true },
-	projectorId: Number,
-	laptopId: Number
+	roomid: { type: String, required: true },
+	projectorid: Number,
+	laptopid: Number
 });
 
 BookingSchema.index({ roomId: 1, startTime: 1}, { unique: true });
+
+
+
+BookingSchema.pre('save', function(next) {
+	var booking = this;
+
+	// hash the password only if the password has been changed or user is new
+	if (booking.duration > 10) {
+		return next();
+	}
+
+});
+
 
 
 // return the model

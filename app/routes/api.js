@@ -13,12 +13,12 @@ Note to editors of this file: Please LOOK AT THE SCHEMAS in app/models/schemas b
 
 
 GET /api					API test message
+	GET /booking
+		POST /create*			
 	POST /user*				token - Lists all users
 		POST /login			netlinkid, password - Logs the user in, returns a token
 		POST /register			netlinkid, password, firstname, lastname, [studentid], [department] - Registers the user
 		POST /<netlinkid>*
-	GET /booking
-		POST /create*
 
 * Denotes API that requires a token
 Also, warning that the API often gives 403's instead of 404's when you use the wrong HTTP method (IE GET /user rather than POST /user)
@@ -45,10 +45,35 @@ module.exports = function(app, express) {
 	// test route to make sure everything is working 
 	// accessed at GET http://localhost:8080/api
 	apiRouter.get('/', function(req, res) {
-		res.json({ success : true, message: 'Welcome to the User API for Lab 7' });	
+		res.json({ success : true, message: 'The API is running' });	
 	});
 
 
+
+	apiRouter.route('/booking/byuser')
+		.get(function(req, res) {
+            Booking.find({ netlinkid: req.decoded.netlinkid }, function(err, bookings) {
+                if(err) {
+                    res.send(err);
+                    return;
+                }
+                res.json(bookings);
+            });
+        });
+
+
+
+	apiRouter.route('/booking/id/:booking_id')
+
+		// get the booking with that id
+		.get(function(req, res) {
+			Booking.findById(req.params.booking_id, function(err, booking) {
+				if (err) res.send(err);
+
+				// return that booking
+				res.json(booking);
+			});
+		});
 
 
 
@@ -83,12 +108,11 @@ module.exports = function(app, express) {
 
 
 
-	//This code currently requires the user to have a token to access ANY part of the UI
-	//Please fix this before re-enabling
 
 	// user authentication middleware
+	// Anything  BELOW THIS POINT requires a token to access
 	apiRouter.use(function(req, res, next) {
-        console.log("Somebody just came to our app!");
+        //console.log("Somebody just came to our app!");
         var token = req.body.token || req.param('token') || req.headers['x-access-token'];
         if(token) {
             jwt.verify(token, secret, function(err, decoded) {
@@ -163,19 +187,6 @@ module.exports = function(app, express) {
 
 
 	// /booking =========================================================
-
-
-	apiRouter.route('/booking')
-		.get(function(req, res) {
-            Booking.find({ netlinkid: req.decoded.netlinkid }, function(err, bookings) {
-                if(err) {
-                    res.send(err);
-                    return;
-                }
-                res.json(bookings);
-            });
-        });
-
 	
 	// on routes that end in /booking/create
 	// ----------------------------------------------------
@@ -185,33 +196,19 @@ module.exports = function(app, express) {
         .post(function(req, res) {
             var booking = new Booking({
                 bookedBy: req.decoded.netlinkid,
-                startTime: req.body.startTime,
-                roomId: req.body.roomId
+                startTime: req.body.starttime, //Time in ms. Use the Javascript Date object
+		duration: req.body.duration, //Time in minutes
+                roomid: req.body.roomid
             });
-            booking.save(function(err) {
-                if(err) {
-                    res.send(err);
-                    return;
-                }
-                res.json({ message: "New Booking Created!" });
-            });
+
+		databaseFacade.bookingCreate(res, booking);
         });
     
 
 
     // on routes that end in /booking/:booking_id
 	// ----------------------------------------------------
-	apiRouter.route('/booking/:booking_id')
-
-		// get the booking with that id
-		.get(function(req, res) {
-			Booking.findById(req.params.booking_id, function(err, booking) {
-				if (err) res.send(err);
-
-				// return that booking
-				res.json(booking);
-			});
-		})
+	apiRouter.route('/booking/id/:booking_id')
 
 		// update the booking with this id
 		.put(function(req, res) {
@@ -233,7 +230,7 @@ module.exports = function(app, express) {
 			});
 		})
 
-		// delete the user with this id
+		// delete the booking with this id
 		.delete(function(req, res) {
 			Booking.remove({
 				_id: req.params.booking_id

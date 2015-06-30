@@ -11,7 +11,7 @@ var UserSchema   = new Schema({
 	lastName: { type: String, required: true },
 	userType: Number/*{ type: String, required: true }*/,
 	department: Number,
-	adminStatus: String/*{ type: String, required: true }*/,
+	role: { type: String, /*required: true */},
 	bookingRestriction: Date
 });
 
