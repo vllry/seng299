@@ -1,4 +1,5 @@
 'use strict';
+//$http.post('/someUrl', data).success(successCallback);
 
 //declare modules
 
@@ -28,7 +29,39 @@ angular.module('userApp', ['app.routes'])
 
 })
 
-.controller('signupController', function(){
+.controller('signupController', ['$http', function($http){
+	var vm = this;
+
+	vm.message = "REGISTRATION PAGE"
+
+	vm.createUser = function(user) {
+		// Trigger validation flag.
+		vm.submitted = true;
+
+		// If form is invalid, return and let AngularJS show validation errors.
+		if (luser.$invalid) {
+		    return;
+		}
+	
+		var userData = {
+		      'netlinkid' : user.netlinkid,
+		      'password' : user.password,
+		      'firstname' : user.firstname,
+		      'lastname' : user.lastname
+		};
+		$http.post('/api/user/register', userData).
+		    success(function(data, status, headers, config) {
+		    	console.log("SUCCESS. data = " + data + ", status = " + status);
+		    }).
+		    error(function(data, status, headers, config) {
+		  	console.log("ERROR. data = " + data + ", status = " + status);
+		    });
+
+		vm.message = "REGISTER BUTTON CLICKED"
+		console.log(user);
+		console.log(userData);
+
+	};
 
 
-});
+}]);
