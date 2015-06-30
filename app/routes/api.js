@@ -1,24 +1,27 @@
 /*
 Master file for routing of /api
 
-Please LOOK AT THE SCHEMAS in app/models/schemas before referring to them! Mongo may not give an error if you use the wrong name, and it can mess up the database.
+Schema attributes are to be named in camelCase, with acronyms/initialisms all lowercase (Some examples: netlinkid, id, apiPath, userName, aLongVariableName)
+API urls are ALL LOWERCASE, with the same attribute names as in the schemas
 
 
 
 Maintainer: Vallery
 Maintainer: Frances
+Note to editors of this file: Please LOOK AT THE SCHEMAS in app/models/schemas before referring to them! Mongo may not give an error if you use the wrong name, and it can mess up the database.
 
 
 
-/api
-	/user*
-		/login
-		/register
-		/<netlinkid>*
-	/booking
-		/create*
+GET /api					API test message
+	POST /user*				token - Lists all users
+		POST /login			netlinkid, password - Logs the user in, returns a token
+		POST /register			netlinkid, password, firstname, lastname, [studentid], [department] - Registers the user
+		POST /<netlinkid>*
+	GET /booking
+		POST /create*
 
 * Denotes API that requires a token
+Also, warning that the API often gives 403's instead of 404's when you use the wrong HTTP method (IE GET /user rather than POST /user)
 
 */
 
@@ -62,7 +65,6 @@ module.exports = function(app, express) {
 				password: req.body.password,
 				firstName: req.body.firstname,
 				lastName: req.body.lastname,
-				userType: req.body.usertype,
 				department: req.body.department
 			});
 

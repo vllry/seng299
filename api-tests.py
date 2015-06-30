@@ -9,7 +9,9 @@ from sys import exit
 
 config = {
 	'netlinkid': 'python_tester',
-	'password' : 'python3'
+	'password' : 'python3',
+	'firstname' : 'Monty',
+	'lastname' : 'Python'
 }
 
 
@@ -38,13 +40,13 @@ tests = {
 	'2 - User Account': {
 		'1 - Registration': {
 			'url': 'http://localhost:3000/api/user/register',
-			'params' : {'netlinkid':config['netlinkid'], 'password':config['password']},
+			'params' : {'netlinkid':config['netlinkid'], 'password':config['password'], 'firstname':config['firstname'], 'lastname':config['lastname']},
 			'bail' : 'all',
 			'accept-on' : 'A user with that netlinkid already exists' #The test user may already exist, and that's okay
 		},
 		'2 - Rejection Of Duplicate Registration': {
 			'url': 'http://localhost:3000/api/user/register',
-			'params' : {'netlinkid':config['netlinkid'], 'password':config['password']},
+			'params' : {'netlinkid':config['netlinkid'], 'password':config['password'], 'firstname':config['firstname'], 'lastname':config['lastname']},
 			'bail' : 'all',
 			'accept-on' : 'A user with that netlinkid already exists', #We want to confirm that a duplicate account can't be created.
 			'reject-on' : 'User created'

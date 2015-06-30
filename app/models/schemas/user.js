@@ -5,13 +5,13 @@ var bcrypt 		 = require('bcrypt-nodejs');
 // user schema 
 var UserSchema   = new Schema({
 	netlinkid: { type: String, required: true, index: { unique: true }},
-	studentid: { type: String }, //Cannot require:true because not everyone is a student -> not everyone has a V-number
 	password: { type: String, required: true, select: false },
-	firstName: String,
-	lastName: String,
-	userType: Number,
+	studentid: String, //Cannot require:true because not everyone is a student -> not everyone has a V-number
+	firstName: { type: String, required: true },
+	lastName: { type: String, required: true },
+	userType: Number/*{ type: String, required: true }*/,
 	department: Number,
-	adminStatus: Number,
+	adminStatus: String/*{ type: String, required: true }*/,
 	bookingRestriction: Date
 });
 
