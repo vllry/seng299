@@ -8,8 +8,10 @@ from sys import exit
 
 
 config = {
-	'userid': 'python_tester',
-	'password' : 'python3'
+	'netlinkid': 'python_tester',
+	'password' : 'python3',
+	'firstname' : 'Monty',
+	'lastname' : 'Python'
 }
 
 
@@ -38,32 +40,32 @@ tests = {
 	'2 - User Account': {
 		'1 - Registration': {
 			'url': 'http://localhost:3000/api/user/register',
-			'params' : {'userid':config['userid'], 'password':config['password']},
+			'params' : {'netlinkid':config['netlinkid'], 'password':config['password'], 'firstname':config['firstname'], 'lastname':config['lastname']},
 			'bail' : 'all',
-			'accept-on' : 'A user with that userid already exists' #The test user may already exist, and that's okay
+			'accept-on' : 'A user with that netlinkid already exists' #The test user may already exist, and that's okay
 		},
 		'2 - Rejection Of Duplicate Registration': {
 			'url': 'http://localhost:3000/api/user/register',
-			'params' : {'userid':config['userid'], 'password':config['password']},
+			'params' : {'netlinkid':config['netlinkid'], 'password':config['password'], 'firstname':config['firstname'], 'lastname':config['lastname']},
 			'bail' : 'all',
-			'accept-on' : 'A user with that userid already exists', #We want to confirm that a duplicate account can't be created.
+			'accept-on' : 'A user with that netlinkid already exists', #We want to confirm that a duplicate account can't be created.
 			'reject-on' : 'User created'
 		},
 		'3 - Rejection Of Incorrect Username': {
 			'url': 'http://localhost:3000/api/user/login',
-			'params' : {'userid':config['userid']+'invalid', 'password':config['password']},
+			'params' : {'netlinkid':config['netlinkid']+'invalid', 'password':config['password']},
 			'accept-on' : 'User does not exist',
 			'reject-on' : 'Logged in' #We want to confirm that this fails
 		},
 		'4 - Rejection Of Incorrect Password': {
 			'url': 'http://localhost:3000/api/user/login',
-			'params' : {'userid':config['userid'], 'password':config['password']+'invalid'},
+			'params' : {'netlinkid':config['netlinkid'], 'password':config['password']+'invalid'},
 			'accept-on' : 'Invalid password',
 			'reject-on' : 'Logged in' #We want to confirm that this fails
 		},
 		'5 - Login': {
 			'url': 'http://localhost:3000/api/user/login',
-			'params' : {'userid':config['userid'], 'password':config['password']},
+			'params' : {'netlinkid':config['netlinkid'], 'password':config['password']},
 			'bail' : 'all'
 		}
 	}

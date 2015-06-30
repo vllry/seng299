@@ -1,35 +1,27 @@
 /*
 Master file for routing of /api
 
-Please LOOK AT THE SCHEMAS in app/models/schemas before referring to them! Mongo will not give an error if you use the wrong name, and it can mess up the database.
+Schema attributes are to be named in camelCase, with acronyms/initialisms all lowercase (Some examples: netlinkid, id, apiPath, userName, aLongVariableName)
+API urls are ALL LOWERCASE, with the same attribute names as in the schemas
 
 
 
 Maintainer: Vallery
 Maintainer: Frances
+Note to editors of this file: Please LOOK AT THE SCHEMAS in app/models/schemas before referring to them! Mongo may not give an error if you use the wrong name, and it can mess up the database.
 
 
 
-/api
-	/user
-		/login
-		/register
-		/<userid>
-		/booking/create
+GET /api					API test message
+	POST /user*				token - Lists all users
+		POST /login			netlinkid, password - Logs the user in, returns a token
+		POST /register			netlinkid, password, firstname, lastname, [studentid], [department] - Registers the user
+		POST /<netlinkid>*
+	GET /booking
+		POST /create*
 
-
-Notes:
-	Vallery, I moved the code around 
-		/user after user authentication because I think user without logging in should not
-		be able to look at the list of users
-
-	/api
-		/user (after user authentication middleware)
-			/login
-			/register
-			/<userid>
-		/booking
-			/create
+* Denotes API that requires a token
+Also, warning that the API often gives 403's instead of 404's when you use the wrong HTTP method (IE GET /user rather than POST /user)
 
 */
 
@@ -68,11 +60,11 @@ module.exports = function(app, express) {
 		// create a user (accessed at POST /user/register)
 		.post(function(req, res) {
 			var user = new User({
-				userid: req.body.userid,
+				netlinkid: req.body.netlinkid,
+				studentid: req.body.studentid,
 				password: req.body.password,
 				firstName: req.body.firstname,
 				lastName: req.body.lastname,
-				userType: req.body.usertype,
 				department: req.body.department
 			});
 
@@ -86,7 +78,7 @@ module.exports = function(app, express) {
 	apiRouter.route('/user/login')
 
 		.post(function(req, res) {
-			databaseFacade.userLogin(res, req.body.userid, req.body.password);
+			databaseFacade.userLogin(res, req.body.netlinkid, req.body.password);
 		});
 
 
@@ -146,7 +138,7 @@ module.exports = function(app, express) {
 
 				// set the new user information if it exists in the request
 				if (req.body.name) user.name = req.body.name;
-				if (req.body.id) user.userid = req.body.id;
+				if (req.body.id) user.netlinkid = req.body.id;
 				if (req.body.password) user.password = req.body.password;
 
 				// save the user
@@ -175,7 +167,7 @@ module.exports = function(app, express) {
 
 	apiRouter.route('/booking')
 		.get(function(req, res) {
-            Booking.find({ userid: req.decoded.userid }, function(err, bookings) {
+            Booking.find({ netlinkid: req.decoded.netlinkid }, function(err, bookings) {
                 if(err) {
                     res.send(err);
                     return;
@@ -192,7 +184,7 @@ module.exports = function(app, express) {
     
         .post(function(req, res) {
             var booking = new Booking({
-                bookedBy: req.decoded.userid,
+                bookedBy: req.decoded.netlinkid,
                 startTime: req.body.startTime,
                 roomId: req.body.roomId
             });
