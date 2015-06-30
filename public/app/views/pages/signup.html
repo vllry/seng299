@@ -3,10 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  
   <link rel="stylesheet" href="assets/css/login.css">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-</head>
+</head> 
 
 
 <body>
@@ -16,42 +17,40 @@
     -->
     <div class="container">
         <div class="card card-container">
-            <!-- <img class="profile-img-card" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
+
             <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
             <p id="profile-name" class="profile-name-card"></p>
+            <!--- FORM --->
             <form class="form-signin">
 
                 <input type="text" id="inputID" class="form-control" placeholder="Netlink ID" required autofocus>
+                <input type="text" id="inputFirstName" class="form-control" placeholder="First Name" required>
+                <input type="text" id="inputLastName" class="form-control" placeholder="Password" required>
                 <input type="text" id="inputPassword" class="form-control" placeholder="Password" required>
                 <input type="text" id="inputPassword2" class="form-control" placeholder="Confirm Password" required>
                 <input type="text" id="inputEmail" class="form-control" placeholder="Email" required>
                 
-                <form role="form">
-		    <label class="radio-inline">
-		      <input type="radio" name="optradio">Student
-		    </label>
-		    <label class="radio-inline">
-		      <input type="radio" name="optradio">Faculty
-		    </label>
-		    <label class="radio-inline">
-		      <input type="radio" name="optradio">Staff
-		    </label>
-		  </form>
+				<label class="radio-inline">
+				  <input type="radio" name="userType" required>Student
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="userType" required>Faculty
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="userType" required>Staff
+				</label>
   
-                <form role="form">
-		    <div class="form-group">
-		      <label for="sel1">Department (select one):</label>
-		      <select class="form-control" id="sel1">
-			<option>Engineering</option>
-			<option>Boring Stuff</option>
-			<option>Something Dumb</option>
-			<option>Go Away</option>
-		      </select>
-		      <br>
-		    </div>
-		  </form>
-                
-                
+				<div class="form-group">
+				  <label for="sel1">Department (select one):</label>
+				  <select class="form-control" id="sel1">
+				<option>Engineering</option>
+				<option>Boring Stuff</option>
+				<option>Something Dumb</option>
+				<option>Go Away</option>
+				  </select>
+				  <br>
+				</div>
+
                 <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Register</button>
             </form><!-- /form -->
             

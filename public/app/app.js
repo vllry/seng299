@@ -20,4 +20,14 @@ angular.module('userApp', ['app.routes'])
 
 	vm.message = "THIS IS THE ABOUT PAGE"
 
+})
+
+.controller('loginController', function(){
+
+
+})
+
+.controller('signupController', function(){
+
+
 });
