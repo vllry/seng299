@@ -4,7 +4,8 @@ var bcrypt 		 = require('bcrypt-nodejs');
 
 // user schema 
 var UserSchema   = new Schema({
-	userid: { type: String, required: true, index: { unique: true }},
+	netlinkid: { type: String, required: true, index: { unique: true }},
+	studentid: { type: String }, //Cannot require:true because not everyone is a student -> not everyone has a V-number
 	password: { type: String, required: true, select: false },
 	firstName: String,
 	lastName: String,
@@ -17,7 +18,7 @@ var UserSchema   = new Schema({
 // hash the password before the user is saved
 UserSchema.pre('save', function(next) {
 	var user = this;
-	console.log(user.userid);
+	console.log(user.netlinkid);
 
 	// hash the password only if the password has been changed or user is new
 	if (!user.isModified('password')) return next();

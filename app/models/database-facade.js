@@ -31,7 +31,7 @@ function mongoCallback(res, err, responses, success) {
 
 function createToken(user) {
 	var token = jwt.sign({
-		id: user.userid,
+		id: user.netlinkid,
 		firstName: user.firstName,
 		lastName: user.lastName,
 		type: user.type,
@@ -56,17 +56,17 @@ exports.getUsers = function(res) {
 
 exports.userRegister = function(res, user) {
 	user.save(function(err) {
-		var errors = {11000 : { success: false, message: 'A user with that userid already exists'}};
+		var errors = {11000 : { success: false, message: 'A user with that netlinkid already exists'}};
 		mongoCallback(res, err, errors, { success : true, message: 'User created' });
 	});
 };
 
 
 
-exports.userLogin = function(res,userid,password) {
-	console.log(userid + ' is attempting to log in');
+exports.userLogin = function(res,netlinkid,password) {
+	console.log(netlinkid + ' is attempting to log in');
 	schemaUser.findOne({
-		'userid': userid
+		'netlinkid': netlinkid
 	}).select('password').exec(function(err, user) {
 		if(err) throw err;
 		if(!user) {
