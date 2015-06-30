@@ -39,7 +39,7 @@ angular.module('userApp', ['app.routes'])
 		vm.submitted = true;
 
 		// If form is invalid, return and let AngularJS show validation errors.
-		if (luser.$invalid) {
+		if (user.$invalid) {
 		    return;
 		}
 	
