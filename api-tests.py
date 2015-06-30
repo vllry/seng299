@@ -19,7 +19,7 @@ config = {
 #	'test group name' : {
 #		'individual test name' : {
 #			'url' : API url,
-#			'params' : List of parameters to pass from config,
+#			'params' : Dictionary of parameters
 #			'bail' : 'all' or 'suite' - optional parameter, use this to stop testing when future tests require this one to succeed. All stops everything, suite skips to the next group of tests.
 #			'accept-on' : optional parameter, will cause a test to pass if success retrns false but message matches ths string,
 #			'reject-on' : optional parameter, will cause a test to fail if success returns true but message matches this string.
@@ -38,25 +38,32 @@ tests = {
 	'2 - User Account': {
 		'1 - Registration': {
 			'url': 'http://localhost:3000/api/user/register',
-			'params' : ['userid', 'password'],
+			'params' : {'userid':config['userid'], 'password':config['password']},
 			'bail' : 'all',
 			'accept-on' : 'A user with that userid already exists' #The test user may already exist, and that's okay
 		},
 		'2 - Rejection Of Duplicate Registration': {
 			'url': 'http://localhost:3000/api/user/register',
-			'params' : ['userid', 'password'],
+			'params' : {'userid':config['userid'], 'password':config['password']},
 			'bail' : 'all',
 			'accept-on' : 'A user with that userid already exists', #We want to confirm that a duplicate account can't be created.
 			'reject-on' : 'User created'
 		},
-		#'3 - Rejection Of Incorrect Login': {
-		#	'url': 'http://localhost:3000/api/user/login',
-		#	'params' : ['userid', 'password'],
-		#	'reject-on' : 'Logged in' #We want to confirm that a duplicate account can't be created.
-		#},
-		'4 - Login': {
+		'3 - Rejection Of Incorrect Username': {
 			'url': 'http://localhost:3000/api/user/login',
-			'params' : ['userid', 'password'],
+			'params' : {'userid':config['userid']+'invalid', 'password':config['password']},
+			'accept-on' : 'User does not exist',
+			'reject-on' : 'Logged in' #We want to confirm that this fails
+		},
+		'4 - Rejection Of Incorrect Password': {
+			'url': 'http://localhost:3000/api/user/login',
+			'params' : {'userid':config['userid'], 'password':config['password']+'invalid'},
+			'accept-on' : 'Invalid password',
+			'reject-on' : 'Logged in' #We want to confirm that this fails
+		},
+		'5 - Login': {
+			'url': 'http://localhost:3000/api/user/login',
+			'params' : {'userid':config['userid'], 'password':config['password']},
 			'bail' : 'all'
 		}
 	}
@@ -65,7 +72,7 @@ tests = {
 
 
 def done(total, passed, bailed=False):
-	print("Passed %i tests out of %i tests done" % (passed, total))
+	print("Passed %i tests out of the %i tests done" % (passed, total))
 	if total != passed:
 		print("Please try to resolve the problems, and if you can't, please don't push to master")
 	if bailed:
@@ -87,13 +94,10 @@ for testsuite in sorted(tests.keys()):
 		total += 1
 		problem = False
 		print('%i/%i:	%s' % (categorycount, category, test))
-		params = {}
-		for p in tests[testsuite][test]['params']:
-			params[p] = config[p]
 
 		try:
 			url = tests[testsuite][test]['url']
-			data = urllib.parse.urlencode(params)
+			data = urllib.parse.urlencode(tests[testsuite][test]['params'])
 			if data:
 				req = urllib.request.Request(url, data.encode('ascii'))
 			else:
