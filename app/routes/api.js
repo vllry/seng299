@@ -117,14 +117,14 @@ module.exports = function(app, express) {
         if(token) {
             jwt.verify(token, secret, function(err, decoded) {
                 if(err) {
-                    res.status(403).send({ success: false, message: "Failed to authenticate user"});
+                    res.status(403).send({ success: false, message: "Token not valid"});
                 } else {
                     req.decoded = decoded;
                     next();
                 }
             });
         } else {
-            res.status(403).send({ success: false, message: "No Token Provided"});
+            res.status(403).send({ success: false, message: "No token provided"});
         }
     });
 
@@ -134,7 +134,7 @@ module.exports = function(app, express) {
 	apiRouter.route('/user')
 
 		 // get all the users (accessed at GET http://localhost:8080/api/user)
-		.get(function(req, res) {
+		.post(function(req, res) {
 			databaseFacade.getUsers(res);
 		});
 

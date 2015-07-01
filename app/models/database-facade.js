@@ -21,8 +21,8 @@ function mongoCallback(res, err, responses, success) {
 			}
 		}
 		res.send(err); //catchall
-		return;
 		//console.log("Unexpected mongo error");
+		return;
 	}
 	res.json(success);
 }
@@ -30,14 +30,8 @@ function mongoCallback(res, err, responses, success) {
 
 
 function createToken(user) {
-	var token = jwt.sign({
-		id: user.netlinkid,
-		firstName: user.firstName,
-		lastName: user.lastName,
-		type: user.type,
-		department: user.department
-		}, config.secret, {
-			expirtesInMinute: 1440
+	var token = jwt.sign(user, config.secret, {
+			expiresInMinutes: 1440 //24 hours
 	});
 	return token;
 }
