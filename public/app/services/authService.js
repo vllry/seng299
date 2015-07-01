@@ -1,0 +1,54 @@
+angular.module('authService', [])
+	
+	.factory('Auth', function($http, $q, AuthToken) {
+
+		var authFactory = {};
+
+		authFactory.login = function(netlinkid, password) {
+			return $http.post('/api/user/login', {
+				netlinkid: netlinkid,
+				password: password
+			})
+			.success(function(data) {
+				AuthToken.setToken(data.token);
+				return data;
+			})
+		}
+
+		authFactory.logout = function() {
+			AuthToken.setToken();
+		}
+
+		authFactory.isLoggedIn = function() {
+			if(AuthToken.getToken())
+				return true;
+			else
+				return false;
+		}
+
+		authFactory.getUser = function() {
+			if(AuthToken.getToken())
+				return $http.get('/api/me');
+			else
+				return $q.reject({ message: "User has no token" });
+		}
+
+	})
+
+	.factory('AuthToken', function($window) {
+
+		var authTokenFactory = {};
+
+		authTokenFactory.getToken = function() {
+			return $window.localStorage.getItem('token');
+		}
+
+		authTokenFactory.setToken = function(token) {
+			if(token) {
+				$window.localStorage.setItem('token', token);
+			} else {
+				$window.localStorage.removeItem('token');
+			}
+
+		}
+	})
