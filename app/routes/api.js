@@ -23,6 +23,7 @@ GET /api					API test message
 * Denotes API that requires a token
 Also, warning that the API often gives 403's instead of 404's when you use the wrong HTTP method (IE GET /user rather than POST /user)
 
+
 */
 
 var bodyParser = require('body-parser'); 	// get body-parser
@@ -50,16 +51,17 @@ module.exports = function(app, express) {
 
 
 
-	apiRouter.route('/booking/byuser')
-		.get(function(req, res) {
-            Booking.find({ netlinkid: req.decoded.netlinkid }, function(err, bookings) {
-                if(err) {
-                    res.send(err);
-                    return;
-                }
-                res.json(bookings);
-            });
-        });
+	// apiRouter.route('/booking/byuser')
+	// 	.get(function(req, res) {
+ //            Booking.find({ netlinkid: req.decoded.netlinkid }, function(err, bookings) {
+ //                if(err) {
+ //                    res.send(err);
+ //                    return;
+ //                }
+ //                res.json(bookings);
+ //            });
+ //        });
+	
 
 
 
@@ -203,6 +205,19 @@ module.exports = function(app, express) {
 
 		databaseFacade.bookingCreate(res, booking);
         });
+
+
+    apiRouter.route('/booking/byuser')
+		.get(function(req, res) {
+            Booking.find({ netlinkid: req.decoded.netlinkid }, function(err, bookings) {
+                if(err) {
+                    res.send(err);
+                    return;
+                }
+                res.json(bookings);
+            });
+        });
+
     
 
 
