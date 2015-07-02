@@ -51,20 +51,6 @@ module.exports = function(app, express) {
 
 
 
-	// apiRouter.route('/booking/byuser')
-	// 	.get(function(req, res) {
- //            Booking.find({ netlinkid: req.decoded.netlinkid }, function(err, bookings) {
- //                if(err) {
- //                    res.send(err);
- //                    return;
- //                }
- //                res.json(bookings);
- //            });
- //        });
-	
-
-
-
 	apiRouter.route('/booking/id/:booking_id')
 
 		// get the booking with that id
@@ -188,6 +174,7 @@ module.exports = function(app, express) {
 		});
 
 
+
 	// /booking =========================================================
 	
 	// on routes that end in /booking/create
@@ -198,13 +185,14 @@ module.exports = function(app, express) {
         .post(function(req, res) {
             var booking = new Booking({
                 bookedBy: req.decoded.netlinkid,
-                startTime: req.body.starttime, //Time in ms. Use the Javascript Date object
+                startTime: req.body.starttime, //Time in ms. Use the Javascript Date object to generate.
 		duration: req.body.duration, //Time in minutes
                 roomid: req.body.roomid
             });
 
 		databaseFacade.bookingCreate(res, booking);
         });
+
 
 
     apiRouter.route('/booking/byuser')
