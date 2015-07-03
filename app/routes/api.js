@@ -51,19 +51,6 @@ module.exports = function(app, express) {
 
 
 
-	// apiRouter.route('/booking/byuser')
-	// 	.get(function(req, res) {
- //            Booking.find({ netlinkid: req.decoded.netlinkid }, function(err, bookings) {
- //                if(err) {
- //                    res.send(err);
- //                    return;
- //                }
- //                res.json(bookings);
- //            });
- //        });
-	
-
-
 
 	apiRouter.route('/booking/id/:booking_id')
 
@@ -198,8 +185,8 @@ module.exports = function(app, express) {
         .post(function(req, res) {
             var booking = new Booking({
                 bookedBy: req.decoded.netlinkid,
-                startTime: req.body.starttime, //Time in ms. Use the Javascript Date object
-		duration: req.body.duration, //Time in minutes
+                startTime: req.body.starttime, //Time in ms. Use the Javascript Date object to generate
+		duration: req.body.duration/30, //Time in minutes -> time in half-hour blocks
                 roomid: req.body.roomid
             });
 

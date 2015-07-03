@@ -6,12 +6,14 @@ Maintainer: Vallery
 
 var config			= require('../../config');
 var schemaUser       = require('./schemas/user');
+var schemaBooking       = require('./schemas/booking');
 
 var jwt				= require('jsonwebtoken');
 
 
 
 //Callback function for sending results from mongo operation
+//res is the express resource, err is the error callback value, responses is an array of possible error responses, and success is the response if there is no error.
 function mongoCallback(res, err, responses, success) {
 	if (err) {
 		for (var key in responses) {
@@ -21,7 +23,7 @@ function mongoCallback(res, err, responses, success) {
 			}
 		}
 		res.send(err); //catchall
-		//console.log("Unexpected mongo error");
+		console.log("Unexpected mongo error: ");
 		return;
 	}
 	res.json(success);
@@ -37,6 +39,35 @@ function createToken(user) {
 }
 
 
+
+function checkIfBookingAtTime(roomid, datetime) {
+	schemaUser.find({}, function(err, users) {
+		mongoCallback(res, err, {}, users);
+	});
+}
+
+
+
+function bookingValidate(booking) {
+	//Check that the time is valid
+	dayOfWeek = booking.startTime.getDay();
+	var earliest = 8; //Earliest weekday time is 8:00 am
+	var latest = 22;
+	if (dayOfWeek == 0 || dayOfWeek == 6) {
+		earliest = 11;
+		latest = 18;
+	}
+	var hour = booking.startTime.getHours()
+	if (hour < earliest || hour + (booking.duration/2) > latest) {
+		return {'success' : false, 'message' : 'Booking must be between ' + earliest.toString() + ':00 and ' + latest.toString() + ':00'}
+	}
+
+	return null;
+}
+
+
+
+//Exported functions, IE functions called by api.js, are below this point
 
 
 
@@ -58,6 +89,12 @@ exports.userRegister = function(res, user) {
 
 
 exports.bookingCreate = function(res, booking) {
+	var status = bookingValidate(booking);
+	if (status) {
+		res.json(status);
+		return;
+	}
+
 	booking.save(function(err) {
 		var errors = {11000 : { success: false, message: 'A booking at that time already exists'}};
 		mongoCallback(res, err, errors, { success : true, message: 'Booking created' });
