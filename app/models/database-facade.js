@@ -49,24 +49,40 @@ function checkIfBookingAtTime(roomid, datetime) {
 
 
 function bookingValidate(booking) {
+	console.log(booking);
 	//Check that the time is valid
 	dayOfWeek = booking.startTime.getDay();
 	var earliest = 8; //Earliest weekday time is 8:00 am
-	var latest = 22;
+	var latest = 22; //Latest weekday time is 10:00 pm
 	if (dayOfWeek == 0 || dayOfWeek == 6) {
-		earliest = 11;
-		latest = 18;
+		earliest = 11; //Earliest weekend time is 11:00 am
+		latest = 18; //Latest weekend time is 6:00 pm
 	}
 	var hour = booking.startTime.getHours()
-	if (hour < earliest || hour + (booking.duration/2) > latest) {
+	if (hour < earliest || hour + (booking. duration/2) > latest) {
 		return {'success' : false, 'message' : 'Booking must be between ' + earliest.toString() + ':00 and ' + latest.toString() + ':00'}
 	}
 
-	return null;
+	console.log(durationInHalfHours % 1);
+	//Check that the duration is valid
+	var durationInHalfHours = booking.duration;
+	if (durationInHalfHours % 1 === 0) { //If duration is not an int
+		return {'success' : 'false', 'message' : 'Duration must be a multiple of 30 minutes.'}
+	}
+	if (durationInHalfHours > 6) {
+		return {'success' : 'false', 'message' : 'No user may create a booking for longer than 3 hours.'}
+	}
+	/*else if (durationInHalfHours > 2) {
+		var bookedBy = booking.bookedBy;     
+		schemaUser.find({'netlinkid' : bookedBy})
+	}*/
+
+	return null; //Indicates no errors
 }
 
 
 
+//Internal functions, intended for use in this file only, are above this point
 //Exported functions, IE functions called by api.js, are below this point
 
 
