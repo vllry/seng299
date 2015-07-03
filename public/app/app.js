@@ -6,7 +6,6 @@
 angular.module('userApp', ['app.routes'])
 
 .controller('homeController', function(){
-
 	var vm = this;
 
 	// basic variable to display
@@ -16,7 +15,6 @@ angular.module('userApp', ['app.routes'])
 })
 
 .controller('aboutController', function(){
-
 	var vm = this;
 
 	vm.message = "THIS IS THE ABOUT PAGE"
@@ -26,6 +24,7 @@ angular.module('userApp', ['app.routes'])
 .controller('loginController', function(){
 	var vm = this;
 
+	
 
 })
 
@@ -57,7 +56,7 @@ angular.module('userApp', ['app.routes'])
 		  	console.log("ERROR. data = " + data + ", status = " + status);
 		    });
 
-		vm.message = "REGISTER BUTTON CLICKED"
+		console.log("REGISTER BUTTON CLICKED");
 		console.log(user);
 		console.log(userData);
 
