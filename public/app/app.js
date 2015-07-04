@@ -3,7 +3,7 @@
 
 //declare modules
 
-angular.module('userApp', ['app.routes'])
+angular.module('userApp', ['app.routes', 'ngStorage'])
 
 .controller('homeController', function(){
 	var vm = this;
@@ -21,11 +21,12 @@ angular.module('userApp', ['app.routes'])
 
 })
 
-.controller('loginController', ['$http', function($http){
+.controller('loginController', ['$http', '$localStorage', function($http, $localStorage){
 	var vm = this;
 
 	vm.loginUser = function(user) {
 		vm.submitted = true;
+		vm.message = ""
 
 		// If form is invalid, return and let AngularJS show validation errors.
 		if (user.$invalid) {
@@ -42,6 +43,10 @@ angular.module('userApp', ['app.routes'])
 			if (data.success == true) {
 				console.log("CORRECT USERNAME AND PASSWORD");
 				vm.message = "Successfully logged in."
+
+				$localStorage.token = data.token;
+
+				console.log("local token = " + data.token);
 			} else if (data.message == "User does not exist") {
 				console.log("USER DOES NOT EXIST");
 				vm.message = "Username does not exist."
