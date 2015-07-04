@@ -9,9 +9,9 @@ var UserSchema   = new Schema({
 	studentid: String, //Cannot require:true because not everyone is a student -> not everyone has a V-number
 	firstName: { type: String, required: true },
 	lastName: { type: String, required: true },
-	userType: Number/*{ type: String, required: true }*/,
-	department: Number,
-	role: { type: String, /*required: true */},
+	userType: { type: String, enum : ['student', 'staff', 'facaulty'], required: true },
+	department: String,
+	role: { type: String, enum : ['user', 'admin', 'superAdmin'], default : 'user', required: true},
 	bookingRestriction: Date
 });
 

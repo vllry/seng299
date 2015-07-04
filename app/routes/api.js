@@ -51,19 +51,6 @@ module.exports = function(app, express) {
 
 
 
-	// apiRouter.route('/booking/byuser')
-	// 	.get(function(req, res) {
- //            Booking.find({ netlinkid: req.decoded.netlinkid }, function(err, bookings) {
- //                if(err) {
- //                    res.send(err);
- //                    return;
- //                }
- //                res.json(bookings);
- //            });
- //        });
-	
-
-
 
 	apiRouter.route('/booking/id/:booking_id')
 
@@ -92,7 +79,8 @@ module.exports = function(app, express) {
 				password: req.body.password,
 				firstName: req.body.firstname,
 				lastName: req.body.lastname,
-				department: req.body.department
+				department: req.body.department,
+				userType: 'student'
 			});
 
 			databaseFacade.userRegister(res, user);
@@ -129,6 +117,7 @@ module.exports = function(app, express) {
             res.status(403).send({ success: false, message: "No token provided"});
         }
     });
+
 
 
 	// on routes that end in /user
@@ -195,15 +184,17 @@ module.exports = function(app, express) {
 	//create booking
     apiRouter.route('/booking/create')
     
-        .post(function(req, res) {
-            var booking = new Booking({
-                bookedBy: req.decoded.netlinkid,
-                startTime: req.body.starttime, //Time in ms. Use the Javascript Date object
-		duration: req.body.duration, //Time in minutes
-                roomid: req.body.roomid
-            });
+		.post(function(req, res) {
+			start = new Date();
+			start.setTime(req.body.starttime);
+			var bookingData = {
+				bookedBy: req.body.netlinkid,
+				startTime: start, //Time in ms. Use the Javascript Date object to generate
+				duration: Number(req.body.duration)/30, //Time in minutes -> time in half-hour blocks
+				roomid: req.body.roomid
+            };
 
-		databaseFacade.bookingCreate(res, booking);
+		databaseFacade.bookingCreate(res, bookingData);
         });
 
 
