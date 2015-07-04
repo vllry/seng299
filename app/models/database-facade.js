@@ -18,6 +18,7 @@ var schemaUser		= require('./schemas/user');
 //res is the express resource, err is the error callback value, responses is an array of possible error responses, and success is the response if there is no error.
 function mongoCallback(res, err, responses, success) {
 	if (err) {
+		console.log(err);
 		for (var key in responses) {
 			if (key == err.code) {
 				res.json(responses[key]);
@@ -84,6 +85,7 @@ function bookingValidate(bookingData, fn) {
 
 	//Do the checks that involve queries.
 	async.parallel([
+		//Check that the user has the right to book for the length they have
 		function (callback) {
 			if (durationInHalfHours <= 2) { //Only staff and facaulty may book for longer than an hour
 				callback(null, {'success' : true});
@@ -99,22 +101,31 @@ function bookingValidate(bookingData, fn) {
 			});
 		},
 
+		//Check that this doesn't overlap with the previous booking
 		function (callback) {
 			var q = schemaBooking.find({ //Get the previous booking in the same room (TODO: account for no previous bookings)
 				'roomid' : bookingData.roomid,
 				'startTime' : {$lt : bookingData.startTime}
 			}).lean().sort({'startTime': -1}).limit(1);
 			q.exec(function(err, data) {
+				console.log('data');
 				console.log(data);
-				var start = data[0]['startTime'];
-				var duration = data[0]['duration'];
-				console.log("Previous booking starts at " + start + " and has length " + duration);
-				//callback(null, {'success' : true}); //TODO: detect booking collision
-				var endOfPrevious = new Date();
-				endOfPrevious.setTime(start);
-				var durationInms = 
+				if (data.length) {
+					var start = data[0]['startTime'];
+					var duration = data[0]['duration'];
+					console.log("Previous booking starts at " + start + " and has length " + duration);
+					var durationInms = data[0]['duration'] * 30 * 60 * 1000 - 1000;
+					var endOfPrevious = new Date();
+					endOfPrevious.setTime(start.getTime() + durationInms);
+					console.log("Previous booking ends at " + endOfPrevious);
+					if (endOfPrevious > bookingData.startTime) {
+						callback(null, {'success' : false, 'message' : 'The start time overlaps with the previous booking'});
+						return;
+					}
+				}
+				callback(null, {'success' : true}); //If there is no previous booking, there can't be a conflict
 			});
-		}
+		},
 	],
 
 	function(err, results){ //Wait until all queries finish before evaluating results
