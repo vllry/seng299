@@ -4,7 +4,7 @@ angular.module('app.routes', ['ngRoute'])
 
 // Configuring the routes
 .config(function($routeProvider, $locationProvider){
-	console.log("HERE");
+
 	$routeProvider
 	  // Route for home page
 	  .when("/", {
@@ -31,7 +31,7 @@ angular.module('app.routes', ['ngRoute'])
 	  	controllerAs: 'signup'
 	  })
 
-	  .otherwise({ redirectTo: '/' });
+	  .otherwise('/');
 	  
 
 	// Added to remove the # from URLs
