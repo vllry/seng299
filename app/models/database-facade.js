@@ -43,9 +43,11 @@ function createToken(user) {
 
 
 
-function checkIfBookingAtTime(roomid, datetime) {
-	schemaUser.find({}, function(err, users) {
-		mongoCallback(res, err, {}, users);
+function getUseridFromNetlinkid(netlinkid, fn) {
+	schemaUser.findOne({
+		'netlinkid' : netlinkid
+	}).select('_id').exec(function(err, user) {
+		fn(user._id);
 	});
 }
 
@@ -198,17 +200,20 @@ exports.userRegister = function(res, user) {
 
 
 exports.bookingCreate = function(res, bookingData) {
-	bookingValidate(bookingData, function(result) {
-		if (result['success']) {
-			var booking = new schemaBooking(bookingData);
-			booking.save(function(err) {
-				var errors = {11000 : { success: false, message: 'A booking at that time already exists'}};
-				mongoCallback(res, err, errors, { success : true, message: 'Booking created' });
-			});
-		}
-		else {
-			res.json(result);
-		}
+	getUseridFromNetlinkid(bookingData.bookedBy, function(userid) {
+		bookingData.bookedBy = userid;
+		bookingValidate(bookingData, function(result) {
+			if (result['success']) {
+				var booking = new schemaBooking(bookingData);
+				booking.save(function(err) {
+					var errors = {11000 : { success: false, message: 'A booking at that time already exists'}};
+					mongoCallback(res, err, errors, { success : true, message: 'Booking created' });
+				});
+			}
+			else {
+				res.json(result);
+			}
+		});
 	});
 };
 

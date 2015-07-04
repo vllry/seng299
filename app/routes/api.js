@@ -188,7 +188,7 @@ module.exports = function(app, express) {
 			start = new Date();
 			start.setTime(req.body.starttime);
 			var bookingData = {
-				bookedBy: req.body.id, //This is the mongo document ID, NOT netlinkid
+				bookedBy: req.body.netlinkid,
 				startTime: start, //Time in ms. Use the Javascript Date object to generate
 				duration: Number(req.body.duration)/30, //Time in minutes -> time in half-hour blocks
 				roomid: req.body.roomid
