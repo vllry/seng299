@@ -118,6 +118,7 @@ module.exports = function(app, express) {
     });
 
 
+
 	// on routes that end in /user
 	// ----------------------------------------------------
 	apiRouter.route('/user')
@@ -182,15 +183,17 @@ module.exports = function(app, express) {
 	//create booking
     apiRouter.route('/booking/create')
     
-        .post(function(req, res) {
-            var booking = new Booking({
-                bookedBy: req.decoded.netlinkid,
-                startTime: req.body.starttime, //Time in ms. Use the Javascript Date object to generate
-		duration: req.body.duration/30, //Time in minutes -> time in half-hour blocks
-                roomid: req.body.roomid
-            });
+		.post(function(req, res) {
+			start = new Date();
+			start.setTime(req.body.starttime);
+			var bookingData = {
+				bookedBy: req.body.id, //This is the mongo document ID, NOT netlinkid
+				startTime: start, //Time in ms. Use the Javascript Date object to generate
+				duration: Number(req.body.duration)/30, //Time in minutes -> time in half-hour blocks
+				roomid: req.body.roomid
+            };
 
-		databaseFacade.bookingCreate(res, booking);
+		databaseFacade.bookingCreate(res, bookingData);
         });
 
 
