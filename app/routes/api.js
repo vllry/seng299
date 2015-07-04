@@ -79,7 +79,8 @@ module.exports = function(app, express) {
 				password: req.body.password,
 				firstName: req.body.firstname,
 				lastName: req.body.lastname,
-				department: req.body.department
+				department: req.body.department,
+				userType: 'student'
 			});
 
 			databaseFacade.userRegister(res, user);
