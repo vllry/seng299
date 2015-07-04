@@ -12,7 +12,7 @@ var BookingSchema   = new Schema({
 	laptopid: Number
 });
 
-BookingSchema.index({ roomId: 1, startTime: 1}, { unique: true });
+BookingSchema.index({ roomid: 1, startTime: 1}, { unique: true });
 
 
 

@@ -52,6 +52,12 @@ function checkIfBookingAtTime(roomid, datetime) {
 
 
 function bookingValidate(bookingData, fn) {
+	console.log(bookingData.roomid);
+	if (!bookingData.roomid) {
+		fn({'success' : false, 'message' : '\'' + bookingData.roomid + '\' is not a valid roomid'});
+		return;
+	}
+
 	var durationInHalfHours = bookingData.duration;
 	var hours = bookingData.startTime.getHours()
 	var dayOfWeek = bookingData.startTime.getDay();
@@ -103,23 +109,45 @@ function bookingValidate(bookingData, fn) {
 
 		//Check that this doesn't overlap with the previous booking
 		function (callback) {
-			var q = schemaBooking.find({ //Get the previous booking in the same room (TODO: account for no previous bookings)
+			var q = schemaBooking.find({ //Get the previous booking in the same room
 				'roomid' : bookingData.roomid,
 				'startTime' : {$lt : bookingData.startTime}
 			}).lean().sort({'startTime': -1}).limit(1);
 			q.exec(function(err, data) {
-				console.log('data');
-				console.log(data);
+				//console.log(data);
 				if (data.length) {
 					var start = data[0]['startTime'];
-					var duration = data[0]['duration'];
-					console.log("Previous booking starts at " + start + " and has length " + duration);
+					console.log("Previous booking starts at " + start + " and has length " + data[0]['duration']);
 					var durationInms = data[0]['duration'] * 30 * 60 * 1000 - 1000;
 					var endOfPrevious = new Date();
 					endOfPrevious.setTime(start.getTime() + durationInms);
 					console.log("Previous booking ends at " + endOfPrevious);
 					if (endOfPrevious > bookingData.startTime) {
 						callback(null, {'success' : false, 'message' : 'The start time overlaps with the previous booking'});
+						return;
+					}
+				}
+				callback(null, {'success' : true}); //If there is no previous booking, there can't be a conflict
+			});
+		},
+
+		//Check that this doesn't overlap with the next booking
+		function (callback) {
+			var q = schemaBooking.find({ //Get the next booking in the same room
+				'roomid' : bookingData.roomid,
+				'startTime' : {$gt : bookingData.startTime}
+			}).lean().sort({'startTime': 1}).limit(1);
+			q.exec(function(err, data) {
+				//console.log(data);
+				if (data.length) {
+					var duration = data[0]['duration'];
+					var startOfNext = data[0].startTime;
+					console.log("Next booking starts at " + startOfNext);
+					endOfNew = new Date();
+					endOfNew.setTime(bookingData.startTime.getTime() + bookingData['duration'] * 30 * 60 * 1000 - 1000); //Start time + duration - 1 second (just in case of ms rounding issues)
+					console.log("New booking ends at " + endOfNew);
+					if (startOfNext < endOfNew) {
+						callback(null, {'success' : false, 'message' : 'The end time overlaps with the next booking'});
 						return;
 					}
 				}
@@ -134,6 +162,9 @@ function bookingValidate(bookingData, fn) {
 		}
 		else if (!results[1]['success']) {
 			fn(results[1]);
+		}
+		else if (!results[2]['success']) {
+			fn(results[2]);
 		}
 		else {
 			fn({'success' : true});
