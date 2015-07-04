@@ -10,17 +10,22 @@
             <p id="profile-name" class="profile-name-card"></p>
             <form class="form-signin">
               <!--  <span id="reauth-email" class="reauth-email"></span> -->
-                <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                <input type="text" id="inputEmail" class="form-control" placeholder="Username" ng-model="user.username" required autofocus>
+                <input type="text" id="inputPassword" class="form-control" placeholder="Password" ng-model="user.password" required>
                 <div id="remember" class="checkbox">
                     <label>
                         <input type="checkbox" value="remember-me"> Remember me
                     </label>
                 </div>
-                <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
+                <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit" ng-click="login.loginUser(user)">Sign in</button>
+
+   	<div ng-message="message">{{ login.message }}</div>
+
             </form><!-- /form -->
             <a href="#" class="forgot-password">
                 Forgot your password?
             </a>
+
+
         </div><!-- /card-container -->
     </div><!-- /container -->
