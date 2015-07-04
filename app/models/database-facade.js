@@ -4,15 +4,13 @@ Facade for interacting with the database.
 Maintainer: Vallery
 */
 
-var async			= require('async');
-var jwt				= require('jsonwebtoken');
+var async		= require('async');
+var jwt			= require('jsonwebtoken');
 var mongoose		= require('mongoose');
-var promise			= require('bluebird');
 
-var config			= require('../../config');
-var schemaUserTest		= promise.promisifyAll(require('./schemas/user'));
-var schemaUser		= require('./schemas/user');
+var config		= require('../../config');
 var schemaBooking	= require('./schemas/booking');
+var schemaUser		= require('./schemas/user');
 
 
 
@@ -102,7 +100,7 @@ function bookingValidate(bookingData, fn) {
 		},
 
 		function (callback) {
-			var q = schemaBooking.find({
+			var q = schemaBooking.find({ //Get the previous booking in the same room (TODO: account for no previous bookings)
 				'roomid' : bookingData.roomid,
 				'startTime' : {$lt : bookingData.startTime}
 			}).lean().sort({'startTime': -1}).limit(1);
@@ -111,12 +109,15 @@ function bookingValidate(bookingData, fn) {
 				var start = data[0]['startTime'];
 				var duration = data[0]['duration'];
 				console.log("Previous booking starts at " + start + " and has length " + duration);
-				callback(null, {'success' : true}); //TODO: detect booking collision
+				//callback(null, {'success' : true}); //TODO: detect booking collision
+				var endOfPrevious = new Date();
+				endOfPrevious.setTime(start);
+				var durationInms = 
 			});
 		}
 	],
 
-	function(err, results){
+	function(err, results){ //Wait until all queries finish before evaluating results
 		if (!results[0]['success']) {
 			fn(results[0]);
 		}
