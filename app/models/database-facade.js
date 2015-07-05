@@ -231,9 +231,12 @@ exports.scheduleByRoomAndDay = function(roomid, dayInms, fn) {
 	dayEnd.setTime(dayStart.getTime());
 	dayEnd.setDate(dayStart.getDate()+1); //TODO: account for end of month/year
 	dayEnd.setTime(dayEnd.getTime()-1000);
-	console.log(dayStart);
-	console.log(dayEnd);
-	fn('hi');
+	//console.log(dayStart);
+	//console.log(dayEnd);
+
+	schemaBookings.find({'roomid' : roomid, 'startTime' : {$lt : dayEnd, $gt : dayStart}}, function(err, bookings) {
+		
+	});
 }
 
 
