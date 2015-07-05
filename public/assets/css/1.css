@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 
-=======
 .section{
    margin: auto;
    margin-top: 200px;
@@ -8,7 +6,7 @@
     border:3px solid white;
     padding: 10px;
 }
->>>>>>> origin/Booking-UI
+
 
 #login{
 	margin-top: 20px;
@@ -23,8 +21,6 @@
 #ROW{
 	margin-right: 0px;
 }
-<<<<<<< HEAD
-=======
 #CheckBox{
 	width:800px; 
 	margin:0 auto
@@ -41,4 +37,4 @@ h2{
 h3{
 	color:gray;
 }
->>>>>>> origin/Booking-UI
+
