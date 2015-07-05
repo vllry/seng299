@@ -53,6 +53,13 @@ function numTwoDigits(num) {
 
 
 
+function daysInMonth(year, month) {
+    var d = new Date(year, month, 0);
+    return d.getDate();
+}
+
+
+
 //Callback function for sending results from mongo operation
 //res is the express resource, err is the error callback value, responses is an array of possible error responses, and success is the response if there is no error.
 function mongoCallback(res, err, responses, success) {
@@ -266,13 +273,27 @@ exports.scheduleByRoomAndDay = function(roomid, dayInms, fn) {
 	dayStart.setMinutes(0);
 	dayStart.setSeconds(0);
 	dayStart.setMilliseconds(0);
+
 	var dayEnd = new Date();
 	dayEnd.setTime(dayStart.getTime());
-	dayEnd.setDate(dayStart.getDate()+1); //TODO: account for end of month/year
+	if (dayStart.getDate() == daysInMonth(dayStart.getYear(), dayStart.getMonth())) { //Handle end of month/year
+		dayEnd.setDate(1);
+		if (dayEnd.getMonth() == 11) {
+			dayEnd.setMonth(0);
+			dayEnd.setYear(dayEnd.getFullYear() + 1);
+		}
+		else {
+			dayEnd.setMonth(dayEnd.getMonth() + 1);
+		}
+	}
+	else {
+		dayEnd.setDate(dayStart.getDate()+1);
+	}
 	dayEnd.setTime(dayEnd.getTime()-1000);
-	//console.log(dayStart);
-	//console.log(dayEnd);
+	console.log(dayStart);
+	console.log(dayEnd);
 
+	//Query for all bookings in that room and range
 	schemaBooking.find({'roomid' : roomid, 'startTime' : {$lt : dayEnd, $gt : dayStart}}, function(err, bookings) {
 		var table = {};
 		var index;
@@ -294,7 +315,8 @@ exports.scheduleByRoomAndDay = function(roomid, dayInms, fn) {
 				table[numTwoDigits(hours)+':'+numTwoDigits(minutes)] = bookings[index];
 			}
 		}
-		console.log(table);
+
+		fn(table); //Return result
 	});
 }
 
