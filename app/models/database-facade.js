@@ -219,6 +219,25 @@ exports.bookingCreate = function(res, bookingData) {
 
 
 
+exports.scheduleByRoomAndDay = function(roomid, dayInms, fn) {
+	console.log(dayInms);
+	var dayStart = new Date();
+	dayStart.setTime(dayInms);
+	dayStart.setHours(0);
+	dayStart.setMinutes(0);
+	dayStart.setSeconds(0);
+	dayStart.setMilliseconds(0);
+	var dayEnd = new Date();
+	dayEnd.setTime(dayStart.getTime());
+	dayEnd.setDate(dayStart.getDate()+1); //TODO: account for end of month/year
+	dayEnd.setTime(dayEnd.getTime()-1000);
+	console.log(dayStart);
+	console.log(dayEnd);
+	fn('hi');
+}
+
+
+
 exports.userLogin = function(res,netlinkid,password) {
 	console.log(netlinkid + ' is attempting to log in');
 	schemaUser.findOne({
