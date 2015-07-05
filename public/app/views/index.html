@@ -33,7 +33,7 @@
 	
 
 </head>
-<body ng-app="userApp">
+<body ng-app="userApp" ng-controller="navbarController as navbar">
 
 <!-- NAVBAR -->
 <header>
@@ -51,16 +51,15 @@
         <div id="navbar" class="collapse navbar-collapse">
           <!-- HOME, ABOUT, CONTACT buttons -->
           <ul class="nav navbar-nav">
-            <li class="active"><a href="/"> <span class="glyphicon glyphicon-home"></span> Home </a></li>
-
-            <li><a href="about"> About</a></li>
-            <li><a href="contact"> Contact</a></li>
+              <li ng-repeat="item in menuLeft" ng-class="{active: item.route == menuActive }"><a href="{{item.route}}"> <span class="{{ item.glyphicon }}"></span> {{item.label}} </a> </li>
           </ul>
-          <!-- LOGIN, SIGNUP buttons -->
+          
+          <!-- LOGIN, SIGNUP, LOGOUT buttons -->
           <ul class="nav navbar-nav navbar-right">
-      	    <li><a href="/signup"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-            <li><a href="login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+	      <li ng-repeat="item in menuRight" ng-hide={{item.hide}} ng-class="{active: item.route == menuActive }"><a href="{{item.route}}"> <span class="{{ item.glyphicon }}"></span> {{item.label}}</a> </li>
 
+	      <li ng-hide={{navbar.hideLogout}} ng-click=navbar.logout()><a href="/"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+	      
           </ul>
         </div><!--/.nav-collapse -->
       </div>
