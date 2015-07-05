@@ -14,6 +14,45 @@ var schemaUser		= require('./schemas/user');
 
 
 
+Date.prototype.getHoursTwoDigits = function() {
+    var retval = this.getHours();
+    if (retval < 10)
+    {
+        return ("0" + retval.toString());
+    }
+    else
+    {
+        return retval.toString();
+    }
+}
+
+
+
+Date.prototype.getMinutesTwoDigits = function() {
+    var retval = this.getMinutes();
+    if (retval < 10)
+    {
+        return ("0" + retval.toString());
+    }
+    else
+    {
+        return retval.toString();
+    }
+}
+
+
+
+function numTwoDigits(num) {
+	if (num < 10) {
+		return '0' + num.toString();
+	}
+	else {
+		return num.toString();
+	}
+}
+
+
+
 //Callback function for sending results from mongo operation
 //res is the express resource, err is the error callback value, responses is an array of possible error responses, and success is the response if there is no error.
 function mongoCallback(res, err, responses, success) {
@@ -220,7 +259,7 @@ exports.bookingCreate = function(res, bookingData) {
 
 
 exports.scheduleByRoomAndDay = function(roomid, dayInms, fn) {
-	console.log(dayInms);
+	//Determine time range
 	var dayStart = new Date();
 	dayStart.setTime(dayInms);
 	dayStart.setHours(0);
@@ -234,8 +273,28 @@ exports.scheduleByRoomAndDay = function(roomid, dayInms, fn) {
 	//console.log(dayStart);
 	//console.log(dayEnd);
 
-	schemaBookings.find({'roomid' : roomid, 'startTime' : {$lt : dayEnd, $gt : dayStart}}, function(err, bookings) {
-		
+	schemaBooking.find({'roomid' : roomid, 'startTime' : {$lt : dayEnd, $gt : dayStart}}, function(err, bookings) {
+		var table = {};
+		var index;
+		for (index = 0; index < 24; index++) { //Generate blank timetable;
+			table[index.toString()+':00'] = {};
+			table[index.toString()+':30'] = {};
+		}
+
+		for (index = 0; index < bookings.length; index++) {
+			var hours = bookings[index].startTime.getHours();
+			var minutes = bookings[index].startTime.getMinutes();
+			var str = hours.toString() + ':' + bookings[index].startTime.getMinutesTwoDigits();
+			table[str] = bookings[index];
+
+			var duration = bookings[index].duration;
+			for (duration; duration > 1; duration--) {
+				hours = hours + Math.floor((minutes+30)/60);
+				minutes = (minutes + 30) % 60;
+				table[numTwoDigits(hours)+':'+numTwoDigits(minutes)] = bookings[index];
+			}
+		}
+		console.log(table);
 	});
 }
 
