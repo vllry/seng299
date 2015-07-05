@@ -14,8 +14,9 @@ Note to editors of this file: Please LOOK AT THE SCHEMAS in app/models/schemas b
 
 GET /api					API test message
 	GET /booking
-		POST /create*			
-	POST /user*				token - Lists all users
+		POST /create*			netlinkid, starttime (in ms, use Date()), duration (in minutes), roomid - Attempts to create a booking
+		GET /byroom/<room id>/<day in ms>	Returns a dictionary with time blocks (12:00, 12:30, etc) as keys, and either null or booking data as the values.
+	POST /user*				Lists all users
 		POST /login			netlinkid, password - Logs the user in, returns a token
 		POST /register			netlinkid, password, firstname, lastname, [studentid], [department] - Registers the user
 		POST /<netlinkid>*
@@ -51,7 +52,6 @@ module.exports = function(app, express) {
 
 
 
-
 	apiRouter.route('/booking/id/:booking_id')
 
 		// get the booking with that id
@@ -61,6 +61,17 @@ module.exports = function(app, express) {
 
 				// return that booking
 				res.json(booking);
+			});
+		});
+
+
+
+	apiRouter.route('/booking/byroom/:roomid/:dayInms')
+
+		// get the booking with that id
+		.get(function(req, res) {
+			databaseFacade.scheduleByRoomAndDay(req.params.roomid, Number(req.params.dayInms), function(schedule) {
+				res.json(schedule);
 			});
 		});
 
