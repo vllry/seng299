@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<title>UVic Library Study Room Booking System</title>
+		<meta name="description" content="Sticky Table Headers Revisited: Creating functional and flexible sticky table headers" />
+		<meta name="keywords" content="Sticky Table Headers Revisited" />
+		<meta name="author" content="Codrops" />
+		<link rel="shortcut icon" href="../favicon.ico">
+		<link rel="stylesheet" type="text/css" href="../../assets/css/normalize.css" />
+		<link rel="stylesheet" type="text/css" href="../../assets/css/demo.css" />
+		<link rel="stylesheet" type="text/css" href="../../assets/css/component.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+ 
+        <link rel="stylesheet" href="../../assets/css/bootstrap.css">
+        <link rel="stylesheet" href="../../assets/css/1.css">
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular-route.js"></script>
+		<script src="//code.angularjs.org/1.2.13/angular-cookies.js"></script>
+
+
+	<!-- Add main Angular app files here -->
+	<script src="app/app.js"></script>
+	<script src="app/app.routes.js"></script>
+        <!--link rel="stylesheet" href="css/bootstrap.css"-->
+		<!--[if IE]>
+  		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<div class="container">
+			<!-- Top Navigation -->
+			<header>
+			    <div class="myContainer">
+    				<div class="row" id="ROW">
+       					<div class="pull-right">
+          					<button id="login" type="button" class="btn btn-primary button-fixed-right">Login</button>
+          					<button id="register" type="button" class="btn btn-primary button-fixed-right">Register</button>
+        				</div>
+ 		   
+    				</div>
+				</div>
+			</header>
+			<div class="component">		
+				<table class="">
+					<thead>
+						<tr>
+							<th>Room# / Time</th><th>A01</th><th>A02</th><th>A03</th><th>A04</th><th>A05</th><th>A06</th><th>A07</th><th>A08</th><th>A09</th><th>A10</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<div class="btn-group">
+                            <th>8:00 am</th><td><button type="button"class="btn btn-primary">Book</button></td><td><button type="button"class="btn btn-primary">Book</button></td><td>NotAvailable</td><td><button type="button"class="btn btn-primary">Book</button></td><td>NotAvailable</td><td><button type="button"class="btn btn-primary">Book</button></td><td>81</td><td>37</td><td>91</td><td>96</td>
+                        </tr><tr>
+							<th>8:30 am</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+						</tr><tr>
+							<th>9:00 am</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+						</tr><tr>
+							<th>10:00 am</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+						</tr><tr>
+							<th>10:30 am</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+						</tr><tr>
+							<th>11:00 am</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+						</tr><tr>
+							<th>11:30 am</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+						</tr><tr>
+                            <th>12:00 pm</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+						</tr><tr>
+                            <th>1:00 pm</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+						</tr><tr>
+                            <th>1:30 pm</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+						</tr><tr>
+                            <th>2:00 pm</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+						</tr><tr>
+                            <th>2:30 pm</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+						</tr><tr>
+                            <th>3:00 pm</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+						</tr><tr>
+                            <th>3:30 pm</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+						</tr><tr>
+                            <th>4:00 pm</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+						</tr><tr>
+                            <th>4:30 pm</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+						</tr><tr>
+                            <th>5:00 pm</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+						</tr><tr>
+                            <th>5:30 pm</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+						</tr><tr>
+                            <th>6:00 pm</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+						</tr><tr>
+                            <th>6:30 pm</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+						</tr><tr>
+                            <th>7:00 pm</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+						</tr><tr>
+                            <th>7:30 pm</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+						</tr><tr>
+                            <th>8:00 pm</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+						</tr><tr>
+                            <th>8:30 pm</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+						</tr><tr>
+                            <th>9:00 pm</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+						</tr><tr>
+                            <th>9:30 pm</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+						</tr><tr>
+                            <th>10:00 pm</th><td>23</td><td>88</td><td>8</td><td>2</td><td>67</td><td>83</td><td>81</td><td>37</td><td>91</td><td>96</td>
+                           </div>
+					</tbody>
+				</table>
+            
+			</div>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+		<script src="js/jquery.stickyheader.js"></script>
+	</body>
+</html>

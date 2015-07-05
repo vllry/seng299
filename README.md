@@ -5,6 +5,7 @@
 	package.json
 	app/
 		models/
+			database-facade.js - Facade for api.js to interact with thd database
 			schemas/
 				mongo collection schema files
 		routes/

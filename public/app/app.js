@@ -3,16 +3,16 @@
 
 //declare modules
 
-angular.module('userApp', ['app.routes'])
+angular.module('userApp', ['app.routes', 'ngStorage'])
 
-.controller('homeController', function(){
+.controller('homeController', ['$rootScope', function($rootScope){
 	var vm = this;
 
-	// basic variable to display
 	vm.message ="Library Study Room Booking"
-
 	
-})
+	
+	
+}])
 
 .controller('aboutController', function(){
 	var vm = this;
@@ -21,12 +21,67 @@ angular.module('userApp', ['app.routes'])
 
 })
 
-.controller('loginController', function(){
+.controller('loginController', ['$http', '$localStorage', '$rootScope', function($http, $localStorage, $rootScope){
 	var vm = this;
 
+	vm.loginUser = function(user) {
+		vm.submitted = true;
+		vm.message = ""
+
+		// If form is invalid, return and let AngularJS show validation errors.
+		if (user.$invalid) {
+		    return;
+		} else if ($localStorage.token != null) {
+		    vm.message = "Already logged in!"
+
+		    //delete this
+		    console.log("user token = " + $localStorage.token);
+		    $rootScope.loggedIn = true;
+		    
+		    return;
+		};
+
+		var loginData = {
+			'netlinkid' : user.username,
+			'password' : user.password
+		};
+		$http.post('api/user/login', loginData).
+			success(function(data, status, headers, config) {
+
+			//correct login information
+			if (data.success == true) {
+				console.log("CORRECT USERNAME AND PASSWORD");
+				vm.message = "Successfully logged in."
+
+				$localStorage.token = data.token;
+				$rootScope.loggedIn = true;
+
+				console.log("local token = " + data.token);
+			//username no in database
+			} else if (data.message == "User does not exist") {
+				console.log("USER DOES NOT EXIST");
+				vm.message = "Username does not exist."
+			//invalid password
+			} else {
+				console.log("INVALID PASSWORD");
+				vm.message = "Invalid Password."
+			};
+
+			
+		    	console.log("SUCCESS. data = " + data + ", status = " + status);
+		    	console.log("data.message = " + data.message);
+		    	console.log("data.success = " + data.success);
+		    }).
+		    error(function(data, status, headers, config) {
+		  	console.log("ERROR. data = " + data + ", status = " + status);
+		    });
+
+		console.log("LOGIN BUTTON CLICKED");
+
+	};
 	
 
-})
+}])
 
 .controller('signupController', ['$http', function($http){
 	var vm = this;
@@ -58,7 +113,6 @@ angular.module('userApp', ['app.routes'])
 
 		console.log("REGISTER BUTTON CLICKED");
 		console.log(user);
-		console.log(userData);
 
 	};
 
