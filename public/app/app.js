@@ -5,6 +5,47 @@
 
 angular.module('userApp', ['app.routes', 'ngStorage'])
 
+.controller('navbarController', function($localStorage, $scope, $rootScope, $location) {
+	  var vm = this;
+
+	  if ($localStorage.token != null) {
+		$rootScope.loggedIn = true;
+	  } else {
+	  	$rootScope.loggedIn = false;
+	  };
+
+	  console.log("loggedIn = " + $rootScope.loggedIn);
+	  
+	  $scope.menuLeft = [
+	    {label:'Home', route:'/', glyphicon:'glyphicon glyphicon-home'},
+	    {label:'About', route:'/about'},
+	    {label:'Contact', route:'/contact'}
+	   ]
+
+	  $scope.menuRight = [
+	    {label:'SignUp', route:'/signup', glyphicon:'glyphicon glyphicon-user', hide:$rootScope.loggedIn},
+	    {label:'Login', route:'/login', glyphicon:'glyphicon glyphicon-log-in', hide:$rootScope.loggedIn}
+	  ]
+
+	  vm.hideLogout = !($rootScope.loggedIn);
+	  console.log("logoutHide = " + vm.hideLogout);
+	  
+	  
+	  $scope.menuActive = '/';
+	  
+	  $rootScope.$on('$routeChangeSuccess', function(e, curr, prev) {
+              $scope.menuActive = $location.path();
+          });
+
+          vm.logout = function() {
+	      $localStorage.token = null;
+	      $rootScope.loggedIn = false;
+	      console.log("after log out, $rootScope.loggedIn = " + $rootScope.loggedIn);
+	  };
+	 
+		
+})
+
 .controller('homeController', ['$rootScope', function($rootScope){
 	var vm = this;
 
@@ -14,10 +55,10 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 	
 }])
 
-.controller('aboutController', function(){
+.controller('aboutController', function($rootScope){
 	var vm = this;
 
-	vm.message = "THIS IS THE ABOUT PAGE"
+	vm.message = $rootScope.loggedIn;
 
 })
 
@@ -37,6 +78,7 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 		    //delete this
 		    console.log("user token = " + $localStorage.token);
 		    $rootScope.loggedIn = true;
+		    console.log("(in login controller) $rootScope.loggedIn = " + $rootScope.loggedIn);
 		    
 		    return;
 		};
@@ -118,3 +160,4 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 
 
 }]);
+
