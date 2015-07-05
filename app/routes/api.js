@@ -14,9 +14,9 @@ Note to editors of this file: Please LOOK AT THE SCHEMAS in app/models/schemas b
 
 GET /api					API test message
 	GET /booking
-		POST /create*
-		GET /byroom/<room id>/<day in ms>
-	POST /user*				token - Lists all users
+		POST /create*			netlinkid, starttime (in ms, use Date()), duration (in minutes), roomid - Attempts to create a booking
+		GET /byroom/<room id>/<day in ms>	Returns a dictionary with time blocks (12:00, 12:30, etc) as keys, and either null or booking data as the values.
+	POST /user*				Lists all users
 		POST /login			netlinkid, password - Logs the user in, returns a token
 		POST /register			netlinkid, password, firstname, lastname, [studentid], [department] - Registers the user
 		POST /<netlinkid>*

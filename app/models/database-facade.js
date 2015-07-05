@@ -14,34 +14,6 @@ var schemaUser		= require('./schemas/user');
 
 
 
-Date.prototype.getHoursTwoDigits = function() {
-    var retval = this.getHours();
-    if (retval < 10)
-    {
-        return ("0" + retval.toString());
-    }
-    else
-    {
-        return retval.toString();
-    }
-}
-
-
-
-Date.prototype.getMinutesTwoDigits = function() {
-    var retval = this.getMinutes();
-    if (retval < 10)
-    {
-        return ("0" + retval.toString());
-    }
-    else
-    {
-        return retval.toString();
-    }
-}
-
-
-
 function numTwoDigits(num) {
 	if (num < 10) {
 		return '0' + num.toString();
@@ -303,11 +275,13 @@ exports.scheduleByRoomAndDay = function(roomid, dayInms, fn) {
 		}
 
 		for (index = 0; index < bookings.length; index++) {
+			//Insert first block of booking
 			var hours = bookings[index].startTime.getHours();
 			var minutes = bookings[index].startTime.getMinutes();
-			var str = hours.toString() + ':' + bookings[index].startTime.getMinutesTwoDigits();
+			var str = numTwoDigits(hours) + ':' + numTwoDigits(minutes);
 			table[str] = bookings[index];
 
+			//Insert subsiquent blocks of booking
 			var duration = bookings[index].duration;
 			for (duration; duration > 1; duration--) {
 				hours = hours + Math.floor((minutes+30)/60);
