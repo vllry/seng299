@@ -24,7 +24,8 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 
 	  $scope.menuRight = [
 	    {label:'SignUp', route:'/signup', glyphicon:'glyphicon glyphicon-user', hide:$rootScope.loggedIn},
-	    {label:'Login', route:'/login', glyphicon:'glyphicon glyphicon-log-in', hide:$rootScope.loggedIn}
+	    {label:'Login', route:'/login', glyphicon:'glyphicon glyphicon-log-in', hide:$rootScope.loggedIn}, 
+	    {label:'Profile', route:'/profile', glyphicon:'glyphicon glyphicon-user', hide:!($rootScope.loggedIn)}
 	  ]
 
 	  vm.hideLogout = !($rootScope.loggedIn);
@@ -41,19 +42,36 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 	      $localStorage.token = null;
 	      $rootScope.loggedIn = false;
 	      console.log("after log out, $rootScope.loggedIn = " + $rootScope.loggedIn);
+
 	  };
-	 
-		
+
 })
 
-.controller('homeController', ['$rootScope', function($rootScope){
+.controller('homeController', function($localStorage, $rootScope){
 	var vm = this;
 
-	vm.message ="Library Study Room Booking"
+	if ($localStorage.token != null) {
+		$rootScope.loggedIn = true;
+	  } else {
+	  	$rootScope.loggedIn = false;
+	};
+
+	vm.hideCreateBooking = !($rootScope.loggedIn);
+
+	vm.createBooking = function(booking, date) {
+		console.log("create booking");
+		console.log("booking = " + booking.roomNumber);
+		console.log("date = " + date.month + " " + date.day + " from " + date.startTime + " to " + date.endTime);
+
+		
+	}
+
+
+	vm.title ="Library Study Room Booking"
 	
 	
 	
-}])
+})
 
 .controller('aboutController', function($rootScope){
 	var vm = this;
@@ -65,7 +83,7 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 .controller('loginController', ['$http', '$localStorage', '$rootScope', function($http, $localStorage, $rootScope){
 	var vm = this;
 
-	vm.loginUser = function(user) {
+	vm.loginUser = function(user, $location) {
 		vm.submitted = true;
 		vm.message = ""
 
@@ -99,6 +117,7 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 				$rootScope.loggedIn = true;
 
 				console.log("local token = " + data.token);
+				
 			//username no in database
 			} else if (data.message == "User does not exist") {
 				console.log("USER DOES NOT EXIST");

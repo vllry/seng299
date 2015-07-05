@@ -1,5 +1,144 @@
+<!-- Bootstrap core CSS -->
+<link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.0/css/bootstrap.css" rel="stylesheet" media="screen">
+
+<style>
+.modal {
+position: fixed;
+right: o;
+top: 40px;
+}
+.modal-header,
+.btn-custom {
+	background: #1ABC9C;
+	color: #FFF;
+}
+.modal-body {
+	background: #73BFC1;
+}
+.popover   {
+	background-color: #e74c3c;
+	color: #ecf0f1;
+	width: 120px;
+}
+.popover.right .arrow:after {
+	border-right-color: #e74c3c;
+}
+.input-group[class*="col-"] {
+    padding-right: 15px;
+    padding-left: 15px;
+}	
+</style>
+
 <div class="jumbotron">
-	<h1>{{ home.message }}</h1>
+	<h1>{{ home.title }}</h1>
 
 	<div>Hello!</div>
+</div>
+
+
+<div class="container">
+<!-- Button to trigger modal --> 
+    <a href="#myModal" role="button" class="btn btn-lg btn-primary btn-block btn-signin" ng-hide={{home.hideCreateBooking}} data-toggle="modal">Create a Booking</a>
+    
+    <!-- Modal -->
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Booking Details</h4>
+        </div>
+        <div class="modal-body">
+
+	<!-- FORMS -->
+	<form class="form-horizontal" name="commentform">
+	
+    <div class="form-group">
+        <label class="control-label col-md-4">Study Room Number</label>
+
+        <select style="position:relative; width:50px; padding-left:12px;" ng-model="booking.roomNumber" required>
+		<option>A01</option>
+		<option>A02</option>
+		<option>A03</option>
+		<option>A04</option>
+		<option>A05</option>
+		<option>A06</option>
+		<option>A07</option>
+		<option>A08</option>
+		<option>A09</option>
+		<option>A10</option>
+	</select>
+    </div>
+
+    
+    <div class="form-group">
+
+        <label class="control-label col-md-4">Month</label>
+
+        <select style="position:relative; width:100px; padding-left:12px;" ng-model="date.month" required>
+		<option>January</option>
+		<option>February</option>
+		<option>March</option>
+		<option>April</option>
+		<option>May</option>
+		<option>June</option>
+		<option>July</option>
+		<option>August</option>
+		<option>September</option>
+		<option>October</option>
+		<option>November</option>
+		<option>December</option>
+	</select>
+
+	<label class="control-label col-md-4">Day</label>
+
+        <select style="position:relative; width:50px; padding-left:12px;" ng-model="date.day" required>
+		<option>01</option>
+		<option>02</option>
+		<option>03</option>
+		<option>04</option>
+		<option>05</option>
+		
+	</select>
+    </div>
+
+    
+    <div class="form-group">
+
+        <label class="control-label col-md-4">From</label>
+
+        <select style="position:relative; width:75px; padding-left:12px;" ng-model="date.startTime" required>
+		<option>8:00</option>
+		<option>8:30</option>
+		<option>9:00</option>
+		<option>9:30</option>
+		<option>10:00</option>
+	</select>
+
+	<label class="control-label col-md-4">Day</label>
+
+        <select style="position:relative; width:75px; padding-left:12px;" ng-model="date.endTime" required>
+		<option>8:30</option>
+		<option>9:00</option>
+		<option>9:30</option>
+		<option>10:00</option>
+		<option>10:30</option>
+		
+	</select>
+    </div>
+    
+        <div class="col-md-6">
+            <button type="submit" class="btn btn-custom pull-right" ng-click="home.createBooking(booking, date)">Create Booking</button>
+        </div>
+    </div>
+</form>
+
+
+
+        <!-- END FORMS -->
+        </div><!-- End of Modal body -->
+        </div><!-- End of Modal content -->
+        </div><!-- End of Modal dialog -->
+    </div><!-- End of Modal -->
+
 </div>
