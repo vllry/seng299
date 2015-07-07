@@ -31,6 +31,12 @@ angular.module('app.routes', ['ngRoute'])
 	  	controllerAs: 'signup'
 	  })
 
+	  .when("/profile", {
+	  	templateUrl: '/app/views/pages/profile.html',
+	  	controller: 'profileController',
+	  	controllerAs: 'profile'
+	  })
+
 	  .otherwise('/');
 	  
 
