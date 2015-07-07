@@ -91,23 +91,6 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 	vm.title ="Library Study Room Booking";
 
 
-<<<<<<< HEAD
-=======
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-    vm.changecolor=function(value){
-    	var color='#0000FF'
-    	var color2='#2EFE2E'
-        if(value==true){
-            return color;
-        }else{
-        	return color2;
-        }
-    };
->>>>>>> origin/master
-
 	vm.checkAval = function(room, time, checkTime) {
 		var bookingData = "/api/booking/byroom/" + room + "/" + time; //1/1436042817000
 		$http.get(bookingData).
