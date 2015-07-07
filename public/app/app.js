@@ -84,8 +84,27 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 
 		//startTime raw date
 		var start = new Date(2015, month, date.day, hour, minutes, 0, 0).getTime()
+
+		var endHour = date.endTime.split(":")[0];
+		var endMinutes = date.endTime.split(":")[1];
 		
-		//var duration = ;
+		var duration = ((endHour - hour) * 60) + (endMinutes - minutes);
+
+		var bookingData = {
+			'token' : $localStorage.token;
+			'netlinkid' : 'test5',
+			'starttime' : start,
+			'duration' : duration,
+			'roomid' booking.roomNumber: 
+		};
+
+		$http.post('api/booking/create', bookingData).
+			success(function(data, status, headers, config) {
+
+		    }).
+		    error(function(data, status, headers, config) {
+		  	
+		    });
 	} //createBooking
 
 	vm.title ="Library Study Room Booking";
