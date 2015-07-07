@@ -109,6 +109,13 @@ module.exports = function(app, express) {
 
 
 
+	// /me ===================================================
+	// api endpoint to get user information
+	apiRouter.get('/me', function(req, res) {
+		res.send(req.decoded);
+	});
+
+
 
 	// user authentication middleware
 	// Anything  BELOW THIS POINT requires a token to access
@@ -144,16 +151,11 @@ module.exports = function(app, express) {
 
 	// on routes that end in /user/:user_id
 	// ----------------------------------------------------
-	apiRouter.route('/user/:user_id')
+	apiRouter.route('/user/:netlinkid')
 
 		// get the user with that id
-		.get(function(req, res) {
-			User.findById(req.params.user_id, function(err, user) {
-				if (err) res.send(err);
-
-				// return that user
-				res.json(user);
-			});
+		.post(function(req, res) {
+			databaseFacade.getUserDetails(res, req.params.netlinkid);
 		})
 
 		// update the user with this id
@@ -258,13 +260,6 @@ module.exports = function(app, express) {
 		});
 
 
-
-
-	// /me ===================================================
-	// api endpoint to get user information
-	apiRouter.get('/me', function(req, res) {
-		res.send(req.decoded);
-	});
 
 	return apiRouter;
 };
