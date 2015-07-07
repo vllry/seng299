@@ -239,5 +239,16 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 	};
 
 
-}]);
+}])
+
+.controller('profileController', function($http) {
+	var vm = this;
+	vm.name = "THIS IS A NAME"
+	vm.password = "THIS IS A PASSWORD"
+	vm.email = "THIS IS AN EMAIL"
+	vm.type = "THIS IS A TYPE"
+	vm.department = "THIS IS A DEPARTMENT"
+
+
+});
 
