@@ -86,37 +86,26 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 		var start = new Date(2015, month, date.day, hour, minutes, 0, 0).getTime()
 		
 		//var duration = ;
-	};
-
+	} //createBooking
 
 	vm.title ="Library Study Room Booking";
-
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 
 
 	vm.checkAval = function(room, time, checkTime) {
 		var bookingData = "/api/booking/byroom/" + room + "/" + time; //1/1436042817000
 		$http.get(bookingData).
 		success(function(data, status, headers, config) {
-			console.log(status);
-			console.log(data[checkTime]);
-			if (data[checkTime] == true) {return true;} //ec8181
+			//console.log(status);
+			//console.log(data[checkTime]);
+			if (data[checkTime] == true) {
+				return true;
+			} //ec8181
 			else {return false;}
-	    }).
+	    });
 	    error(function(data, status, headers, config) {
 	  		//console.log("ERROR. data = " + data + ", status = " + status);
 	    });
 	};
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 
 
 
