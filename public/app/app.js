@@ -154,7 +154,7 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 			'netlinkid' : user.username,
 			'password' : user.password
 		};
-		$http.post('api/user/login', loginData).
+		$http.post('/api/user/login', loginData).
 			success(function(data, status, headers, config) {
 
 			//correct login information
