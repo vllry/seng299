@@ -85,7 +85,7 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 		//startTime raw date
 		var start = new Date(2015, month, date.day, hour, minutes, 0, 0).getTime()
 		
-		var duration = ;
+		//var duration = ;
 	}
 
 
