@@ -121,9 +121,9 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
     
     /* Construct id for each cell in the time table */
     
-    vm.timeS=["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm",
-	"1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm", "7:30pm",
-	"8:00pm", "8:30pm", "9:00pm", "9:30pm", "10:00pm"];
+    vm.timeS=[ "8:00", "8:30", "9:00", "9:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00",
+	"13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30",
+	"20:00", "20:30", "21:00", "21:30", "22:00"];
     vm.room = ["A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10"];
     vm.ids = [];
 	var index = 0;
@@ -138,18 +138,26 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
     /* Construct table */
     
     vm.rooms = ["Room#/ Time", "A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10"];
-    vm.times=["8:00 am", "8:30 am", "9:00 am", "9:30 am", "10:00 am", "10:30 am", "11:00 am", "11:30 am", "12:00 pm", "12:30 pm", "1:00 pm",
-	"1:30 pm", "2:00 pm", "2:30pm", "3:00pm", "3:30 pm", "4:00 pm", "4:30 pm", "5:00 pm", "5:30 pm", "6:00 pm", "6:30 pm", "7:00 pm", "7:30 pm",
-	"8:00 pm", "8:30 pm", "9:00 pm", "9:30 pm", "10:00 pm"];
+    vm.times=["", "8:00", "8:30", "9:00", "9:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00",
+	"13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30",
+	"20:00", "20:30", "21:00", "21:30", "22:00"];
+    
+    vm.header = [];
+    vm.header[0] = vm.rooms;
+    
     vm.table = [];
     index = 0;
     var maxNumberOfElementinaRow = 10;
     vm.table[0] = vm.rooms;
-    for(var i = 1; i < vm.times.length + 1; i++) {
-        vm.table[i] = [];
-        vm.table[i][0] = vm.times[i];
+    for(var i = 1; i < vm.times.length; i++) {
+        var tempIndex = i;
+        vm.table[tempIndex] = [];
+//        vm.table[tempIndex][0] = vm.times[tempIndex];
+        var temp = {"link":vm.times[tempIndex] , "id": vm.times[tempIndex]};
+        vm.table[tempIndex][0] = temp;
         for(var j = 1; j < maxNumberOfElementinaRow + 1; j++) {
-            vm.table[i][j] = vm.ids[index];
+            temp = {"link": "+", "id": vm.ids[index]};
+            vm.table[tempIndex][j] = temp;
             index++;
         }
     }
