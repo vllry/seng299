@@ -538,11 +538,39 @@ top: 40px;
                 </tr>
 			</tbody>
 		</table>
-	</div>    
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+        
+        
+<!--        {{ home.table }}-->
+        <div class="component2">		
+		  <table class="tableID2">
+
+		      <tr ng-repeat="row in home.table">
+                  <td class="available" ng-repeat="col in row" ng-model=col id="{{ col }}">
+                        {{ col }}
+                        <a ng-if="home.isId(col)" href="Book" id="{{ col }}" ng-click="home.click(col)">+</a>
+                  </td>
+              </tr>
+				
+
+		  </table>
+        </div>
+	</div>
+    
+    
+    
+    
+    
+        
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
 		<script src="../../../assets/js/jquery.stickyheader.js"></script>
 		<script src="js/ExtractTableCell.js"></script>
+    
+    
+        
+    
+    
+        
 </body>
 </script>
 </html>

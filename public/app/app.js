@@ -117,8 +117,81 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
-
-
+    
+    
+    /* Construct id for each cell in the time table */
+    
+    vm.timeS=["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm",
+	"1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm", "7:30pm",
+	"8:00pm", "8:30pm", "9:00pm", "9:30pm", "10:00pm"];
+    vm.room = ["A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10"];
+    vm.ids = [];
+	var index = 0;
+    for(var i = 0; i < vm.timeS.length; i++) {
+		for(var j = 0; j < vm.room.length; j++) {
+            vm.ids[index] = vm.timeS[i] + "-" + vm.room[j];
+			index++;
+		}
+	}
+    
+    
+    /* Construct table */
+    
+    vm.rooms = ["Room#/ Time", "A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10"];
+    vm.times=["8:00 am", "8:30 am", "9:00 am", "9:30 am", "10:00 am", "10:30 am", "11:00 am", "11:30 am", "12:00 pm", "12:30 pm", "1:00 pm",
+	"1:30 pm", "2:00 pm", "2:30pm", "3:00pm", "3:30 pm", "4:00 pm", "4:30 pm", "5:00 pm", "5:30 pm", "6:00 pm", "6:30 pm", "7:00 pm", "7:30 pm",
+	"8:00 pm", "8:30 pm", "9:00 pm", "9:30 pm", "10:00 pm"];
+    vm.table = [];
+    index = 0;
+    var maxNumberOfElementinaRow = 10;
+    vm.table[0] = vm.rooms;
+    for(var i = 1; i < vm.times.length + 1; i++) {
+        vm.table[i] = [];
+        vm.table[i][0] = vm.times[i];
+        for(var j = 1; j < maxNumberOfElementinaRow + 1; j++) {
+            vm.table[i][j] = vm.ids[index];
+            index++;
+        }
+    }
+    
+    
+    
+    vm.isId = function(col) {
+        var str = col.split("-");
+        var time = str[0];
+        var room = str[1];
+        if(time.length === 0 || room.length === 0) {
+            return false;
+        }else {
+//            window.alert("time: " + time + "\nroom: " + room);
+            return true;
+        }
+    }
+    
+    vm.isHeader = function(col) {
+        var str = col.split("-");
+        var time = str[0];
+        var room = str[1];
+        
+        if(time.length === 0 || room.length === 0) {
+            return true;
+        }else {
+//            window.alert("time: " + time + "\nroom: " + room);
+            return false;
+        }
+    }
+    
+    
+    
+    /* Response to click */
+    
+    vm.click = function(id) {
+        var str = id.split("-");
+        var time = str[0];
+        var room = str[1];
+        window.alert("time: " + time + "\nroom: " + room);
+        
+    }
 
 })
 
