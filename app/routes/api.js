@@ -18,7 +18,7 @@ GET /api					API test message
 		GET /byroom/<room id>/<day in ms>	Returns a dictionary with time blocks (12:00, 12:30, etc) as keys, and either null or booking data as the values.
 	POST /user*				Lists all users
 		POST /login			netlinkid, password - Logs the user in, returns a token
-		POST /register			netlinkid, password, firstname, lastname, [studentid], [department] - Registers the user
+		POST /register			netlinkid, password, firstname, lastname, usertype (student, staff, or facaulty), [studentid], [department] - Registers the user
 		POST /<netlinkid>*
 
 * Denotes API that requires a token
@@ -91,7 +91,7 @@ module.exports = function(app, express) {
 				firstName: req.body.firstname,
 				lastName: req.body.lastname,
 				department: req.body.department,
-				userType: 'student'
+				userType: req.body.usertype
 			});
 
 			databaseFacade.userRegister(res, user);
