@@ -58,6 +58,9 @@ top: 40px;
 .input-group[class*="col-"] {
     padding-right: 15px;
     padding-left: 15px;
+#tablecell{
+
+}
 }	
 </style>
 
@@ -175,11 +178,15 @@ top: 40px;
 <body>
     <!--kenneth-->
     <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit" ng-click="home.checkAval('1','1436042817000','00:00')">CheckAval</button>
-
-
+    <!--script>
+    if (document.getElementsByTagName("td").==true){
+        document.getElementById("special").style.color = "blue";
+    }
+    </script>
+    
     <!--table-->
 	<div class="component">		
-		<table class="tableID">
+		<table class="">
 			<thead>
 				<tr>
 					<th>Room# / Time</th><th>A01</th><th>A02</th><th>A03</th><th>A04</th><th>A05</th><th>A06</th><th>A07</th><th>A08</th><th>A09</th><th>A10</th>
@@ -188,9 +195,8 @@ top: 40px;
 			<tbody>
 				<tr>
                     <th>8:00 am</th>
-                        <td bgcolor="home.checkAval('1','1436042817000','14:00')"></td> 
-                        <td bgcolor="home.checkAval('1','1436042817000','08:00')"></td>
-                        <td class="available" id="8:00am" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td id="home.checkAval('1','1436042817000','14:00')" bgcolor="home.changecolor('id')"></td>
+                        <td id="home.checkAval('1','1436042817000','9:00')" bgcolor="home.changecolor('value')"></td>
                         <td class="available" id="8:00am" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
                         <td class="available" id="8:00am" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
                         <td class="available" id="8:00am" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
