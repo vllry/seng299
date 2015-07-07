@@ -241,14 +241,40 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 
 }])
 
-.controller('profileController', function($http) {
+.controller('profileController', function($http, $localStorage) {
 	var vm = this;
-	vm.name = "THIS IS A NAME"
-	vm.password = "THIS IS A PASSWORD"
-	vm.email = "THIS IS AN EMAIL"
-	vm.type = "THIS IS A TYPE"
-	vm.department = "THIS IS A DEPARTMENT"
 
+	console.log("this user's token: " + $localStorage.token);
+	console.log("this user's netlinkid: " + $localStorage.netlinkid);
+
+	var postURL = '/api/user/'.concat($localStorage.netlinkid);
+	var token = {
+		'token' : $localStorage.token
+	} 
+
+	$http.post(postURL, token).
+		    success(function(data, status, headers, config) {
+		    	console.log("get user data success");
+		    	console.log("first name = " + data.firstName);
+		    	console.log("last name = " + data.lastName);
+		    	console.log("user type = " + data.userType);
+
+		    	var fullName = (data.firstName).concat(" ").concat(data.lastName);
+
+			vm.name = fullName
+			vm.password = "THIS IS A PASSWORD"
+			vm.email = $localStorage.netlinkid.concat("@uvic.ca");
+			vm.type = data.userType;
+			vm.department = "THIS IS A DEPARTMENT"
+		  
+		    }).
+		    error(function(data, status, headers, config) {
+		  	console.log("ERROR. data = " + data + ", status = " + status);
+		    });
+
+	//post to /api/users/[netlinkid] with parameter token: $localStorage.token
+
+	
 
 });
 
