@@ -191,7 +191,8 @@ top: 40px;
               <tbody>
                   
                   <tr ng-repeat="row in home.table">
-                  <td class="available" ng-repeat="col in row" id="{{ col['id'] }}" ng-click="home.click(col['id'])">
+
+                       <td class="available" ng-repeat="col in row" id="{{ col['id'] }}" ng-click="home.click(col['id'])">
                         <a  href="Book" id="{{ col['id'] }}"> {{ col["link"]}} </a>
                   </td>
                 </tr>
@@ -201,6 +202,9 @@ top: 40px;
 
 		  </table>
         </div>
+    
+<!--    {{ home.table }}-->
+     
 	</div>
     
     
