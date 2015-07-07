@@ -61,7 +61,7 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 	vm.createBooking = function(booking, date) {
 		console.log("create booking");
 		console.log("booking = " + booking.roomNumber);
-		console.log("date = " + date.month + " " + date.day + " from " + date.startTime + " to " + date.endTime);
+		console.log("date = " + date.month + " " + date.day + " from " + date.startTime + " for " + date.duration);
 
 		var months = {
   		  January: 0,
@@ -85,25 +85,25 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 		//startTime raw date
 		var start = new Date(2015, month, date.day, hour, minutes, 0, 0).getTime()
 
-		var endHour = date.endTime.split(":")[0];
-		var endMinutes = date.endTime.split(":")[1];
-		
-		var duration = ((endHour - hour) * 60) + (endMinutes - minutes);
-
 		var bookingData = {
-			'token' : $localStorage.token;
-			'netlinkid' : 'test5',
+			'token' : $localStorage.token,
+			'netlinkid' : $localStorage.netlinkid,
 			'starttime' : start,
-			'duration' : duration,
-			'roomid' booking.roomNumber: 
+			'duration' : date.duration,
+			'roomid' : booking.roomNumber
 		};
 
 		$http.post('api/booking/create', bookingData).
 			success(function(data, status, headers, config) {
-
+			console.log(data.message);
+			console.log("token = " + bookingData.token);
+			console.log("netlinkid = " + bookingData.netlinkid);
+			console.log("starttime = " + bookingData.starttime);
+			console.log("duration = " + bookingData.duration);
+			console.log("roomid = " + bookingData.roomid);
 		    }).
 		    error(function(data, status, headers, config) {
-		  	
+		  	console.log("booking create error");
 		    });
 	} //createBooking
 
@@ -171,6 +171,7 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 				vm.message = "Successfully logged in."
 
 				$localStorage.token = data.token;
+				$localStorage.netlinkid = user.username;
 				$rootScope.loggedIn = true;
 
 				console.log("local token = " + data.token);
@@ -219,7 +220,10 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 		      'netlinkid' : user.netlinkid,
 		      'password' : user.password,
 		      'firstname' : user.firstname,
-		      'lastname' : user.lastname
+		      'lastname' : user.lastname,
+		      'usertype' : user.type,
+		      'userdepartment' : user.department,
+		      'role' : 'user'
 		};
 		$http.post('/api/user/register', userData).
 		    success(function(data, status, headers, config) {
