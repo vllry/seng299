@@ -8,11 +8,85 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 .controller('homeController', ['$rootScope', function($rootScope){
 	var vm = this;
 
+
 	vm.message ="Library Study Room Booking"
 	
 	
 	
 }])
+
+	if ($localStorage.token != null) {
+		$rootScope.loggedIn = true;
+	  } else {
+	  	$rootScope.loggedIn = false;
+	};
+
+	vm.hideCreateBooking = !($rootScope.loggedIn);
+
+	vm.createBooking = function(booking, date) {
+		console.log("create booking");
+		console.log("booking = " + booking.roomNumber);
+		console.log("date = " + date.month + " " + date.day + " from " + date.startTime + " to " + date.endTime);
+
+		var months = {
+  		  January: 0,
+  		  February: 1,
+ 		  March: 2,
+ 		  April: 3,
+ 		  May: 4,
+ 		  June: 5,
+ 		  July: 6,
+ 		  August: 7,
+ 		  September: 8,
+ 		  October: 9,
+ 		  November: 10,
+ 		  December: 11,
+		};
+		
+		var month = months[date.month];
+		var hour = date.startTime.split(":")[0];
+		var minutes = date.startTime.split(":")[1];
+
+		//startTime raw date
+		var start = new Date(2015, month, date.day, hour, minutes, 0, 0).getTime()
+		
+		//var duration = ;
+	};
+
+
+	vm.title ="Library Study Room Booking";
+
+
+//------------------------------------------------------------------------
+//------------------------------------------------------------------------
+//------------------------------------------------------------------------
+//------------------------------------------------------------------------
+
+
+	vm.checkAval = function(room, time, checkTime) {
+		var bookingData = "/api/booking/byroom/" + room + "/" + time; //1/1436042817000
+		$http.get(bookingData).
+		success(function(data, status, headers, config) {
+			console.log(status);
+			console.log(data[checkTime]);
+			if (data[checkTime] == true) {return true;} //ec8181
+			else {return false;}
+	    }).
+	    error(function(data, status, headers, config) {
+	  		//console.log("ERROR. data = " + data + ", status = " + status);
+	    });
+	};
+
+//------------------------------------------------------------------------
+//------------------------------------------------------------------------
+//------------------------------------------------------------------------
+//------------------------------------------------------------------------
+//------------------------------------------------------------------------
+
+
+
+})
+
 
 .controller('aboutController', function(){
 	var vm = this;
