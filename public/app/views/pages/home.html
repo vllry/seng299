@@ -1,5 +1,37 @@
 <!-- Bootstrap core CSS -->
-<link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.0/css/bootstrap.css" rel="stylesheet" media="screen">
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		<link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.0/css/bootstrap.css" rel="stylesheet" media="screen">
+
+
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<title>UVic Library Study Room Booking System</title>
+		<meta name="description" content="Sticky Table Headers Revisited: Creating functional and flexible sticky table headers" />
+		<meta name="keywords" content="Sticky Table Headers Revisited" />
+		<meta name="author" content="Codrops" />
+		<link rel="shortcut icon" href="../favicon.ico">
+		<link rel="stylesheet" type="text/css" href="../../../assets/css/normalize.css" />
+		<link rel="stylesheet" type="text/css" href="../../../assets/css/demo.css" />
+		<link rel="stylesheet" type="text/css" href="../../../assets/css/component.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+ 
+        <link rel="stylesheet" href="../../../assets/css/bootstrap.css">
+        <link rel="stylesheet" href="../../../assets/css/1.css">
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular-route.js"></script>
+		<script src="//code.angularjs.org/1.2.13/angular-cookies.js"></script>
+
+
+		<script src="app/app.js"></script>
+		<script src="app/app.routes.js"></script>
+
+	</head>
+<!---->
+
+
 
 <style>
 .modal {
@@ -140,5 +172,377 @@ top: 40px;
         </div><!-- End of Modal content -->
         </div><!-- End of Modal dialog -->
     </div><!-- End of Modal -->
+<body>
+    <!--kenneth-->
+    <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit" ng-click="home.checkAval('1','1436042817000','00:00')">CheckAval</button>
 
-</div>
+
+    <!--table-->
+	<div class="component">		
+		<table class="tableID">
+			<thead>
+				<tr>
+					<th>Room# / Time</th><th>A01</th><th>A02</th><th>A03</th><th>A04</th><th>A05</th><th>A06</th><th>A07</th><th>A08</th><th>A09</th><th>A10</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+                    <th>8:00 am</th>
+                        <td bgcolor="home.checkAval('1','1436042817000','14:00')"></td> 
+                        <td bgcolor="home.checkAval('1','1436042817000','08:00')"></td>
+                        <td class="available" id="8:00am" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="8:00am" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="8:00am" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="8:00am" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="8:00am" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="8:00am" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="8:00am" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="8:00am" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>
+                </tr>
+                <tr>
+					<th>8:30 am</th>
+                        <td class="available" id="8:30am" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="8:30am" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="8:30am" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="8:30am" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="8:30am" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="8:30am" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="8:30am" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="8:30am" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="8:30am" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="8:30am" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>
+				</tr>
+                <tr>
+					<th>9:00 am</th>
+                        <td class="available" id="9:00am" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="9:00am" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="9:00am" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="9:00am" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="9:00am" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="9:00am" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="9:00am" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="9:00am" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="9:00am" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="9:00am" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>
+				</tr>
+                <tr>
+					<th>10:00 am</th>
+                        <td class="available" id="10:00am" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="10:00am" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="10:00am" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="10:00am" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="10:00am" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="10:00am" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="10:00am" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="10:00am" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="10:00am" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="10:00am" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>
+				</tr>
+                <tr>
+					<th>10:30 am</th>
+                        <td class="available" id="10:30am" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="10:30am" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="10:30am" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="10:30am" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="10:30am" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="10:30am" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="10:30am" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="10:30am" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="10:30am" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="10:30am" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>
+				</tr>
+                <tr>
+					<th>11:00 am</th>
+                        <td class="available" id="11:00am" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="11:00am" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="11:00am" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="11:00am" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="11:00am" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="11:00am" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="11:00am" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="11:00am" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="11:00am" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="11:00am" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>
+				</tr>
+                <tr>
+					<th>11:30 am</th>
+                        <td class="available" id="11:30am" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="11:30am" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="11:30am" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="11:30am" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="11:30am" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="11:30am" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="11:30am" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="11:30am" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="11:30am" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="11:30am" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>
+				</tr>
+                <tr>
+                    <th>12:00 pm</th>
+                        <td class="available" id="12:00pm" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="12:00pm" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="12:00pm" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="12:00pm" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="12:00pm" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="12:00pm" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="12:00pm" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="12:00pm" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="12:00pm" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="12:00pm" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>
+				</tr>
+                <tr>
+                    <th>1:00 pm</th>
+                        <td class="available" id="1:00pm" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="1:00pm" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="1:00pm" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="1:00pm" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="1:00pm" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="1:00pm" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="1:00pm" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="1:00pm" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="1:00pm" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="1:00pm" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>
+                <tr>
+                    <th>1:30 pm</th>
+                        <td class="available" id="1:30pm" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="1:30pm" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="1:30pm" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="1:30pm" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="1:30pm" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="1:30pm" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="1:30pm" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="1:30pm" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="1:30pm" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="1:30pm" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>
+				</tr>
+                <tr>
+                    <th>2:00 pm</th>
+                        <td class="available" id="2:00pm" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="2:00pm" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="2:00pm" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="2:00pm" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="2:00pm" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="2:00pm" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="2:00pm" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="2:00pm" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="2:00pm" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="2:00pm" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>
+				</tr>
+                <tr>
+                    <th>2:30 pm</th>
+                        <td class="available" id="2:30pm" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="2:30pm" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="2:30pm" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="2:30pm" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="2:30pm" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="2:30pm" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="2:30pm" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="2:30pm" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="2:30pm" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="2:30pm" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>
+				</tr>
+                <tr>
+                    <th>3:00 pm</th>
+                        <td class="available" id="3:00pm" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="3:00pm" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="3:00pm" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="3:00pm" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="3:00pm" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="3:00pm" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="3:00pm" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="3:00pm" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="3:00pm" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="3:00pm" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>
+				</tr>
+                <tr>
+                    <th>3:30 pm</th>
+                        <td class="available" id="3:30pm" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="3:30pm" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="3:30pm" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="3:30pm" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="3:30pm" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="3:30pm" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="3:30pm" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="3:30pm" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="3:30pm" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="3:30pm" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>
+				</tr>
+                <tr>
+                    <th>4:00 pm</th>
+                        <td class="available" id="4:00pm" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="4:00pm" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="4:00pm" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="4:00pm" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="4:00pm" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="4:00pm" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="4:00pm" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="4:00pm" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="4:00pm" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="4:00pm" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>
+				</tr>
+                <tr>
+                    <th>4:30 pm</th>
+                        <td class="available" id="4:30pm" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="4:30pm" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="4:30pm" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="4:30pm" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="4:30pm" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="4:30pm" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="4:30pm" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="4:30pm" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="4:30pm" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="4:30pm" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>
+				</tr>
+                <tr>
+                    <th>5:00 pm</th>
+                        <td class="available" id="5:00pm" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="5:00pm" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="5:00pm" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="5:00pm" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="5:00pm" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="5:00pm" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="5:00pm" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="5:00pm" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="5:00pm" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="5:00pm" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>>
+				</tr>
+                <tr>
+                    <th>5:30 pm</th>
+                        <td class="available" id="5:30pm" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="5:30pm" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="5:30pm" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="5:30pm" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="5:30pm" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="5:30pm" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="5:30pm" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="5:30pm" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="5:30pm" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="5:30pm" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>>
+				</tr>
+                <tr>
+                    <th>6:00 pm</th>
+                        <td class="available" id="6:00pm" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="6:00pm" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="6:00pm" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="6:00pm" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="6:00pm" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="6:00pm" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="6:00pm" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="6:00pm" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="6:00pm" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="6:00pm" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>>
+				</tr>
+                <tr>
+                    <th>6:30 pm</th>
+                        <td class="available" id="6:30pm" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="6:30pm" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="6:30pm" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="6:30pm" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="6:30pm" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="6:30pm" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="6:30pm" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="6:30pm" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="6:30pm" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="6:30pm" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>
+				</tr>
+                <tr>
+                    <th>7:00 pm</th>
+                        <td class="available" id="7:00pm" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="7:00pm" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="7:00pm" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="7:00pm" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="7:00pm" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="7:00pm" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="7:00pm" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="7:00pm" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="7:00pm" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="7:00pm" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>
+				</tr>
+                <tr>
+                    <th>7:30 pm</th>
+                        <td class="available" id="7:30pm" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="7:30pm" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="7:30pm" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="7:30pm" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="7:30pm" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="7:30pm" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="7:30pm" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="7:30pm" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="7:30pm" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="7:30pm" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>
+				</tr>
+                <tr>
+                    <th>8:00 pm</th>
+                        <td class="available" id="8:00pm" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="8:00pm" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="8:00pm" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="8:00pm" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="8:00pm" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="8:00pm" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="8:00pm" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="8:00pm" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="8:00pm" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="8:00pm" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>
+				</tr>
+                <tr>
+                    <th>8:30 pm</th>
+                        <td class="available" id="8:30pm" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="8:30pm" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="8:30pm" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="8:30pm" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="8:30pm" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="8:30pm" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="8:30pm" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="8:30pm" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="8:30pm" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="8:30pm" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>
+				</tr>
+                <tr>
+                    <th>9:00 pm</th>
+                        <td class="available" id="9:00pm" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="9:00pm" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="9:00pm" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="9:00pm" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="9:00pm" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="9:00pm" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="9:00pm" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="9:00pm" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="9:00pm" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="9:00pm" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>
+				</tr>
+                <tr>
+                    <th>9:30 pm</th>
+                        <td class="available" id="9:30pm" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="9:30pm" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="9:30pm" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="9:30pm" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="9:30pm" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="9:30pm" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="9:30pm" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="9:30pm" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="9:30pm" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="9:30pm" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>
+				</tr>
+                <tr>
+                    <th>10:00 pm</th>
+                        <td class="available" id="10:00pm" ng-class="availability" ng-model="A01"><a href="Book">+</a></td>
+                        <td class="available" id="10:00pm" ng-class="availability" ng-model="A02"><a href="Book">+</a></td>
+                        <td class="available" id="10:00pm" ng-class="availability" ng-model="A03"><a href="Book">+</a></td>
+                        <td class="available" id="10:00pm" ng-class="availability" ng-model="A04"><a href="Book">+</a></td>
+                        <td class="available" id="10:00pm" ng-class="availability" ng-model="A05"><a href="Book">+</a></td>
+                        <td class="available" id="10:00pm" ng-class="availability" ng-model="A06"><a href="Book">+</a></td>
+                        <td class="available" id="10:00pm" ng-class="availability" ng-model="A07"><a href="Book">+</a></td>
+                        <td class="available" id="10:00pm" ng-class="availability" ng-model="A08"><a href="Book">+</a></td>
+                        <td class="available" id="10:00pm" ng-class="availability" ng-model="A09"><a href="Book">+</a></td>
+                        <td class="available" id="10:00pm" ng-class="availability" ng-model="A10"><a href="Book">+</a></td>
+                </tr>
+			</tbody>
+		</table>
+	</div>    
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+		<script src="../../../assets/js/jquery.stickyheader.js"></script>
+		<script src="js/ExtractTableCell.js"></script>
+</body>
+</script>
+</html>
