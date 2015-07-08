@@ -49,6 +49,7 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 
 .controller('homeController', function($http, $localStorage, $rootScope){
 	var vm = this;
+	vm.title ="Library Study Room Booking";
 
 
 	vm.months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -90,12 +91,9 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
         }
         //window.alert("month = " + month + "\ndate = " + date);
     }
-    
 
-	vm.title ="Library Study Room Booking";
-    
-    
-    
+
+
      /* Construct id for each cell in the time table */
     
     vm.timeS=[ "8:00", "8:30", "9:00", "9:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00",

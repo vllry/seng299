@@ -25,9 +25,10 @@
 		<script src="app/app.js"></script>
 		<script src="app/app.routes.js"></script>
 
-	</head>
-<!---->
-
+		<!--link rel="stylesheet" href="css/bootstrap.css"-->
+		<!--[if IE]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
 
 
 <style>
@@ -65,25 +66,25 @@ top: 40px;
 }
 
     
-    .chosenDate {
-        text-align: right;
-    }
+.chosenDate {
+    text-align: right;
+}
 </style>
 
-<div class="jumbotron">
-	<h1>{{ home.title }}</h1>
 
-<!--	<div>Hello!</div>-->
-    <h4>Year: {{ home.year }} Month: {{ home.months[home.month] }} Date: {{ home.date }} </h4>
-</div>
+	</head>
 
 
 <body>
     
 
  
-    
-    
+	<!--
+	<div class="jumbotron">
+		<h1>{{ home.title }}</h1>
+		<h4>Year: {{ home.year }} Month: {{ home.months[home.month] }} Date: {{ home.date }} </h4>
+	</div>
+	-->
     
     
     
