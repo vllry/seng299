@@ -218,12 +218,15 @@ top: 40px;
                   <option>150</option>
 		      </select>
             </div>
-            </form>
-        <label class="control-label col-md-3">Check: {{ home.checkMessage }}</label>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+              
+            <label class="control-label">Check: {{ home.checkMessage }}</label>
+              <br>
+            <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="home.checkMessage = ''">Cancel</button>
         <button type="button" class="btn btn-primary" ng-hide={{home.hideCreateBooking}} ng-click="home.createBooking(duration)">Create Booking</button>
+      </div>
+        
+            </form>
       </div>
     </div>
   </div>

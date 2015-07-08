@@ -49,11 +49,27 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 
 .controller('homeController', function($http, $localStorage, $rootScope){
 	var vm = this;
+
+
+	var months = new Array();
+	months[0] = "January";
+	months[1] = "February";
+	months[2] = "March";
+	months[3] = "April";
+	months[4] = "May";
+	months[5] = "June";
+	months[6] = "July";
+	months[7] = "August";
+	months[8] = "September";
+	months[9] = "October";
+	months[10] = "November";
+	months[11] = "December";
+
     
     var currentDate = new Date();
     
     vm.year = currentDate.getFullYear();
-    vm.month = currentDate.getMonth();
+    vm.month = months[currentDate.getMonth()];
     vm.date = currentDate.getDate();
     
     vm.dates = [];
@@ -222,47 +238,45 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 
 	vm.hideCreateBooking = !($rootScope.loggedIn);
 
+	// vm.createBooking = function(duration) {
 	vm.createBooking = function(duration) {
-        
-        
-        
-        
+       
+       
+		
+       
 		var roomNumber = parseInt(vm.bookingRoom.substring(1,3));
-		console.log("booking = " + booking.roomNumber);
-        
-        var month = vm.chosenDate["month"];
-        var date = vm.chosenDate["date"];
-        var startTime = vm.bookingTime;
-		console.log("date = " + month + " " + date + " from " + startTime + " for " + duration);
-
-        var time = startTime.split(":");
+       	var month = vm.chosenDate["month"];
+       	var date = vm.chosenDate["date"];
+       	var startTime = vm.bookingTime;
+		var time = startTime.split(":");
 		var hour = time[0];
 		var minutes = time[1];
+		vm.checkMessage = "Hour: " + hour + ",Minute: " + minutes;
 
-		//startTime raw date
-		var start = new Date(2015, month, date, hour, minutes, 0, 0).getTime();
+		// //startTime raw date
+		// var start = new Date(2015, month, date, hour, minutes, 0, 0).getTime();
 
-		var bookingData = {
-			'token' : $localStorage.token,
-			'netlinkid' : $localStorage.netlinkid,
-			'starttime' : start,
-			'duration' : date.duration,
-			'roomid' : booking.roomNumber
-		};
+		// var bookingData = {
+		// 	'token' : $localStorage.token,
+		// 	'netlinkid' : $localStorage.netlinkid,
+		// 	'starttime' : start,
+		// 	'duration' : date.duration,
+		// 	'roomid' : booking.roomNumber
+		// };
 
-		$http.post('api/booking/create', bookingData)
-            .success(function(data, status, headers, config) {
-			console.log(data.message);
-			console.log("token = " + bookingData.token);
-			console.log("netlinkid = " + bookingData.netlinkid);
-			console.log("starttime = " + bookingData.starttime);
-			console.log("duration = " + bookingData.duration);
-			console.log("roomid = " + bookingData.roomid);
-            vm.checkMessage = "Successfully Created Booking!";
-		    })
-            .error(function(data, status, headers, config) {
-		  	console.log("booking create error");
-		    });
+		// $http.post('api/booking/create', bookingData)
+  //          .success(function(data, status, headers, config) {
+		// 	console.log(data.message);
+		// 	console.log("token = " + bookingData.token);
+		// 	console.log("netlinkid = " + bookingData.netlinkid);
+		// 	console.log("starttime = " + bookingData.starttime);
+		// 	console.log("duration = " + bookingData.duration);
+		// 	console.log("roomid = " + bookingData.roomid);
+  //          vm.checkMessage = "Successfully Created Booking!";
+		//     })
+  //          .error(function(data, status, headers, config) {
+		//   	console.log("booking create error");
+		//     });
 	} //createBooking
     
     
