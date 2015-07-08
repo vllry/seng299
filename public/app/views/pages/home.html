@@ -58,22 +58,26 @@ top: 40px;
 .input-group[class*="col-"] {
     padding-right: 15px;
     padding-left: 15px;
+#tablecell{
+
+}
 }	
 </style>
 
 <div class="jumbotron">
 	<h1>{{ home.title }}</h1>
 
-	<div>Hello!</div>
+<!--	<div>Hello!</div>-->
+    <h4>Year: {{ home.year }} Month: {{ home.month }} Date: {{ home.date }}</h4>
 </div>
 
-
+<!--
 <div class="container">
 <!-- Button to trigger modal --> 
-    <a href="#myModal" role="button" class="btn btn-lg btn-primary btn-block btn-signin" ng-hide={{home.hideCreateBooking}} data-toggle="modal">Create a Booking</a>
+ <!--   <a href="#myModal" role="button" class="btn btn-lg btn-primary btn-block btn-signin" ng-hide={{home.hideCreateBooking}} data-toggle="modal">Create a Booking</a>
     
     <!-- Modal -->
-    <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <!-- <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
         <div class="modal-content">
         <div class="modal-header">
@@ -83,7 +87,7 @@ top: 40px;
         <div class="modal-body">
 
 	<!-- FORMS -->
-	<form class="form-horizontal" name="commentform">
+<!--	<form class="form-horizontal" name="commentform">
 	
     <div class="form-group">
         <label class="control-label col-md-4">Study Room Number</label>
@@ -137,7 +141,7 @@ top: 40px;
     
     <div class="form-group">
 
-        <label class="control-label col-md-4">From</label>
+        <label class="control-label col-md-4">Start Time</label>
 
         <select style="position:relative; width:75px; padding-left:12px;" ng-model="date.startTime" required>
 		<option>8:00</option>
@@ -147,14 +151,14 @@ top: 40px;
 		<option>10:00</option>
 	</select>
 
-	<label class="control-label col-md-4">Day</label>
+	<label class="control-label col-md-4">Duration (minutes)</label>
 
-        <select style="position:relative; width:75px; padding-left:12px;" ng-model="date.endTime" required>
-		<option>8:30</option>
-		<option>9:00</option>
-		<option>9:30</option>
-		<option>10:00</option>
-		<option>10:30</option>
+        <select style="position:relative; width:50px; padding-left:12px;" ng-model="date.duration" required>
+		<option>30</option>
+		<option>60</option>
+		<option>90</option>
+		<option>120</option>
+		<option>150</option>
 		
 	</select>
     </div>
@@ -168,15 +172,54 @@ top: 40px;
 
 
         <!-- END FORMS -->
-        </div><!-- End of Modal body -->
-        </div><!-- End of Modal content -->
-        </div><!-- End of Modal dialog -->
-    </div><!-- End of Modal -->
+ <!--       </div><!-- End of Modal body -->
+   <!--       </div><!-- End of Modal content -->
+   <!--       </div><!-- End of Modal dialog -->
+   <!--   </div><!-- End of Modal -->
 <body>
+    
+
     <!--kenneth-->
-    <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit" ng-click="home.checkAval('1','1436042817000','00:00')">CheckAval</button>
-
-
+<!--    <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit" ng-click="home.checkAval('1','1436042817000','00:00')">CheckAval</button>-->
+    
+    
+    
+    
+    
+    
+    
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Please pick a date!
+            <span class="caret"></span>
+        </button>
+    <ul class="dropdown-menu dropdown-menu-right">
+        <li ng-repeat="row in home.dates" id="{{ row['month'] }}/{{ row['date'] }}" >
+            <a href="#" ng-click="home.getChosenDate(row['month'], row['date'])" >{{ row["month"] }}/{{ row["date"] }}</a>
+        </li>
+  </ul>
+</div>
+    
+    <br>
+    <br>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <!--table-->
         <div class="component2">		
 		  <table class="tableID2">
@@ -204,24 +247,11 @@ top: 40px;
         </div>
     
 <!--    {{ home.table }}-->
-     
-	</div>
     
-    
-    
-    
-    
-        
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
 		<script src="../../../assets/js/jquery.stickyheader.js"></script>
 		<script src="js/ExtractTableCell.js"></script>
-    
-    
-        
-    
-    
-        
 </body>
 </script>
 </html>
