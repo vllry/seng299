@@ -89,62 +89,62 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
     
     
     
-//	if ($localStorage.token != null) {
-//		$rootScope.loggedIn = true;
-//	  } else {
-//	  	$rootScope.loggedIn = false;
-//	};
-//
-//	vm.hideCreateBooking = !($rootScope.loggedIn);
-//
-//	vm.createBooking = function(booking, date) {
-//		console.log("create booking");
-//		console.log("booking = " + booking.roomNumber);
-//		console.log("date = " + date.month + " " + date.day + " from " + date.startTime + " for " + date.duration);
-//
-//		var months = {
-//  		  January: 0,
-//  		  February: 1,
-// 		  March: 2,
-// 		  April: 3,
-// 		  May: 4,
-// 		  June: 5,
-// 		  July: 6,
-// 		  August: 7,
-// 		  September: 8,
-// 		  October: 9,
-// 		  November: 10,
-// 		  December: 11,
-//		};
-//		
-//		var month = months[date.month];
-//		var hour = date.startTime.split(":")[0];
-//		var minutes = date.startTime.split(":")[1];
-//
-//		//startTime raw date
-//		var start = new Date(2015, month, date.day, hour, minutes, 0, 0).getTime()
-//
-//		var bookingData = {
-//			'token' : $localStorage.token,
-//			'netlinkid' : $localStorage.netlinkid,
-//			'starttime' : start,
-//			'duration' : date.duration,
-//			'roomid' : booking.roomNumber
-//		};
-//
-//		$http.post('api/booking/create', bookingData).
-//			success(function(data, status, headers, config) {
-//			console.log(data.message);
-//			console.log("token = " + bookingData.token);
-//			console.log("netlinkid = " + bookingData.netlinkid);
-//			console.log("starttime = " + bookingData.starttime);
-//			console.log("duration = " + bookingData.duration);
-//			console.log("roomid = " + bookingData.roomid);
-//		    }).
-//		    error(function(data, status, headers, config) {
-//		  	console.log("booking create error");
-//		    });
-//	} //createBooking
+	if ($localStorage.token != null) {
+		$rootScope.loggedIn = true;
+	  } else {
+	  	$rootScope.loggedIn = false;
+	};
+
+	vm.hideCreateBooking = !($rootScope.loggedIn);
+
+	vm.createBooking = function(booking, date) {
+		console.log("create booking");
+		console.log("booking = " + booking.roomNumber);
+		console.log("date = " + date.month + " " + date.day + " from " + date.startTime + " for " + date.duration);
+
+		var months = {
+  		  January: 0,
+  		  February: 1,
+ 		  March: 2,
+ 		  April: 3,
+ 		  May: 4,
+ 		  June: 5,
+ 		  July: 6,
+ 		  August: 7,
+ 		  September: 8,
+ 		  October: 9,
+ 		  November: 10,
+ 		  December: 11,
+		};
+		
+		var month = months[date.month];
+		var hour = date.startTime.split(":")[0];
+		var minutes = date.startTime.split(":")[1];
+
+		//startTime raw date
+		var start = new Date(2015, month, date.day, hour, minutes, 0, 0).getTime()
+
+		var bookingData = {
+			'token' : $localStorage.token,
+			'netlinkid' : $localStorage.netlinkid,
+			'starttime' : start,
+			'duration' : date.duration,
+			'roomid' : booking.roomNumber
+		};
+
+		$http.post('api/booking/create', bookingData).
+			success(function(data, status, headers, config) {
+			console.log(data.message);
+			console.log("token = " + bookingData.token);
+			console.log("netlinkid = " + bookingData.netlinkid);
+			console.log("starttime = " + bookingData.starttime);
+			console.log("duration = " + bookingData.duration);
+			console.log("roomid = " + bookingData.roomid);
+		    }).
+		    error(function(data, status, headers, config) {
+		  	console.log("booking create error");
+		    });
+	} //createBooking
 
 	vm.title ="Library Study Room Booking";
     
