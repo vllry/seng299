@@ -217,6 +217,7 @@ exports.getUserDetails = function(res, netlinkid) {
 
 
 exports.userRegister = function(res, user) {
+	console.log(user);
 	user.save(function(err) {
 		var errors = {11000 : { success: false, message: 'A user with that netlinkid already exists'}};
 		mongoCallback(res, err, errors, { success : true, message: 'User created' });

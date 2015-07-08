@@ -86,12 +86,12 @@ module.exports = function(app, express) {
 		.post(function(req, res) {
 			var user = new User({
 				netlinkid: req.body.netlinkid,
-				studentid: req.body.studentid,
+				studentid: req.body.studentid || 'Unknown',
 				password: req.body.password,
 				firstName: req.body.firstname,
 				lastName: req.body.lastname,
-				department: req.body.department,
-				userType: req.body.usertype
+				department: req.body.department || 'Unknown',
+				userType: req.body.usertype || 'student'
 			});
 
 			databaseFacade.userRegister(res, user);
