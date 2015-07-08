@@ -258,7 +258,7 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 
 		$http.post('api/booking/create', bookingData)
            .success(function(data, status, headers, config) {
-           vm.checkMessage = "Successfully Created Booking!";
+           vm.checkMessage = data.message;
 		    })
            .error(function(data, status, headers, config) {
 		  	console.log("booking create error");
