@@ -194,13 +194,16 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
     });
     
     
+    vm.durations= ["30", "60", "90", "120", "150"];
+    
+    
     /* Response to click */
     
     vm.click = function(id) {
         var str = id.split("-");
         vm.bookingTime = str[0]; // booking time
         vm.bookingRoom = str[1]; // booking room
-        window.alert("time: " + vm.bookingTime + "\nroom: " + vm.bookingRoom);
+//        window.alert("time: " + vm.bookingTime + "\nroom: " + vm.bookingRoom);
         
     }
     
@@ -247,16 +250,17 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 			'roomid' : booking.roomNumber
 		};
 
-		$http.post('api/booking/create', bookingData).
-			success(function(data, status, headers, config) {
+		$http.post('api/booking/create', bookingData)
+            .success(function(data, status, headers, config) {
 			console.log(data.message);
 			console.log("token = " + bookingData.token);
 			console.log("netlinkid = " + bookingData.netlinkid);
 			console.log("starttime = " + bookingData.starttime);
 			console.log("duration = " + bookingData.duration);
 			console.log("roomid = " + bookingData.roomid);
-		    }).
-		    error(function(data, status, headers, config) {
+            vm.checkMessage = "Successfully Created Booking!";
+		    })
+            .error(function(data, status, headers, config) {
 		  	console.log("booking create error");
 		    });
 	} //createBooking
