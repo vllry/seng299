@@ -83,68 +83,6 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
         //window.alert("month = " + month + "\ndate = " + date);
     }
     
-    
-    
-    
-    
-    
-    
-//	if ($localStorage.token != null) {
-//		$rootScope.loggedIn = true;
-//	  } else {
-//	  	$rootScope.loggedIn = false;
-//	};
-//
-//	vm.hideCreateBooking = !($rootScope.loggedIn);
-//
-//	vm.createBooking = function(booking, date) {
-//		console.log("create booking");
-//		console.log("booking = " + booking.roomNumber);
-//		console.log("date = " + date.month + " " + date.day + " from " + date.startTime + " for " + date.duration);
-//
-//		var months = {
-//  		  January: 0,
-//  		  February: 1,
-// 		  March: 2,
-// 		  April: 3,
-// 		  May: 4,
-// 		  June: 5,
-// 		  July: 6,
-// 		  August: 7,
-// 		  September: 8,
-// 		  October: 9,
-// 		  November: 10,
-// 		  December: 11,
-//		};
-//		
-//		var month = months[date.month];
-//		var hour = date.startTime.split(":")[0];
-//		var minutes = date.startTime.split(":")[1];
-//
-//		//startTime raw date
-//		var start = new Date(2015, month, date.day, hour, minutes, 0, 0).getTime()
-//
-//		var bookingData = {
-//			'token' : $localStorage.token,
-//			'netlinkid' : $localStorage.netlinkid,
-//			'starttime' : start,
-//			'duration' : date.duration,
-//			'roomid' : booking.roomNumber
-//		};
-//
-//		$http.post('api/booking/create', bookingData).
-//			success(function(data, status, headers, config) {
-//			console.log(data.message);
-//			console.log("token = " + bookingData.token);
-//			console.log("netlinkid = " + bookingData.netlinkid);
-//			console.log("starttime = " + bookingData.starttime);
-//			console.log("duration = " + bookingData.duration);
-//			console.log("roomid = " + bookingData.roomid);
-//		    }).
-//		    error(function(data, status, headers, config) {
-//		  	console.log("booking create error");
-//		    });
-//	} //createBooking
 
 	vm.title ="Library Study Room Booking";
     
@@ -256,68 +194,79 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
     });
     
     
+    /* Response to click */
+    
+    vm.click = function(id) {
+        var str = id.split("-");
+        vm.bookingTime = str[0]; // booking time
+        vm.bookingRoom = str[1]; // booking room
+        window.alert("time: " + vm.bookingTime + "\nroom: " + vm.bookingRoom);
+        
+    }
+    
+    
+    
+    
     
     
 
 
-//    /* Construct id for each cell in the time table */
-//    
-//    vm.timeS=[ "8:00", "8:30", "9:00", "9:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00",
-//	"13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30",
-//	"20:00", "20:30", "21:00", "21:30", "22:00"];
-//    vm.room = ["A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10"];
-//    vm.ids = [];
-//	var index = 0;
-//    for(var i = 0; i < vm.timeS.length; i++) {
-//		for(var j = 0; j < vm.room.length; j++) {
-//            vm.ids[index] = vm.timeS[i] + "-" + vm.room[j];
-//			index++;
-//		}
-//	}
-//    
-//    
-//    /* Construct table */
-//    
-//    vm.rooms = ["Room#/ Time", "A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10"];
-//    vm.times=["", "8:00", "8:30", "9:00", "9:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00",
-//	"13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30",
-//	"20:00", "20:30", "21:00", "21:30", "22:00"];
-//    
-//    vm.header = [];
-//    vm.header[0] = vm.rooms;
-//    
-//    vm.table = [];
-//    index = 0;
-//    var maxNumberOfElementinaRow = 10;
-//    vm.table[0] = vm.rooms;
-//    for(var i = 1; i < vm.times.length; i++) {
-//        var tempIndex = i;
-//        vm.table[tempIndex] = [];
-//        var temp = {"link":vm.times[tempIndex] , "id": vm.times[tempIndex], "htmlClass": ""};
-//        vm.table[tempIndex][0] = temp;
-//        for(var j = 1; j < maxNumberOfElementinaRow + 1; j++) {
-//            temp = {"link": "+", "id": vm.ids[index], "htmlClass": "available"};
-//            vm.table[tempIndex][j] = temp;
-//            index++;
-//        }
-//    }
+    if ($localStorage.token != null) {
+		$rootScope.loggedIn = true;
+	  } else {
+	  	$rootScope.loggedIn = false;
+	};
+
+	vm.hideCreateBooking = !($rootScope.loggedIn);
+
+	vm.createBooking = function(duration) {
+        
+        
+        
+        
+		var roomNumber = parseInt(vm.bookingRoom.substring(1,3));
+		console.log("booking = " + booking.roomNumber);
+        
+        var month = vm.chosenDate["month"];
+        var date = vm.chosenDate["date"];
+        var startTime = vm.bookingTime;
+		console.log("date = " + month + " " + date + " from " + startTime + " for " + duration);
+
+        var time = startTime.split(":");
+		var hour = time[0];
+		var minutes = time[1];
+
+		//startTime raw date
+		var start = new Date(2015, month, date, hour, minutes, 0, 0).getTime();
+
+		var bookingData = {
+			'token' : $localStorage.token,
+			'netlinkid' : $localStorage.netlinkid,
+			'starttime' : start,
+			'duration' : date.duration,
+			'roomid' : booking.roomNumber
+		};
+
+		$http.post('api/booking/create', bookingData).
+			success(function(data, status, headers, config) {
+			console.log(data.message);
+			console.log("token = " + bookingData.token);
+			console.log("netlinkid = " + bookingData.netlinkid);
+			console.log("starttime = " + bookingData.starttime);
+			console.log("duration = " + bookingData.duration);
+			console.log("roomid = " + bookingData.roomid);
+		    }).
+		    error(function(data, status, headers, config) {
+		  	console.log("booking create error");
+		    });
+	} //createBooking
     
     
     
    
     
     
-    /* Response to click */
     
-    vm.click = function(id) {
-        var str = id.split("-");
-        var time = str[0];
-        var room = str[1];
-        window.alert("time: " + time + "\nroom: " + room);
-        
-    }
-    
-    vm.timestamp = Number(new Date());
 
 })
 
