@@ -9,9 +9,6 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 		<title>UVic Library Study Room Booking System</title>
-		<meta name="description" content="Sticky Table Headers Revisited: Creating functional and flexible sticky table headers" />
-		<meta name="keywords" content="Sticky Table Headers Revisited" />
-		<meta name="author" content="Codrops" />
 		<link rel="shortcut icon" href="../favicon.ico">
 		<link rel="stylesheet" type="text/css" href="../../../assets/css/normalize.css" />
 		<link rel="stylesheet" type="text/css" href="../../../assets/css/demo.css" />
@@ -62,10 +59,11 @@ top: 40px;
 .input-group[class*="col-"] {
     padding-right: 15px;
     padding-left: 15px;
-#tablecell{
+}
+#checkStatus{
+    color: #1ABC9C;
+}
 
-}
-}
     
     .chosenDate {
         text-align: right;
@@ -76,54 +74,10 @@ top: 40px;
 	<h1>{{ home.title }}</h1>
 
 <!--	<div>Hello!</div>-->
-    <h4>Year: {{ home.year }} Month: {{ home.month }} Date: {{ home.date }} </h4>
+    <h4>Year: {{ home.year }} Month: {{ home.months[home.month] }} Date: {{ home.date }} </h4>
 </div>
 
 
-<!--<div class="container">-->
-<!-- Button to trigger modal --> 
-<!--  <a href="#myModal" role="button" class="btn btn-lg btn-primary btn-block btn-signin" ng-hide={{home.hideCreateBooking}} data-toggle="modal">Create a Booking</a>-->
-    
-    <!-- Modal -->
-<!--
-   <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">  
-        <div class="modal-content">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">Booking Details</h4>
-    </div> 
-    
-
-    <div class="modal-body">
--->
-
-	<!-- FORMS -->
-<!--
-	<form class="form-horizontal" name="commentform">
-        <div class="form-group">
-            <label class="control-label col-md-4">Duration (minutes)</label>
-                <select style="position:relative; width:50px; padding-left:12px;" ng-model="duration" required>
-                  <option>30</option>
-                  <option>60</option>
-                  <option>90</option>
-                  <option>120</option>
-                  <option>150</option>
-		      </select>
-        </div>
-        <div class="col-md-6">
-            <button type="submit" class="btn btn-custom pull-right" ng-click="home.createBooking(booking, date)">Create Booking</button>
-        </div>
-    </form>
--->
-
-
-
-        <!-- END FORMS -->
- <!--   </div><!-- End of Modal body -->
- <!--   </div><!-- End of Modal content -->
-<!--    </div><!-- End of Modal dialog -->
-<!--    </div><!-- End of Modal -->
 <body>
     
 
@@ -141,7 +95,7 @@ top: 40px;
         </button>
     <ul class="dropdown-menu">
         <li ng-repeat="row in home.dates" id="{{ row['month'] }}/{{ row['date'] }}" >
-            <a href="#" ng-click="home.getChosenDate(row['month'], row['date'])" >{{ row["month"] }}/{{ row["date"] }}</a>
+            <a href="#" ng-click="home.getChosenDate(row['year'],row['month'], row['date'])" >{{ row["year"] }} {{ home.months[row["month"] ]}} {{ row["date"] }}</a>
         </li>
   </ul>
 </div>
@@ -152,7 +106,7 @@ top: 40px;
     
     <div class="chosenDate">
 <!--                {{ home.chosenDate }}-->
-                Chosen Month: {{ home.chosenDate["month"] }}, Chosen Date: {{ home.chosenDate["date"] }} {{ home.chosenDate["message"] }}
+                Chosen Year: {{ home.chosenDate["year"] }}, Chosen Month: {{ home.months[home.chosenDate["month"]] }}, Chosen Date: {{ home.chosenDate["date"] }} {{ home.chosenDate["message"] }}
     </div>
     
     
@@ -205,7 +159,7 @@ top: 40px;
         <h4 class="modal-title" id="myModalLabel">Booking Details</h4>
       </div>
       <div class="modal-body">
-          <label class="control-label col-md-4">Booking Month: {{ home.chosenDate["month"] }}, Booking Date: {{ home.chosenDate["date"] }}</label>
+          <label class="control-label col-md-4">Booking Month: {{ home.months[home.chosenDate["month"]]}}, Booking Date: {{ home.chosenDate["date"] }}</label>
           <label class="control-label col-md-3">Booking Time: {{ home.bookingTime }}, Booking Room: {{ home.bookingRoom }}</label>
           <form class="form-horizontal" name="commentform">
             <div class="form-group">
@@ -219,7 +173,7 @@ top: 40px;
 		      </select>
             </div>
               
-            <label class="control-label">Check: {{ home.checkMessage }}</label>
+            <label class="control-label" id="checkStatus" >Check Booking Status: {{ home.checkMessage }}</label>
               <br>
             <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="home.checkMessage = ''">Cancel</button>

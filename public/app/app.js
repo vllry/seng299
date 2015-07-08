@@ -51,25 +51,14 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 	var vm = this;
 
 
-	var months = new Array();
-	months[0] = "January";
-	months[1] = "February";
-	months[2] = "March";
-	months[3] = "April";
-	months[4] = "May";
-	months[5] = "June";
-	months[6] = "July";
-	months[7] = "August";
-	months[8] = "September";
-	months[9] = "October";
-	months[10] = "November";
-	months[11] = "December";
+	vm.months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+	
 
     
     var currentDate = new Date();
     
     vm.year = currentDate.getFullYear();
-    vm.month = months[currentDate.getMonth()];
+    vm.month = currentDate.getMonth();
     vm.date = currentDate.getDate();
     
     vm.dates = [];
@@ -78,6 +67,7 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
         var tempDate = new Date();
         tempDate.setDate(tempDate.getDate() + i);
         var temp = {
+        	"year": tempDate.getFullYear(),
             "month": tempDate.getMonth(),
             "date": tempDate.getDate()
         }
@@ -86,12 +76,14 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
     
     
     vm.chosenDate = {
+    		"year": vm.year,
             "month": vm.month,
             "date": vm.date,
             "message": "(default)"
         }
-    vm.getChosenDate = function(month, date) {
+    vm.getChosenDate = function(year, month, date) {
         vm.chosenDate = {
+        	"year": year,
             "month": month,
             "date": date,
             "message": ""
@@ -216,10 +208,10 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
     /* Response to click */
     
     vm.click = function(id) {
+    	vm.checkMessage = "";
         var str = id.split("-");
         vm.bookingTime = str[0]; // booking time
         vm.bookingRoom = str[1]; // booking room
-//        window.alert("time: " + vm.bookingTime + "\nroom: " + vm.bookingRoom);
         
     }
     
@@ -238,45 +230,39 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 
 	vm.hideCreateBooking = !($rootScope.loggedIn);
 
-	// vm.createBooking = function(duration) {
 	vm.createBooking = function(duration) {
        
        
 		
        
 		var roomNumber = parseInt(vm.bookingRoom.substring(1,3));
+		var year = vm.chosenDate["year"];
        	var month = vm.chosenDate["month"];
        	var date = vm.chosenDate["date"];
        	var startTime = vm.bookingTime;
 		var time = startTime.split(":");
 		var hour = time[0];
 		var minutes = time[1];
-		vm.checkMessage = "Hour: " + hour + ",Minute: " + minutes;
+		
 
-		// //startTime raw date
-		// var start = new Date(2015, month, date, hour, minutes, 0, 0).getTime();
+		//startTime raw date
+		var start = new Date(year, month, date, hour, minutes, 0, 0).getTime();
 
-		// var bookingData = {
-		// 	'token' : $localStorage.token,
-		// 	'netlinkid' : $localStorage.netlinkid,
-		// 	'starttime' : start,
-		// 	'duration' : date.duration,
-		// 	'roomid' : booking.roomNumber
-		// };
+		var bookingData = {
+			'token' : $localStorage.token,
+			'netlinkid' : $localStorage.netlinkid,
+			'starttime' : start,
+			'duration' : duration,
+			'roomid' : roomNumber
+		};
 
-		// $http.post('api/booking/create', bookingData)
-  //          .success(function(data, status, headers, config) {
-		// 	console.log(data.message);
-		// 	console.log("token = " + bookingData.token);
-		// 	console.log("netlinkid = " + bookingData.netlinkid);
-		// 	console.log("starttime = " + bookingData.starttime);
-		// 	console.log("duration = " + bookingData.duration);
-		// 	console.log("roomid = " + bookingData.roomid);
-  //          vm.checkMessage = "Successfully Created Booking!";
-		//     })
-  //          .error(function(data, status, headers, config) {
-		//   	console.log("booking create error");
-		//     });
+		$http.post('api/booking/create', bookingData)
+           .success(function(data, status, headers, config) {
+           vm.checkMessage = "Successfully Created Booking!";
+		    })
+           .error(function(data, status, headers, config) {
+		  	console.log("booking create error");
+		    });
 	} //createBooking
     
     
