@@ -68,9 +68,19 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
         vm.dates[i] = temp;
     }
     
+    
+    vm.chosenDate = {
+            "month": vm.month,
+            "date": vm.date,
+            "message": "(default)"
+        }
     vm.getChosenDate = function(month, date) {
-        
-        window.alert("month = " + month + "\ndate = " + date);
+        vm.chosenDate = {
+            "month": month,
+            "date": date,
+            "message": ""
+        }
+        //window.alert("month = " + month + "\ndate = " + date);
     }
     
     
@@ -138,27 +148,9 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 
 	vm.title ="Library Study Room Booking";
     
-    var duration = 14;
-
-
-	vm.checkAval = function(room, time, checkTime) {
-		var bookingData = "/api/booking/byroom/" + room + "/" + time; //1/1436042817000
-		$http.get(bookingData).
-		success(function(data, status, headers, config) {
-			//console.log(status);
-			//console.log(data[checkTime]);
-			if (data[checkTime] == true) {
-				return true;
-			} //ec8181
-			else {return false;}
-	    });
-	    error(function(data, status, headers, config) {
-	  		//console.log("ERROR. data = " + data + ", status = " + status);
-	    });
-	};
-
-
-    /* Construct id for each cell in the time table */
+    
+    
+     /* Construct id for each cell in the time table */
     
     vm.timeS=[ "8:00", "8:30", "9:00", "9:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00",
 	"13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30",
@@ -191,8 +183,7 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
     for(var i = 1; i < vm.times.length; i++) {
         var tempIndex = i;
         vm.table[tempIndex] = [];
-//        vm.table[tempIndex][0] = vm.times[tempIndex];
-        var temp = {"link":vm.times[tempIndex] , "id": vm.times[tempIndex], "htmlClass": ""}";
+        var temp = {"link":vm.times[tempIndex] , "id": vm.times[tempIndex], "htmlClass": ""};
         vm.table[tempIndex][0] = temp;
         for(var j = 1; j < maxNumberOfElementinaRow + 1; j++) {
             temp = {"link": "+", "id": vm.ids[index], "htmlClass": "available"};
@@ -202,32 +193,118 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
     }
     
     
-    
-    vm.isId = function(col) {
-        var str = col.split("-");
-        var time = str[0];
-        var room = str[1];
-        if(time.length === 0 || room.length === 0) {
-            return false;
-        }else {
-//            window.alert("time: " + time + "\nroom: " + room);
-            return true;
+    var changeHtmlClass = function(id) {
+        for(var i = 0; i < vm.table.length; i++) {
+            for(var j = 0; j < vm.table[0].length; j++) {
+                if(vm.table[i][j]["id"] === id) {
+                    vm.table[i][j]["htmlClass"] = "notAvailable";
+                }
+            }
         }
     }
     
-    vm.isHeader = function(col) {
-        var str = col.split("-");
-        var time = str[0];
-        var room = str[1];
+    
+    
+    
+    vm.populateCalendar = function() {
+		for (var room = 1; room <= 10; room++) { //For each room
+			var date = new Date();
+			var bookingData = "/api/booking/byroom/" + room.toString() + "/" + date.getTime(); //Example: /api/booking/byroom/1/1436042817000
+			$http.get(bookingData).
+
+			success(function(data, status, headers, config) {
+				console.log(status);
+				for (var timeSlot = 18; timeSlot <= 43; timeSlot++) {
+					var hours = Math.floor(timeSlot/2).toString();
+					var minutes = '00';
+					if (timeSlot % 2) {
+						minutes = '30';
+					}
+
+					//IMPORTANT NOTE: you cannot reference variable room because this is asynchronous. It'll probably just be 11.
+					var curBlock = data[hours+':'+minutes];
+					if (curBlock['bookedBy'] != undefined) {
+						console.log('booking in ' + curBlock['roomid'] + ' at ' + hours+':'+minutes);
+						//HERE is where you should insert your code or function call to re-colour booked slots in the table
+                        
+                        var id;
+                        if (curBlock['roomid'].length === 1) {
+                            id = hours + ':' + minutes + '-A0' + curBlock['roomid'];
+                        } else {
+                            id = hours + ':' + minutes + '-A' + curBlock['roomid'];
+                        }
+                        changeHtmlClass(id);
+					}
+				}
+			}).
+
+			error(function(data, status, headers, config) {
+		  		console.log("ERROR. data = " + data + ", status = " + status);
+			});
+		}
+
+	};
+    
+    
+  
+    
+
+	//This runs populateCalendar() once the page has loaded.
+    angular.element(document).ready(function () {
+        vm.populateCalendar();
         
-        if(time.length === 0 || room.length === 0) {
-            return true;
-        }else {
-//            window.alert("time: " + time + "\nroom: " + room);
-            return false;
-        }
-    }
+    });
     
+    
+    
+    
+
+
+//    /* Construct id for each cell in the time table */
+//    
+//    vm.timeS=[ "8:00", "8:30", "9:00", "9:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00",
+//	"13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30",
+//	"20:00", "20:30", "21:00", "21:30", "22:00"];
+//    vm.room = ["A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10"];
+//    vm.ids = [];
+//	var index = 0;
+//    for(var i = 0; i < vm.timeS.length; i++) {
+//		for(var j = 0; j < vm.room.length; j++) {
+//            vm.ids[index] = vm.timeS[i] + "-" + vm.room[j];
+//			index++;
+//		}
+//	}
+//    
+//    
+//    /* Construct table */
+//    
+//    vm.rooms = ["Room#/ Time", "A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10"];
+//    vm.times=["", "8:00", "8:30", "9:00", "9:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00",
+//	"13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30",
+//	"20:00", "20:30", "21:00", "21:30", "22:00"];
+//    
+//    vm.header = [];
+//    vm.header[0] = vm.rooms;
+//    
+//    vm.table = [];
+//    index = 0;
+//    var maxNumberOfElementinaRow = 10;
+//    vm.table[0] = vm.rooms;
+//    for(var i = 1; i < vm.times.length; i++) {
+//        var tempIndex = i;
+//        vm.table[tempIndex] = [];
+//        var temp = {"link":vm.times[tempIndex] , "id": vm.times[tempIndex], "htmlClass": ""};
+//        vm.table[tempIndex][0] = temp;
+//        for(var j = 1; j < maxNumberOfElementinaRow + 1; j++) {
+//            temp = {"link": "+", "id": vm.ids[index], "htmlClass": "available"};
+//            vm.table[tempIndex][j] = temp;
+//            index++;
+//        }
+//    }
+    
+    
+    
+   
     
     
     /* Response to click */

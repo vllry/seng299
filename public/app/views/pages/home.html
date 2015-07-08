@@ -61,14 +61,18 @@ top: 40px;
 #tablecell{
 
 }
-}	
+}
+    
+    .chosenDate {
+        text-align: right;
+    }
 </style>
 
 <div class="jumbotron">
 	<h1>{{ home.title }}</h1>
 
 <!--	<div>Hello!</div>-->
-    <h4>Year: {{ home.year }} Month: {{ home.month }} Date: {{ home.date }}</h4>
+    <h4>Year: {{ home.year }} Month: {{ home.month }} Date: {{ home.date }} </h4>
 </div>
 
 <!--
@@ -179,8 +183,7 @@ top: 40px;
 <body>
     
 
-    <!--kenneth-->
-<!--    <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit" ng-click="home.checkAval('1','1436042817000','00:00')">CheckAval</button>-->
+ 
     
     
     
@@ -192,21 +195,29 @@ top: 40px;
         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Please pick a date!
             <span class="caret"></span>
         </button>
-    <ul class="dropdown-menu dropdown-menu-right">
+    <ul class="dropdown-menu">
         <li ng-repeat="row in home.dates" id="{{ row['month'] }}/{{ row['date'] }}" >
             <a href="#" ng-click="home.getChosenDate(row['month'], row['date'])" >{{ row["month"] }}/{{ row["date"] }}</a>
         </li>
   </ul>
 </div>
     
+    
     <br>
     <br>
     
+    <div class="chosenDate">
+<!--                {{ home.chosenDate }}-->
+                Chosen Month: {{ home.chosenDate["month"] }}, Chosen Date: {{ home.chosenDate["date"] }} {{ home.chosenDate["message"] }}
+    </div>
     
     
+    <br>
+    <br
     
     
-    
+      
+        
     
     
     
@@ -235,7 +246,7 @@ top: 40px;
                   
                   <tr ng-repeat="row in home.table">
 
-                       <td class="available" ng-repeat="col in row" id="{{ col['id'] }}" ng-click="home.click(col['id'])">
+                       <td ng-repeat="col in row" class="{{ col['htmlClass'] }}"  id="{{ col['id'] }}" ng-click="home.click(col['id'])">
                         <a  href="Book" id="{{ col['id'] }}"> {{ col["link"]}} </a>
                   </td>
                 </tr>
