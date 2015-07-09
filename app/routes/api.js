@@ -196,7 +196,7 @@ module.exports = function(app, express) {
 	// ----------------------------------------------------
 	//create booking
     apiRouter.route('/booking/create')
-    
+
 		.post(function(req, res) {
 			start = new Date();
 			start.setTime(req.body.starttime);
@@ -209,6 +209,17 @@ module.exports = function(app, express) {
 
 		databaseFacade.bookingCreate(res, bookingData);
         });
+
+
+
+    apiRouter.route('/booking/delete')
+    
+		.post(function(req, res) {
+			start = new Date();
+			start.setTime(req.body.starttime);
+
+			databaseFacade.bookingDelete(res, req.body.roomid, start);
+		});
 
 
     apiRouter.route('/booking/byuser')

@@ -200,6 +200,21 @@ function bookingValidate(bookingData, fn) {
 
 
 
+exports.bookingDelete = function(res, roomid, startTime) {
+	schemaBooking.remove({'roomid' : roomid, 'startTime' : startTime}, function(err,numRemoved) {
+		/*if (numRemoved === 0) {
+			console.log("Booking couldn't be deleted");
+			res.json({'success' : false, 'message' : 'There wasn\'t a booking in room ' + roomid + ' at ' + startTime.toString()});
+		}
+		else {
+			console.log("booking deleted");
+			*/mongoCallback(res, err, {}, {'success' : true, 'message' : 'Booking deleted'});
+		//}
+	});
+}
+
+
+
 exports.getUsers = function(res) {
 	schemaUser.find({}, function(err, users) {
 		mongoCallback(res, err, {}, users);
