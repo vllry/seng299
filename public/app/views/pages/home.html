@@ -189,11 +189,11 @@ top: 40px;
                 <label><input type="checkbox">Need a projector?</label>
                  <label><input type="checkbox">Need a laptop?</label>
             </div>
-            <label class="control-label" id="checkStatus" >Check Booking Status: {{ home.checkMessage }}</label>
+<!--            <label class="control-label" id="checkStatus" >Check Booking Status: {{ home.checkMessage }}</label>-->
               <br>
             <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="home.checkMessage = ''">Cancel</button>
-        <button type="button" class="btn btn-primary" ng-hide={{home.hideCreateBooking}} ng-click="home.createBooking(duration)">Create Booking</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-hide={{home.hideCreateBooking}} ng-click="home.createBooking(duration)">Create Booking</button>
       </div>
         
             </form>
