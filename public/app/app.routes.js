@@ -37,6 +37,12 @@ angular.module('app.routes', ['ngRoute'])
 	  	controllerAs: 'book'
 	  })
 
+	  .when("/profile", {
+	  	templateUrl: '/app/views/pages/profile.html',
+	  	controller: 'profileController',
+	  	controllerAs: 'profile'
+	  })
+
 	  .otherwise('/');
 	  
 

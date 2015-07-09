@@ -18,7 +18,7 @@ GET /api					API test message
 		GET /byroom/<room id>/<day in ms>	Returns a dictionary with time blocks (12:00, 12:30, etc) as keys, and either null or booking data as the values.
 	POST /user*				Lists all users
 		POST /login			netlinkid, password - Logs the user in, returns a token
-		POST /register			netlinkid, password, firstname, lastname, [studentid], [department] - Registers the user
+		POST /register			netlinkid, password, firstname, lastname, usertype (student, staff, or facaulty), [studentid], [department] - Registers the user
 		POST /<netlinkid>*
 
 * Denotes API that requires a token
@@ -86,12 +86,12 @@ module.exports = function(app, express) {
 		.post(function(req, res) {
 			var user = new User({
 				netlinkid: req.body.netlinkid,
-				studentid: req.body.studentid,
+				studentid: req.body.studentid || 'Unknown',
 				password: req.body.password,
 				firstName: req.body.firstname,
 				lastName: req.body.lastname,
-				department: req.body.department,
-				userType: 'student'
+				department: req.body.department || 'Unknown',
+				userType: req.body.usertype || 'student'
 			});
 
 			databaseFacade.userRegister(res, user);
@@ -107,6 +107,13 @@ module.exports = function(app, express) {
 			databaseFacade.userLogin(res, req.body.netlinkid, req.body.password);
 		});
 
+
+
+	// /me ===================================================
+	// api endpoint to get user information
+	apiRouter.get('/me', function(req, res) {
+		res.send(req.decoded);
+	});
 
 
 
@@ -144,16 +151,11 @@ module.exports = function(app, express) {
 
 	// on routes that end in /user/:user_id
 	// ----------------------------------------------------
-	apiRouter.route('/user/:user_id')
+	apiRouter.route('/user/:netlinkid')
 
 		// get the user with that id
-		.get(function(req, res) {
-			User.findById(req.params.user_id, function(err, user) {
-				if (err) res.send(err);
-
-				// return that user
-				res.json(user);
-			});
+		.post(function(req, res) {
+			databaseFacade.getUserDetails(res, req.params.netlinkid);
 		})
 
 		// update the user with this id
@@ -258,13 +260,6 @@ module.exports = function(app, express) {
 		});
 
 
-
-
-	// /me ===================================================
-	// api endpoint to get user information
-	apiRouter.get('/me', function(req, res) {
-		res.send(req.decoded);
-	});
 
 	return apiRouter;
 };

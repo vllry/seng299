@@ -208,7 +208,16 @@ exports.getUsers = function(res) {
 
 
 
+exports.getUserDetails = function(res, netlinkid) {
+	schemaUser.findOne({'netlinkid' : netlinkid}, function(err, user) {
+		mongoCallback(res, err, {}, user);
+	});
+};
+
+
+
 exports.userRegister = function(res, user) {
+	console.log(user);
 	user.save(function(err) {
 		var errors = {11000 : { success: false, message: 'A user with that netlinkid already exists'}};
 		mongoCallback(res, err, errors, { success : true, message: 'User created' });
