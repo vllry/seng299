@@ -165,7 +165,7 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 						minutes = '30';
 					}
 
-					//IMPORTANT NOTE: you cannot reference variable room because this is asynchronous. It'll probably just be 11.
+					//IMPORTANT NOTE: you cannot reference variable room because this is asynchronous.
 					var curBlock = data[hours+':'+minutes];
 					if (curBlock['bookedBy'] != undefined) {
 						console.log('booking in ' + curBlock['roomid'] + ' at ' + hours+':'+minutes);
@@ -177,7 +177,7 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
                         } else {
                             id = hours + ':' + minutes + '-A' + curBlock['roomid'];
                         }
-                        changeHtmlClass(id);
+                        changeHtmlClass(id); //Update table cell to reflect (un)availability
 					}
 				}
 			}).
