@@ -68,6 +68,7 @@ top: 40px;
     
 .chosenDate {
     text-align: right;
+    color: whitesmoke;
 }
 </style>
 
@@ -86,11 +87,17 @@ top: 40px;
 	</div>
 	-->
     
-    
-    
-    
-    
-    <div class="dropdown">
+    <main>
+         <br>
+    <br>
+         <br>
+    <br>
+         <br>
+    <br>
+         <br>
+    <br>
+        
+        <div class="dropdown">
         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Please pick a date!
             <span class="caret"></span>
         </button>
@@ -106,13 +113,18 @@ top: 40px;
     <br>
     
     <div class="chosenDate">
-<!--                {{ home.chosenDate }}-->
+
                 Chosen Year: {{ home.chosenDate["year"] }}, Chosen Month: {{ home.months[home.chosenDate["month"]] }}, Chosen Date: {{ home.chosenDate["date"] }} {{ home.chosenDate["message"] }}
     </div>
     
     
     <br>
     <br
+    </main>
+    
+    
+    
+    
     
     
     <!-- table -->
@@ -173,7 +185,10 @@ top: 40px;
                   <option>150</option>
 		      </select>
             </div>
-              
+            <div class="checkbox">
+                <label><input type="checkbox">Need a projector?</label>
+                 <label><input type="checkbox">Need a laptop?</label>
+            </div>
             <label class="control-label" id="checkStatus" >Check Booking Status: {{ home.checkMessage }}</label>
               <br>
             <div class="modal-footer">
