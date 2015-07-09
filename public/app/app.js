@@ -158,7 +158,7 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 
 			success(function(data, status, headers, config) {
 				console.log(status);
-				for (var timeSlot = 18; timeSlot <= 43; timeSlot++) {
+				for (var timeSlot = 16; timeSlot <= 43; timeSlot++) {
 					var hours = Math.floor(timeSlot/2).toString();
 					var minutes = '00';
 					if (timeSlot % 2) {
