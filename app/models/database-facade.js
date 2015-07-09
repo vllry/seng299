@@ -275,7 +275,7 @@ exports.scheduleByRoomAndDay = function(roomid, dayInms, fn) {
 	console.log(dayEnd);
 
 	//Query for all bookings in that room and range
-	schemaBooking.find({'roomid' : roomid, 'startTime' : {$lt : dayEnd, $gt : dayStart}}, function(err, bookings) {
+	schemaBooking.find({'roomid' : roomid, 'startTime' : {$lt : dayEnd, $gt : dayStart}}).populate('bookedBy', 'netlinkid firstName').exec(function(err, bookings) {
 		var table = {};
 		var index;
 		for (index = 0; index < 24; index++) { //Generate blank timetable;
@@ -287,7 +287,7 @@ exports.scheduleByRoomAndDay = function(roomid, dayInms, fn) {
 			//Insert first block of booking
 			var hours = bookings[index].startTime.getHours();
 			var minutes = bookings[index].startTime.getMinutes();
-			var str = numTwoDigits(hours) + ':' + numTwoDigits(minutes);
+			var str = hours + ':' + numTwoDigits(minutes);
 			table[str] = bookings[index];
 
 			//Insert subsiquent blocks of booking
@@ -295,7 +295,7 @@ exports.scheduleByRoomAndDay = function(roomid, dayInms, fn) {
 			for (duration; duration > 1; duration--) {
 				hours = hours + Math.floor((minutes+30)/60);
 				minutes = (minutes + 30) % 60;
-				table[numTwoDigits(hours)+':'+numTwoDigits(minutes)] = bookings[index];
+				table[hours.toString()+':'+numTwoDigits(minutes)] = bookings[index];
 			}
 		}
 

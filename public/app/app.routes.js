@@ -29,6 +29,12 @@ angular.module('app.routes', ['ngRoute'])
 	  	templateUrl: '/app/views/pages/signup.html',
 	  	controller: 'signupController',
 	  	controllerAs: 'signup'
+
+	  })
+	  .when("book",{
+	  	templateUrl: '/app/views/pages/Book.html',
+	  	controller: 'bookController',
+	  	controllerAs: 'book'
 	  })
 
 	  .when("/profile", {
