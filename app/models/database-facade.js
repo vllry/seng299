@@ -275,7 +275,7 @@ exports.scheduleByRoomAndDay = function(roomid, dayInms, fn) {
 	console.log(dayEnd);
 
 	//Query for all bookings in that room and range
-	schemaBooking.find({'roomid' : roomid, 'startTime' : {$lt : dayEnd, $gt : dayStart}}, function(err, bookings) {
+	schemaBooking.find({'roomid' : roomid, 'startTime' : {$lt : dayEnd, $gt : dayStart}}).populate('bookedBy', 'netlinkid firstName').exec(function(err, bookings) {
 		var table = {};
 		var index;
 		for (index = 0; index < 24; index++) { //Generate blank timetable;
