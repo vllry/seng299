@@ -16,6 +16,8 @@ var UserSchema   = new Schema({
 	bookingRestriction: Date
 });
 
+
+
 // hash the password before the user is saved
 UserSchema.pre('save', function(next) {
 	var user = this;
@@ -33,6 +35,24 @@ UserSchema.pre('save', function(next) {
 		next();
 	});
 });
+
+
+// hash the password before the user is saved
+UserSchema.post('update', function(next) {
+	var user = this;
+	console.log(user.netlinkid);
+
+	// generate the hash
+	bcrypt.hash(user.password, null, null, function(err, hash) {
+		if (err) return next(err);
+
+		// change the password to the hashed version
+		user.password = hash;
+		next();
+	});
+});
+
+
 
 // method to compare a given password with the database hash
 UserSchema.methods.comparePassword = function(password) {
