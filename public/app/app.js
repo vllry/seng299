@@ -9,12 +9,12 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 	  var vm = this;
 
 	  if ($localStorage.token != null) {
-		$rootScope.loggedIn = true;
+		$localStorage.loggedIn = true;
 	  } else {
-	  	$rootScope.loggedIn = false;
+	  	$localStorage.loggedIn = false;
 	  };
 
-	  console.log("loggedIn = " + $rootScope.loggedIn);
+	  console.log("loggedIn = " + $localStorage.loggedIn);
 	  
 	  $scope.menuLeft = [
 	    {label:'Home', route:'/', glyphicon:'glyphicon glyphicon-home'},
@@ -23,25 +23,25 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 	   ]
 
 	  $scope.menuRight = [
-	    {label:'SignUp', route:'/signup', glyphicon:'glyphicon glyphicon-user', hide:$rootScope.loggedIn},
-	    {label:'Login', route:'/login', glyphicon:'glyphicon glyphicon-log-in', hide:$rootScope.loggedIn}, 
-	    {label:'Profile', route:'/profile', glyphicon:'glyphicon glyphicon-user', hide:!($rootScope.loggedIn)}
+	    {label:'SignUp', route:'/signup', glyphicon:'glyphicon glyphicon-user', hide:$localStorage.loggedIn},
+	    {label:'Login', route:'/login', glyphicon:'glyphicon glyphicon-log-in', hide:$localStorage.loggedIn}, 
+	    {label:'Profile', route:'/profile', glyphicon:'glyphicon glyphicon-user', hide:!($localStorage.loggedIn)}
 	  ]
 
-	  vm.hideLogout = !($rootScope.loggedIn);
+	  vm.hideLogout = !($localStorage.loggedIn);
 	  console.log("logoutHide = " + vm.hideLogout);
 	  
-	  
+	  /*
 	  $scope.menuActive = '/';
 	  
 	  $rootScope.$on('$routeChangeSuccess', function(e, curr, prev) {
               $scope.menuActive = $location.path();
-          });
+          }); */
 
           vm.logout = function() {
 	      $localStorage.token = null;
-	      $rootScope.loggedIn = false;
-	      console.log("after log out, $rootScope.loggedIn = " + $rootScope.loggedIn);
+	      $localStorage.loggedIn = false;
+	      console.log("after log out, $localStorage.loggedIn = " + $localStorage.loggedIn);
 
 	  };
 
@@ -51,12 +51,12 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 	var vm = this;
 
 	if ($localStorage.token != null) {
-		$rootScope.loggedIn = true;
+		$localStorage.loggedIn = true;
 	  } else {
-	  	$rootScope.loggedIn = false;
+	  	$localStorage.loggedIn = false;
 	};
 
-	vm.hideCreateBooking = !($rootScope.loggedIn);
+	vm.hideCreateBooking = !($localStorage.loggedIn);
 
 	vm.createBooking = function(booking, date) {
 		console.log("create booking");
@@ -130,10 +130,10 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 
 })
 
-.controller('aboutController', function($rootScope){
+.controller('aboutController', function($localStorage, $rootScope){
 	var vm = this;
 
-	vm.message = $rootScope.loggedIn;
+	vm.message = $localStorage.loggedIn;
 
 })
 
@@ -152,8 +152,8 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 
 		    //delete this
 		    console.log("user token = " + $localStorage.token);
-		    $rootScope.loggedIn = true;
-		    console.log("(in login controller) $rootScope.loggedIn = " + $rootScope.loggedIn);
+		    $localStorage.loggedIn = true;
+		    console.log("(in login controller) $localStorage.loggedIn = " + $localStorage.loggedIn);
 		    
 		    return;
 		};
@@ -172,7 +172,7 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 
 				$localStorage.token = data.token;
 				$localStorage.netlinkid = user.username;
-				$rootScope.loggedIn = true;
+				$localStorage.loggedIn = true;
 
 				console.log("local token = " + data.token);
 				
@@ -223,7 +223,6 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 		      'lastname' : user.lastname,
 		      'usertype' : user.type,
 		      'userdepartment' : user.department,
-		      'role' : 'user'
 		};
 		$http.post('/api/user/register', userData).
 		    success(function(data, status, headers, config) {
