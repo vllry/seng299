@@ -10,7 +10,7 @@
               <h3 class="panel-title">Account Information</h3>
               <span class="glyphicon glyphicon-pencil"></span><a href="#" style="text-decoration:none;" data-toggle="modal" data-target="#textModal" ng-click="profile.displayBefore()"> edit</a>
             </div>
-            <div class="panel-body">
+            <div class="panel-body" ng-init="profile.getProfileInfo()">
               <div class="row">
                 
                 <div class=" col-md-9 col-lg-9 "> 
@@ -70,9 +70,6 @@
       <div class="modal-body">
           
           <form class="form-signin">
-		Username (netlinkID):
-                <input type="text" id="inputID" class="form-control" ng-model="profile.netlinkid" ng-initial required autofocus> <br>
-
                 First Name:
                 <input type="text" id="inputFirstName" class="form-control" ng-model="profile.firstName" ng-initial required> <br>
 
