@@ -179,6 +179,7 @@ top: 40px;
       <div class="modal-body">
           <label class="control-label col-md-4">Booking Month: {{ home.months[home.chosenDate["month"]]}}, Booking Date: {{ home.chosenDate["date"] }}</label>
           <label class="control-label col-md-3">Booking Time: {{ home.bookingTime }}, Booking Room: {{ home.bookingRoom }}</label>
+          <label class="control-label col-md-3">Booked by: {{ home.bookingTime }}</label>
           <form class="form-horizontal" name="commentform">
             <div class="form-group">
             <label class="control-label col-md-3">Duration (minutes)</label>
@@ -198,7 +199,7 @@ top: 40px;
               <br>
             <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="home.checkMessage = ''">Cancel</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-hide={{home.hideCreateBooking}} ng-click="home.createBooking(duration)">Create Booking</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-hide={{home.hideCreateBooking}} ng-click="home.createBooking(duration)">{{ home.button }}</button>
       </div>
         
             </form>

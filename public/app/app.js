@@ -147,13 +147,24 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
         }
     }
     
-    
+	function Create2DArray(rows) {
+  		var arr = [];
+
+  		for (var i=0;i<rows;i++) {
+     		arr[i] = [];
+  		}
+
+  		return arr;
+		}
+
     
     
     vm.populateCalendar = function() {
+		vm.list = Create2DArray(43);
 		for (var room = 1; room <= 10; room++) { //For each room
 			var date = new Date();
 			var bookingData = "/api/booking/byroom/" + room.toString() + "/" + date.getTime(); //Example: /api/booking/byroom/1/1436042817000
+			
 			$http.get(bookingData).
 
 			success(function(data, status, headers, config) {
@@ -165,9 +176,17 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 						minutes = '30';
 					}
 
+
+
+			
 					//IMPORTANT NOTE: you cannot reference variable room because this is asynchronous.
 					var curBlock = data[hours+':'+minutes];
+					//console.log('room:' + room);
+					/*console.log(hours);
+					console.log(minutes);
+					console.log(vm.list[room][hours+':'+minutes]);*/
 					if (curBlock['bookedBy'] != undefined) {
+						vm.list[curBlock['roomid']][hours+':'+minutes] = curBlock;
 						console.log('booking in ' + curBlock['roomid'] + ' at ' + hours+':'+minutes);
 						//HERE is where you should insert your code or function call to re-colour booked slots in the table
                         
@@ -195,7 +214,7 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
     });
     
     
-    vm.durations= ["30", "60", "90", "120", "150"];
+    //vm.durations= ["30", "60", "90", "120", "150"];
     
     
     /* Response to click */
@@ -204,6 +223,12 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
         var str = id.split("-");
         vm.bookingTime = str[0]; // booking time
         vm.bookingRoom = str[1]; // booking room
+        vm.button = '';
+        console.log(id);
+        console.log( vm.list[parseInt(str[1])][str[0]] );
+        if (vm.list[parseInt(str[1])][str[0]] != undefined)
+        {vm.button = 'edit';}
+        else vm.button = 'Create Booking';
     }
     
     
