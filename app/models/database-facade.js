@@ -74,7 +74,7 @@ function getUseridFromNetlinkid(netlinkid, fn) {
 function bookingValidate(bookingData, fn) {
 	console.log(bookingData.roomid);
 	if (['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'].indexOf(bookingData.roomid) === -1) {
-		fn({'success' : false, 'message' : '\'' + bookingData.roomid + '\' is not a valid roomid'});
+		fn({'success' : false, 'message' : bookingData.roomid + ' is not a valid roomid'});
 		return;
 	}
 

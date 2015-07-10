@@ -99,7 +99,7 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
     vm.timeS=[ "8:00", "8:30", "9:00", "9:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00",
 	"13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30",
 	"20:00", "20:30", "21:00", "21:30", "22:00"];
-    vm.room = ["A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10"];
+    vm.room = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
     vm.ids = [];
 	var index = 0;
     for(var i = 0; i < vm.timeS.length; i++) {
@@ -112,7 +112,7 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
     
     /* Construct table */
     
-    vm.rooms = ["Room#/ Time", "A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10"];
+    vm.rooms = ["Room#/ Time", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
     vm.times=["", "8:00", "8:30", "9:00", "9:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00",
 	"13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30",
 	"20:00", "20:30", "21:00", "21:30", "22:00"];
@@ -171,12 +171,7 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 						console.log('booking in ' + curBlock['roomid'] + ' at ' + hours+':'+minutes);
 						//HERE is where you should insert your code or function call to re-colour booked slots in the table
                         
-                        var id;
-                        if (curBlock['roomid'].length === 1) {
-                            id = hours + ':' + minutes + '-A0' + curBlock['roomid'];
-                        } else {
-                            id = hours + ':' + minutes + '-A' + curBlock['roomid'];
-                        }
+                        var id = hours + ':' + minutes + '-' + curBlock['roomid'];
                         changeHtmlClass(id); //Update table cell to reflect (un)availability
 					}
 				}
@@ -204,13 +199,11 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
     
     
     /* Response to click */
-    
     vm.click = function(id) {
     	vm.checkMessage = "";
         var str = id.split("-");
         vm.bookingTime = str[0]; // booking time
         vm.bookingRoom = str[1]; // booking room
-        
     }
     
     
@@ -229,15 +222,10 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 	vm.hideCreateBooking = !($rootScope.loggedIn);
 
 	vm.createBooking = function(duration) {
-       
-       
-		
-       
-		var roomNumber = parseInt(vm.bookingRoom.substring(1,3));
 		var year = vm.chosenDate["year"];
-       	var month = vm.chosenDate["month"];
-       	var date = vm.chosenDate["date"];
-       	var startTime = vm.bookingTime;
+		var month = vm.chosenDate["month"];
+		var date = vm.chosenDate["date"];
+		var startTime = vm.bookingTime;
 		var time = startTime.split(":");
 		var hour = time[0];
 		var minutes = time[1];
@@ -251,10 +239,10 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 			'netlinkid' : $localStorage.netlinkid,
 			'starttime' : start,
 			'duration' : duration,
-			'roomid' : roomNumber
+			'roomid' : vm.bookingRoom
 		};
 
-		$http.post('api/booking/create', bookingData)
+		$http.post('/api/booking/create', bookingData)
            .success(function(data, status, headers, config) {
                 //vm.checkMessage = data.message;
                 window.alert(data.message);
