@@ -364,7 +364,9 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 		      'firstname' : user.firstname,
 		      'lastname' : user.lastname,
 		      'usertype' : user.type,
-		      'userdepartment' : user.department,
+		      'department' : user.department,
+		      'email' : user.email,
+		      'role' : 'user'
 		};
 		$http.post('/api/user/register', userData).
 		    success(function(data, status, headers, config) {

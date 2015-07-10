@@ -272,6 +272,19 @@ exports.getUserDetails = function(res, netlinkid) {
 
 
 
+exports.updateUserDetails = function(res, netlinkid, userData) {
+	schemaUser.findOneAndUpdate({'netlinkid' : netlinkid}, userData, function(err, data) {
+		if (data) {
+			mongoCallback(res, err, {}, {'success' : true, 'message' : data});
+		}
+		else {
+			res.json({'success' : false, 'message' : 'No user with netlinkid ' + netlinkid});
+		}
+	});
+};
+
+
+
 exports.userRegister = function(res, user) {
 	console.log(user);
 	user.save(function(err) {

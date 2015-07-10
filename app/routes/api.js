@@ -21,11 +21,12 @@ GET /api					API test message
 	POST /user*				Lists all users
 		POST /login			netlinkid, password - Logs the user in, returns a token
 		POST /register			netlinkid, password, firstname, lastname, usertype (student, staff, or facaulty), [studentid], [department] - Registers the user
-		POST /<netlinkid>*
+		GET /<netlinkid>*
+		PUT /<netlinkid>*		[password], [firstname], [lastname], [department], [studentid], [email] - Updates the specified parameters for the user
 
 * Denotes API that requires a token
-Also, warning that the API often gives 403's instead of 404's when you use the wrong HTTP method (IE GET /user rather than POST /user)
 
+Also, warning that the API often gives 403's instead of 404's when you use the wrong HTTP method (IE GET rather than POST)
 
 */
 
@@ -93,6 +94,7 @@ module.exports = function(app, express) {
 				firstName: req.body.firstname,
 				lastName: req.body.lastname,
 				department: req.body.department || 'Unknown',
+				email: req.body.email || 'Unknown',
 				userType: req.body.usertype || 'student'
 			});
 
@@ -160,26 +162,21 @@ module.exports = function(app, express) {
 			databaseFacade.getUserDetails(res, req.params.netlinkid);
 		})
 
+
 		// update the user with this id
 		.put(function(req, res) {
-			User.findById(req.params.user_id, function(err, user) {
+			userData = {};
+			// set the new user information if it exists in the request
+			if (req.body.firstname) userData.firstName = req.body.firstname;
+			if (req.body.lastname) userData.lastName = req.body.lastname;
+			if (req.body.department) userData.department = req.body.department;
+			if (req.body.studentid) userData.studentid = req.body.studentid;
+			if (req.body.email) userData.email = req.body.email;
+			if (req.body.password) userData.password = req.body.password;
 
-				if (err) res.send(err);
-
-				// set the new user information if it exists in the request
-				if (req.body.name) user.name = req.body.name;
-				if (req.body.id) user.netlinkid = req.body.id;
-				if (req.body.password) user.password = req.body.password;
-
-				// save the user
-				user.save(function(err) {
-					if (err) res.send(err);
-
-					// return a message
-					res.json({ message: 'User updated!' });
-				});
-			});
+			databaseFacade.updateUserDetails(res, req.params.netlinkid, userData);
 		})
+
 
 		// delete the user with this id
 		.delete(function(req, res) {
