@@ -73,7 +73,7 @@ function getUseridFromNetlinkid(netlinkid, fn) {
 
 function bookingValidate(bookingData, fn) {
 	console.log(bookingData.roomid);
-	if (!bookingData.roomid) {
+	if (['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'].indexOf(bookingData.roomid) === -1) {
 		fn({'success' : false, 'message' : '\'' + bookingData.roomid + '\' is not a valid roomid'});
 		return;
 	}
@@ -200,6 +200,62 @@ function bookingValidate(bookingData, fn) {
 
 
 
+exports.bookingCreate = function(res, bookingData) {
+	getUseridFromNetlinkid(bookingData.bookedBy, function(userid) {
+		bookingData.bookedBy = userid;
+		bookingValidate(bookingData, function(result) {
+			if (result['success']) {
+				var booking = new schemaBooking(bookingData);
+				booking.save(function(err) {
+					var errors = {11000 : { success: false, message: 'A booking at that time already exists'}};
+					mongoCallback(res, err, errors, { success : true, message: 'Booking created' });
+				});
+			}
+			else {
+				res.json(result);
+			}
+		});
+	});
+};
+
+
+
+exports.bookingDelete = function(res, roomid, startTime) {
+	schemaBooking.remove({'roomid' : roomid, 'startTime' : startTime}, function(err,numRemoved) {
+		if (numRemoved === 0) {
+			res.json({'success' : false, 'message' : 'There wasn\'t a booking in room ' + roomid + ' at ' + startTime.toString()});
+		}
+		else {
+			mongoCallback(res, err, {}, {'success' : true, 'message' : 'Booking deleted'});
+		}
+	});
+}
+
+
+
+exports.bookingUpdate = function(res, bookingData) {
+	bookingValidate(bookingData, function(result) {
+		if (result['success']) {
+			schemaBooking.findOneAndUpdate({'roomid' : bookingData['roomid'], 'startTime' : bookingData['startTime']},
+					{'duration' : bookingData['duration']},
+					function(err, data) {
+						if (data) {
+							mongoCallback(res, err, {}, {'success' : true, 'message' : data});
+						}
+						else {
+							res.json({'success' : false, 'message' : 'No booking in room ' + bookingData['roomid'] + ' at ' + bookingData['startTime'].toString()});
+						}
+					}
+			);
+		}
+		else {
+			res.json(result);
+		}
+	});
+};
+
+
+
 exports.getUsers = function(res) {
 	schemaUser.find({}, function(err, users) {
 		mongoCallback(res, err, {}, users);
@@ -221,26 +277,6 @@ exports.userRegister = function(res, user) {
 	user.save(function(err) {
 		var errors = {11000 : { success: false, message: 'A user with that netlinkid already exists'}};
 		mongoCallback(res, err, errors, { success : true, message: 'User created' });
-	});
-};
-
-
-
-exports.bookingCreate = function(res, bookingData) {
-	getUseridFromNetlinkid(bookingData.bookedBy, function(userid) {
-		bookingData.bookedBy = userid;
-		bookingValidate(bookingData, function(result) {
-			if (result['success']) {
-				var booking = new schemaBooking(bookingData);
-				booking.save(function(err) {
-					var errors = {11000 : { success: false, message: 'A booking at that time already exists'}};
-					mongoCallback(res, err, errors, { success : true, message: 'Booking created' });
-				});
-			}
-			else {
-				res.json(result);
-			}
-		});
 	});
 };
 
@@ -275,7 +311,7 @@ exports.scheduleByRoomAndDay = function(roomid, dayInms, fn) {
 	console.log(dayEnd);
 
 	//Query for all bookings in that room and range
-	schemaBooking.find({'roomid' : roomid, 'startTime' : {$lt : dayEnd, $gt : dayStart}}, function(err, bookings) {
+	schemaBooking.find({'roomid' : roomid, 'startTime' : {$lt : dayEnd, $gt : dayStart}}).populate('bookedBy', 'netlinkid firstName').exec(function(err, bookings) {
 		var table = {};
 		var index;
 		for (index = 0; index < 24; index++) { //Generate blank timetable;
@@ -287,7 +323,7 @@ exports.scheduleByRoomAndDay = function(roomid, dayInms, fn) {
 			//Insert first block of booking
 			var hours = bookings[index].startTime.getHours();
 			var minutes = bookings[index].startTime.getMinutes();
-			var str = numTwoDigits(hours) + ':' + numTwoDigits(minutes);
+			var str = hours + ':' + numTwoDigits(minutes);
 			table[str] = bookings[index];
 
 			//Insert subsiquent blocks of booking
@@ -295,7 +331,7 @@ exports.scheduleByRoomAndDay = function(roomid, dayInms, fn) {
 			for (duration; duration > 1; duration--) {
 				hours = hours + Math.floor((minutes+30)/60);
 				minutes = (minutes + 30) % 60;
-				table[numTwoDigits(hours)+':'+numTwoDigits(minutes)] = bookings[index];
+				table[hours.toString()+':'+numTwoDigits(minutes)] = bookings[index];
 			}
 		}
 
