@@ -13,8 +13,10 @@ Note to editors of this file: Please LOOK AT THE SCHEMAS in app/models/schemas b
 
 
 GET /api					API test message
-	GET /booking
+	/booking
 		POST /create*			netlinkid, starttime (in ms, use Date()), duration (in minutes), roomid - Attempts to create a booking
+		POST /delete*			roomid, starttime (in ms) - Deletes the booking in the specified room at the specified time
+		POST /update*			roomid, starttime (in ms), duration (in minutes) - Update the details of an existing booking
 		GET /byroom/<room id>/<day in ms>	Returns a dictionary with time blocks (12:00, 12:30, etc) as keys, and either null or booking data as the values.
 	POST /user*				Lists all users
 		POST /login			netlinkid, password - Logs the user in, returns a token
@@ -195,7 +197,7 @@ module.exports = function(app, express) {
 	// on routes that end in /booking/create
 	// ----------------------------------------------------
 	//create booking
-    apiRouter.route('/booking/create')
+	apiRouter.route('/booking/create')
 
 		.post(function(req, res) {
 			start = new Date();
@@ -205,20 +207,34 @@ module.exports = function(app, express) {
 				startTime: start, //Time in ms. Use the Javascript Date object to generate
 				duration: Number(req.body.duration)/30, //Time in minutes -> time in half-hour blocks
 				roomid: req.body.roomid
-            };
+			};
 
-		databaseFacade.bookingCreate(res, bookingData);
-        });
+			databaseFacade.bookingCreate(res, bookingData);
+		});
 
 
-
-    apiRouter.route('/booking/delete')
+	apiRouter.route('/booking/delete')
     
 		.post(function(req, res) {
 			start = new Date();
 			start.setTime(req.body.starttime);
 
 			databaseFacade.bookingDelete(res, req.body.roomid, start);
+		});
+
+
+	apiRouter.route('/booking/update')
+
+		.post(function(req, res) {
+			start = new Date();
+			start.setTime(req.body.starttime);
+			var bookingData = {
+				'roomid': req.body.roomid,
+				'startTime': start, //Time in ms. Use the Javascript Date object to generate
+				'duration': Number(req.body.duration)/30 //Time in minutes -> time in half-hour blocks
+			};
+
+			databaseFacade.bookingUpdate(res, bookingData);
 		});
 
 

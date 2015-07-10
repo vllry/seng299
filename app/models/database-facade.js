@@ -200,6 +200,26 @@ function bookingValidate(bookingData, fn) {
 
 
 
+exports.bookingCreate = function(res, bookingData) {
+	getUseridFromNetlinkid(bookingData.bookedBy, function(userid) {
+		bookingData.bookedBy = userid;
+		bookingValidate(bookingData, function(result) {
+			if (result['success']) {
+				var booking = new schemaBooking(bookingData);
+				booking.save(function(err) {
+					var errors = {11000 : { success: false, message: 'A booking at that time already exists'}};
+					mongoCallback(res, err, errors, { success : true, message: 'Booking created' });
+				});
+			}
+			else {
+				res.json(result);
+			}
+		});
+	});
+};
+
+
+
 exports.bookingDelete = function(res, roomid, startTime) {
 	schemaBooking.remove({'roomid' : roomid, 'startTime' : startTime}, function(err,numRemoved) {
 		if (numRemoved === 0) {
@@ -210,6 +230,29 @@ exports.bookingDelete = function(res, roomid, startTime) {
 		}
 	});
 }
+
+
+
+exports.bookingUpdate = function(res, bookingData) {
+	bookingValidate(bookingData, function(result) {
+		if (result['success']) {
+			schemaBooking.findOneAndUpdate({'roomid' : bookingData['roomid'], 'startTime' : bookingData['startTime']},
+					{'duration' : bookingData['duration']},
+					function(err, data) {
+						if (data) {
+							mongoCallback(res, err, {}, {'success' : true, 'message' : data});
+						}
+						else {
+							res.json({'success' : false, 'message' : 'No booking in room ' + bookingData['roomid'] + ' at ' + bookingData['startTime'].toString()});
+						}
+					}
+			);
+		}
+		else {
+			res.json(result);
+		}
+	});
+};
 
 
 
@@ -234,26 +277,6 @@ exports.userRegister = function(res, user) {
 	user.save(function(err) {
 		var errors = {11000 : { success: false, message: 'A user with that netlinkid already exists'}};
 		mongoCallback(res, err, errors, { success : true, message: 'User created' });
-	});
-};
-
-
-
-exports.bookingCreate = function(res, bookingData) {
-	getUseridFromNetlinkid(bookingData.bookedBy, function(userid) {
-		bookingData.bookedBy = userid;
-		bookingValidate(bookingData, function(result) {
-			if (result['success']) {
-				var booking = new schemaBooking(bookingData);
-				booking.save(function(err) {
-					var errors = {11000 : { success: false, message: 'A booking at that time already exists'}};
-					mongoCallback(res, err, errors, { success : true, message: 'Booking created' });
-				});
-			}
-			else {
-				res.json(result);
-			}
-		});
 	});
 };
 
