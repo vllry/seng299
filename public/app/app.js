@@ -31,18 +31,11 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 	  vm.hideLogout = !($localStorage.loggedIn);
 	  console.log("logoutHide = " + vm.hideLogout);
 	  
-	  /*
-	  $scope.menuActive = '/';
-	  
-	  $rootScope.$on('$routeChangeSuccess', function(e, curr, prev) {
-              $scope.menuActive = $location.path();
-          }); */
 
           vm.logout = function() {
 	      $localStorage.token = null;
 	      $localStorage.loggedIn = false;
 	      console.log("after log out, $localStorage.loggedIn = " + $localStorage.loggedIn);
-
 	  };
 
 })
@@ -316,6 +309,7 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 				$localStorage.netlinkid = user.username;
 				$localStorage.loggedIn = true;
 
+				//delete this
 				console.log("local token = " + data.token);
 				
 			//username no in database
