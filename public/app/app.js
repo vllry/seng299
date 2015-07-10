@@ -49,8 +49,178 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 
 .controller('homeController', function($http, $localStorage, $rootScope){
 	var vm = this;
+	vm.title ="Library Study Room Booking";
 
-	if ($localStorage.token != null) {
+
+	vm.months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+	
+
+    
+    var currentDate = new Date();
+    
+    vm.year = currentDate.getFullYear();
+    vm.month = currentDate.getMonth();
+    vm.date = currentDate.getDate();
+    
+    vm.dates = [];
+    var numberOfDatestoBeDisplayed = 14;
+    for(var i = 0; i < numberOfDatestoBeDisplayed; i++) {
+        var tempDate = new Date();
+        tempDate.setDate(tempDate.getDate() + i);
+        var temp = {
+        	"year": tempDate.getFullYear(),
+            "month": tempDate.getMonth(),
+            "date": tempDate.getDate()
+        }
+        vm.dates[i] = temp;
+    }
+    
+    
+    vm.chosenDate = {
+    		"year": vm.year,
+            "month": vm.month,
+            "date": vm.date,
+            "message": "(default)"
+        }
+    vm.getChosenDate = function(year, month, date) {
+        vm.chosenDate = {
+        	"year": year,
+            "month": month,
+            "date": date,
+            "message": ""
+        }
+        //window.alert("month = " + month + "\ndate = " + date);
+    }
+
+
+
+     /* Construct id for each cell in the time table */
+    
+    vm.timeS=[ "8:00", "8:30", "9:00", "9:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00",
+	"13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30",
+	"20:00", "20:30", "21:00", "21:30", "22:00"];
+    vm.room = ["A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10"];
+    vm.ids = [];
+	var index = 0;
+    for(var i = 0; i < vm.timeS.length; i++) {
+		for(var j = 0; j < vm.room.length; j++) {
+            vm.ids[index] = vm.timeS[i] + "-" + vm.room[j];
+			index++;
+		}
+	}
+    
+    
+    /* Construct table */
+    
+    vm.rooms = ["Room#/ Time", "A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10"];
+    vm.times=["", "8:00", "8:30", "9:00", "9:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00",
+	"13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30",
+	"20:00", "20:30", "21:00", "21:30", "22:00"];
+    
+    vm.header = [];
+    vm.header[0] = vm.rooms;
+    
+    vm.table = [];
+    index = 0;
+    var maxNumberOfElementinaRow = 10;
+    vm.table[0] = vm.rooms;
+    for(var i = 1; i < vm.times.length; i++) {
+        var tempIndex = i;
+        vm.table[tempIndex] = [];
+        var temp = {"link":vm.times[tempIndex] , "id": vm.times[tempIndex], "htmlClass": ""};
+        vm.table[tempIndex][0] = temp;
+        for(var j = 1; j < maxNumberOfElementinaRow + 1; j++) {
+            temp = {"link": "+", "id": vm.ids[index], "htmlClass": "available"};
+            vm.table[tempIndex][j] = temp;
+            index++;
+        }
+    }
+    
+    
+    var changeHtmlClass = function(id) {
+        for(var i = 0; i < vm.table.length; i++) {
+            for(var j = 0; j < vm.table[0].length; j++) {
+                if(vm.table[i][j]["id"] === id) {
+                    vm.table[i][j]["htmlClass"] = "notAvailable";
+                }
+            }
+        }
+    }
+    
+    
+    
+    
+    vm.populateCalendar = function() {
+		for (var room = 1; room <= 10; room++) { //For each room
+			var date = new Date();
+			var bookingData = "/api/booking/byroom/" + room.toString() + "/" + date.getTime(); //Example: /api/booking/byroom/1/1436042817000
+			$http.get(bookingData).
+
+			success(function(data, status, headers, config) {
+				console.log(status);
+				for (var timeSlot = 16; timeSlot <= 43; timeSlot++) {
+					var hours = Math.floor(timeSlot/2).toString();
+					var minutes = '00';
+					if (timeSlot % 2) {
+						minutes = '30';
+					}
+
+					//IMPORTANT NOTE: you cannot reference variable room because this is asynchronous.
+					var curBlock = data[hours+':'+minutes];
+					if (curBlock['bookedBy'] != undefined) {
+						console.log('booking in ' + curBlock['roomid'] + ' at ' + hours+':'+minutes);
+						//HERE is where you should insert your code or function call to re-colour booked slots in the table
+                        
+                        var id;
+                        if (curBlock['roomid'].length === 1) {
+                            id = hours + ':' + minutes + '-A0' + curBlock['roomid'];
+                        } else {
+                            id = hours + ':' + minutes + '-A' + curBlock['roomid'];
+                        }
+                        changeHtmlClass(id); //Update table cell to reflect (un)availability
+					}
+				}
+			}).
+
+			error(function(data, status, headers, config) {
+		  		console.log("ERROR. data = " + data + ", status = " + status);
+			});
+		}
+
+	};
+    
+    
+  
+    
+
+	//This runs populateCalendar() once the page has loaded.
+    angular.element(document).ready(function () {
+        vm.populateCalendar();
+        
+    });
+    
+    
+    vm.durations= ["30", "60", "90", "120", "150"];
+    
+    
+    /* Response to click */
+    
+    vm.click = function(id) {
+    	vm.checkMessage = "";
+        var str = id.split("-");
+        vm.bookingTime = str[0]; // booking time
+        vm.bookingRoom = str[1]; // booking room
+        
+    }
+    
+    
+    
+    
+    
+    
+
+
+    if ($localStorage.token != null) {
 		$rootScope.loggedIn = true;
 	  } else {
 	  	$rootScope.loggedIn = false;
@@ -58,75 +228,48 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 
 	vm.hideCreateBooking = !($rootScope.loggedIn);
 
-	vm.createBooking = function(booking, date) {
-		console.log("create booking");
-		console.log("booking = " + booking.roomNumber);
-		console.log("date = " + date.month + " " + date.day + " from " + date.startTime + " for " + date.duration);
-
-		var months = {
-  		  January: 0,
-  		  February: 1,
- 		  March: 2,
- 		  April: 3,
- 		  May: 4,
- 		  June: 5,
- 		  July: 6,
- 		  August: 7,
- 		  September: 8,
- 		  October: 9,
- 		  November: 10,
- 		  December: 11,
-		};
+	vm.createBooking = function(duration) {
+       
+       
 		
-		var month = months[date.month];
-		var hour = date.startTime.split(":")[0];
-		var minutes = date.startTime.split(":")[1];
+       
+		var roomNumber = parseInt(vm.bookingRoom.substring(1,3));
+		var year = vm.chosenDate["year"];
+       	var month = vm.chosenDate["month"];
+       	var date = vm.chosenDate["date"];
+       	var startTime = vm.bookingTime;
+		var time = startTime.split(":");
+		var hour = time[0];
+		var minutes = time[1];
+		
 
 		//startTime raw date
-		var start = new Date(2015, month, date.day, hour, minutes, 0, 0).getTime()
+		var start = new Date(year, month, date, hour, minutes, 0, 0).getTime();
 
 		var bookingData = {
 			'token' : $localStorage.token,
 			'netlinkid' : $localStorage.netlinkid,
 			'starttime' : start,
-			'duration' : date.duration,
-			'roomid' : booking.roomNumber
+			'duration' : duration,
+			'roomid' : roomNumber
 		};
 
-		$http.post('api/booking/create', bookingData).
-			success(function(data, status, headers, config) {
-			console.log(data.message);
-			console.log("token = " + bookingData.token);
-			console.log("netlinkid = " + bookingData.netlinkid);
-			console.log("starttime = " + bookingData.starttime);
-			console.log("duration = " + bookingData.duration);
-			console.log("roomid = " + bookingData.roomid);
-		    }).
-		    error(function(data, status, headers, config) {
+		$http.post('api/booking/create', bookingData)
+           .success(function(data, status, headers, config) {
+                //vm.checkMessage = data.message;
+                window.alert(data.message);
+		    })
+           .error(function(data, status, headers, config) {
 		  	console.log("booking create error");
 		    });
 	} //createBooking
-
-	vm.title ="Library Study Room Booking";
-
-
-	vm.checkAval = function(room, time, checkTime) {
-		var bookingData = "/api/booking/byroom/" + room + "/" + time; //1/1436042817000
-		$http.get(bookingData).
-		success(function(data, status, headers, config) {
-			//console.log(status);
-			//console.log(data[checkTime]);
-			if (data[checkTime] == true) {
-				return true;
-			} //ec8181
-			else {return false;}
-	    });
-	    error(function(data, status, headers, config) {
-	  		//console.log("ERROR. data = " + data + ", status = " + status);
-	    });
-	};
-
-
+    
+    
+    
+   
+    
+    
+    
 
 })
 
@@ -277,4 +420,6 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 	
 
 });
+
+
 
