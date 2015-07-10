@@ -396,18 +396,33 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 		    	console.log("last name = " + data.lastName);
 		    	console.log("user type = " + data.userType);
 
-		    	var fullName = (data.firstName).concat(" ").concat(data.lastName);
-
-			vm.name = fullName
+			vm.netlinkid = $localStorage.netlinkid;
+			vm.firstName = data.firstName;
+			vm.lastName = data.lastName;
 			vm.password = "THIS IS A PASSWORD"
 			vm.email = $localStorage.netlinkid.concat("@uvic.ca");
 			vm.type = data.userType;
-			vm.department = "THIS IS A DEPARTMENT"
+			vm.department = data.department;
 		  
 		    }).
 		    error(function(data, status, headers, config) {
 		  	console.log("ERROR. data = " + data + ", status = " + status);
 		    });
+
+	vm.displayBefore = function(info) {
+		console.log("BEFORE CHANGES:");
+		console.log("netlinkid = " + vm.netlinkid);
+		console.log("first name = " + vm.firstName);
+		console.log("last name = " + vm.lastName);
+		console.log("password = " + vm.password);
+		console.log("email = " + vm.email);
+		console.log("user type = " + vm.type);
+		console.log("department = " + vm.department);
+	};
+
+	vm.update = function() {
+		
+	};
 
 	//post to /api/users/[netlinkid] with parameter token: $localStorage.token
 
