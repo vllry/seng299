@@ -92,7 +92,7 @@ angular.module('userApp', ['app.routes', 'ngStorage', 'ngDialog'])
     vm.timeS=[ "8:00", "8:30", "9:00", "9:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00",
 	"13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30",
 	"20:00", "20:30", "21:00", "21:30", "22:00"];
-    vm.room = ["A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10"];
+    vm.room = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
     vm.ids = [];
 	var index = 0;
     for(var i = 0; i < vm.timeS.length; i++) {
@@ -105,7 +105,7 @@ angular.module('userApp', ['app.routes', 'ngStorage', 'ngDialog'])
     
     /* Construct table */
     
-    vm.rooms = ["Room#/ Time", "A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10"];
+    vm.rooms = ["Room#/ Time", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
     vm.times=["", "8:00", "8:30", "9:00", "9:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00",
 	"13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30",
 	"20:00", "20:30", "21:00", "21:30", "22:00"];
@@ -140,13 +140,24 @@ angular.module('userApp', ['app.routes', 'ngStorage', 'ngDialog'])
         }
     }
     
-    
+	function Create2DArray(rows) {
+  		var arr = [];
+
+  		for (var i=0;i<rows;i++) {
+     		arr[i] = [];
+  		}
+
+  		return arr;
+		}
+
     
     
     vm.populateCalendar = function() {
+		vm.list = Create2DArray(43);
 		for (var room = 1; room <= 10; room++) { //For each room
 			var date = new Date();
 			var bookingData = "/api/booking/byroom/" + room.toString() + "/" + date.getTime(); //Example: /api/booking/byroom/1/1436042817000
+			
 			$http.get(bookingData).
 			success(function(data, status, headers, config) {
 				console.log(status);
@@ -157,18 +168,21 @@ angular.module('userApp', ['app.routes', 'ngStorage', 'ngDialog'])
 						minutes = '30';
 					}
 
+
+
+			
 					//IMPORTANT NOTE: you cannot reference variable room because this is asynchronous.
 					var curBlock = data[hours+':'+minutes];
+					//console.log('room:' + room);
+					/*console.log(hours);
+					console.log(minutes);
+					console.log(vm.list[room][hours+':'+minutes]);*/
 					if (curBlock['bookedBy'] != undefined) {
+						vm.list[curBlock['roomid']][hours+':'+minutes] = curBlock;
 						console.log('booking in ' + curBlock['roomid'] + ' at ' + hours+':'+minutes);
 						//HERE is where you should insert your code or function call to re-colour booked slots in the table
                         
-                        var id;
-                        if (curBlock['roomid'].length === 1) {
-                            id = hours + ':' + minutes + '-A0' + curBlock['roomid'];
-                        } else {
-                            id = hours + ':' + minutes + '-A' + curBlock['roomid'];
-                        }
+                        var id = hours + ':' + minutes + '-' + curBlock['roomid'];
                         changeHtmlClass(id); //Update table cell to reflect (un)availability
 					}
 				}
@@ -190,28 +204,41 @@ angular.module('userApp', ['app.routes', 'ngStorage', 'ngDialog'])
         vm.populateCalendar();
         
     });
-    
-    
-    vm.durations= ["30", "60", "90", "120", "150"];
+
+    if ($localStorage.token != null) {
+		$rootScope.loggedIn = true;
+	  	} else {
+	  		$rootScope.loggedIn = false;
+		};
+
+	vm.hideCreateBooking = !($rootScope.loggedIn);  
     
     
     /* Response to click */
-    
     vm.click = function(id) {
     	vm.checkMessage = "";
         var str = id.split("-");
         vm.bookingTime = str[0]; // booking time
         vm.bookingRoom = str[1]; // booking room
-        
+        vm.button = '';
+        console.log(id);
+        console.log( vm.list[parseInt(str[1])][str[0]] );
+        if (vm.list[parseInt(str[1])][str[0]] != undefined)
+        {
+
+        	if($localStorage.netlinkid == vm.list[parseInt(str[1])][str[0]]['bookedBy']['netlinkid']){
+        		vm.someone = vm.list[parseInt(str[1])][str[0]]['bookedBy']['firstName'];
+        		vm.button = 'SAVE';
+        		return;
+        	} else {
+        		vm.hideCreateBooking = true;
+        		vm.someone = vm.list[parseInt(str[1])][str[0]]['bookedBy']['firstName'];
+        		return;
+        	}
+        }
+        else vm.button = 'Create Booking';
     }
     
-    
-    
-    
-    
-    
-
-
     if ($localStorage.token != null) {
 		$localStorage.loggedIn = true;
 	  } else {
@@ -221,15 +248,10 @@ angular.module('userApp', ['app.routes', 'ngStorage', 'ngDialog'])
 	vm.hideCreateBooking = !($localStorage.loggedIn);
 
 	vm.createBooking = function(duration) {
-       
-       
-		
-       
-		var roomNumber = parseInt(vm.bookingRoom.substring(1,3));
 		var year = vm.chosenDate["year"];
-       	var month = vm.chosenDate["month"];
-       	var date = vm.chosenDate["date"];
-       	var startTime = vm.bookingTime;
+		var month = vm.chosenDate["month"];
+		var date = vm.chosenDate["date"];
+		var startTime = vm.bookingTime;
 		var time = startTime.split(":");
 		var hour = time[0];
 		var minutes = time[1];
@@ -243,10 +265,10 @@ angular.module('userApp', ['app.routes', 'ngStorage', 'ngDialog'])
 			'netlinkid' : $localStorage.netlinkid,
 			'starttime' : start,
 			'duration' : duration,
-			'roomid' : roomNumber
+			'roomid' : vm.bookingRoom
 		};
 
-		$http.post('api/booking/create', bookingData)
+		$http.post('/api/booking/create', bookingData)
            .success(function(data, status, headers, config) {
                 //vm.checkMessage = data.message;
                 window.alert(data.message);
@@ -256,7 +278,35 @@ angular.module('userApp', ['app.routes', 'ngStorage', 'ngDialog'])
 		    });
 	} //createBooking
     
-    
+    vm.deleteBooking=function(starttime,id){
+	 //get ms
+	 //var timeInMS=starttime.getTime();
+     var room = vm.bookingRoom;
+     var starttime = vm.bookingTime;
+	 // var timeInMs = new Date(starttime,0.0).getTime();
+	var year = vm.chosenDate["year"];
+	var month = vm.chosenDate["month"];
+	var date = vm.chosenDate["date"];
+	var time = starttime.split(":");
+	var hour = time[0];
+	var minutes = time[1];
+	var timeInMS=new Date(year, month, date, hour, minutes, 0, 0).getTime();
+
+	 console.log(timeInMS);
+     var bookingData={
+     		'token' : $localStorage.token,
+     		'roomid': room,
+     		'starttime':timeInMS
+      };
+     $http.post('/api/booking/delete', bookingData)
+      .success(function(data, status, headers, config) {
+            //vm.checkMessage = data.message;
+            window.alert(data.message);
+	    })
+       .error(function(data, status, headers, config) {
+	  	console.log("there wasn't a booking");
+	    });
+}
     
    
     

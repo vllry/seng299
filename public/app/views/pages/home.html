@@ -73,7 +73,7 @@ top: 40px;
 
 
 .notAvailable {
-	background-color: #7C98BF;
+	background-color: #dc6464; /*#7C98BF*/
 }
 </style>
 
@@ -176,12 +176,31 @@ top: 40px;
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">Booking Details</h4>
       </div>
-      <div class="modal-body">
-          <label class="control-label col-md-4">Booking Month: {{ home.months[home.chosenDate["month"]]}}, Booking Date: {{ home.chosenDate["date"] }}</label>
+      <div class="modal-body" style="background-image:url(./../../../assets/images/popup-bg.jpg)">
+         <!--  <label class="control-label col-md-4">Booking Month: {{ home.months[home.chosenDate["month"]]}}, Booking Date: {{ home.chosenDate["date"] }}</label>
           <label class="control-label col-md-3">Booking Time: {{ home.bookingTime }}, Booking Room: {{ home.bookingRoom }}</label>
-          <form class="form-horizontal" name="commentform">
-            <div class="form-group">
-            <label class="control-label col-md-3">Duration (minutes)</label>
+          <label class="control-label col-md-2">Booked by: {{ home.someone }}</label> -->
+
+          <div class="control-label col-md-4">
+
+          <label style="color:#354d7d"> Booking Date: {{ home.months[home.chosenDate["month"]]}} {{ home.chosenDate["date"] }}</label>
+          <br>
+
+          <label style="color:#354d7d"> Booking Time: {{ home.bookingTime }} Booking Room: {{ home.bookingRoom }} </label>
+
+          <br>
+
+          <label style="color:#354d7d"> Booked by: {{ home.someone }}</label>
+
+          </div>
+
+          <div>
+
+          <br>
+          <form class="form-horizontal " name="commentform">
+            <div class="form-group" ng-hide="home.hideCreateBooking">
+            <!-- <label class="control-label col-md-3">Duration (minutes)</label> -->
+            <label style="color:#354d7d" ng-hide="home.hideCreateBooking"> Duration (minutes)</label>
                 <select style="position:relative; width:50px; padding-left:12px;" ng-model="duration" required>
                   <option>30</option>
                   <option>60</option>
@@ -190,15 +209,17 @@ top: 40px;
                   <option>150</option>
 		      </select>
             </div>
+          </div>
             <div class="checkbox">
-                <label><input type="checkbox">Need a projector?</label>
-                 <label><input type="checkbox">Need a laptop?</label>
+                <label style="color:#354d7d"><input type="checkbox">Need a projector?</label>
+                 <label style="color:#354d7d"><input type="checkbox">Need a laptop?</label>
             </div>
 <!--            <label class="control-label" id="checkStatus" >Check Booking Status: {{ home.checkMessage }}</label>-->
               <br>
             <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="home.checkMessage = ''">Cancel</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-hide={{home.hideCreateBooking}} ng-click="home.createBooking(duration)">Create Booking</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="home.deleteBooking()">Delete</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-hide="home.hideCreateBooking" ng-click="home.createBooking(duration)">{{ home.button }}</button>
       </div>
         
             </form>
