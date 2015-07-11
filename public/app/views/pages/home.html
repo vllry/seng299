@@ -105,9 +105,9 @@ top: 40px;
     <br>
          <br>
     <br>
-        
+       <div> 
         <div class="dropdown">
-        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Please pick a date!
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">{{home.chosenDate["year"]}} {{ home.months[home.chosenDate["month"]] }} {{ home.chosenDate["date"] }}
             <span class="caret"></span>
         </button>
     <ul class="dropdown-menu">
@@ -125,7 +125,7 @@ top: 40px;
 
                 Chosen Year: {{ home.chosenDate["year"] }}, Chosen Month: {{ home.months[home.chosenDate["month"]] }}, Chosen Date: {{ home.chosenDate["date"] }} {{ home.chosenDate["message"] }}
     </div>
-    
+</div>
     
     <br>
     <br
