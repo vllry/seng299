@@ -76,6 +76,10 @@ top: 40px;
 	background-color: #dc6464; /*#7C98BF*/
 }
 
+.notAvailable1 {
+  color:#ffffff; /*#7C98BF*/
+}
+
 #delete {
   background-color: #dc6464;
 }
@@ -126,8 +130,8 @@ top: 40px;
     
     
     <!-- table -->
-        <div class="component2">		
-		  <table class="tableID2">
+        <div class="container">		
+		  <table class="">
               
               <thead>
                   <tr ng-repeat="row in home.header">
@@ -137,13 +141,14 @@ top: 40px;
                 </tr>
               </thead>
               <tbody>
-                  
-                  <tr ng-repeat="row in home.table">
-
-                       <td ng-repeat="col in row" class="{{ col['htmlClass'] }}"  id="{{ col['id'] }}" data-toggle="modal" data-target="#myModal" ng-click="home.click(col['id'])">
+                  <!-- <th ng-repeat="i in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]">
+                          {{ home.times[i] }} -->
+                  <tr ng-repeat="i in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]">
+                        <th>{{ home.times[i]}}</th>
+                        <td ng-repeat="j in [1,2,3,4,5,6,7,8,9,10]" class="{{ home.table[i][j]['htmlClass'] }}"  id="{{ home.table[i][j]['id'] }}" data-toggle="modal" data-target="#myModal" ng-click="home.click(home.table[i][j]['id'])">
 <!--                        <a  href="Book" id="{{ col['id'] }}"> {{ col["link"]}} </a>-->
-                           <a id="{{ col['id'] }}"> {{ col["link"]}} </a>
-                  </td>
+                           <a  class="{{ home.table[i][j]['htmlClass1'] }}" id="{{ home.table[i][j]['id'] }}"> {{ home.table[i][j]["link"]}}</a>
+                        </td>
                 </tr>
               </tbody>
 		      
@@ -191,9 +196,9 @@ top: 40px;
 
           <br>
           <form class="form-horizontal " name="commentform">
-            <div class="form-group" ng-hide="home.hideCreateBooking">
+            <div class="form-group" ng-hide="home.hideDuration">
             <!-- <label class="control-label col-md-3">Duration (minutes)</label> -->
-            <label style="color:#354d7d" ng-hide="home.hideCreateBooking"> Duration (minutes)</label>
+            <label style="color:#354d7d" ng-hide="home.hideDuration"> Duration (minutes)</label>
                 <select style="position:relative; width:50px; padding-left:12px;" ng-model="duration" required>
                   <option>30</option>
                   <option>60</option>
@@ -213,6 +218,7 @@ top: 40px;
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="home.checkMessage = ''">Cancel</button>
         <button id="delete" style="color:white" type="button" class="btn btn-default" data-dismiss="modal" ng-click="home.deleteBooking()" ng-hide="home.hideDeleteButton">Delete</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal" ng-hide="home.hideCreateBooking" ng-click="home.createBooking(duration)">{{ home.button }}</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-hide="home.hideEditButton" ng-click="home.EditBooking(duration)">{{ home.button }}</button>
       </div>
         
             </form>
@@ -232,7 +238,6 @@ top: 40px;
 		<script src="../../../assets/js/jquery.stickyheader.js"></script>
 		<script src="js/ExtractTableCell.js"></script>
 </body>
-</script>
 </html>
 
 

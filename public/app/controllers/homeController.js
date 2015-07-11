@@ -83,10 +83,10 @@ angular.module('userApp')
     for(var i = 1; i < vm.times.length; i++) {
         var tempIndex = i;
         vm.table[tempIndex] = [];
-        var temp = {"link":vm.times[tempIndex] , "id": vm.times[tempIndex], "htmlClass": ""};
+        var temp = {"link":vm.times[tempIndex] , "id": vm.times[tempIndex], "htmlClass": "", "htmlClass1": ""};
         vm.table[tempIndex][0] = temp;
         for(var j = 1; j < maxNumberOfElementinaRow + 1; j++) {
-            temp = {"link": "+", "id": vm.ids[index], "htmlClass": "available"};
+            temp = {"link": "+", "id": vm.ids[index], "htmlClass": "available", "htmlClass1": "available1"};
             vm.table[tempIndex][j] = temp;
             index++;
         }
@@ -98,6 +98,7 @@ angular.module('userApp')
             for(var j = 0; j < vm.table[0].length; j++) {
                 if(vm.table[i][j]["id"] === id) {
                     vm.table[i][j]["htmlClass"] = "notAvailable";
+                    vm.table[i][j]["htmlClass1"] = "notAvailable1";
                 }
             }
         }
@@ -174,10 +175,15 @@ angular.module('userApp')
 	  		$rootScope.loggedIn = false;
 		};
 
-	vm.hideCreateBooking = !($rootScope.loggedIn);  
+	vm.hideCreateBooking = !($rootScope.loggedIn);
+    vm.hideEditButton = false;  
     vm.hideDeleteButton = false;
-    vm.hideBookedBy = true;
+    vm.hideBookedBy = false;
+<<<<<<< HEAD
 
+=======
+    vm.hideDuration = false;
+>>>>>>> origin/master
     /* Response to click */
     vm.click = function(id) {
     	vm.checkMessage = "";
@@ -185,7 +191,7 @@ angular.module('userApp')
         vm.bookingTime = str[0]; // booking time
         vm.bookingRoom = str[1]; // booking room
         vm.button = '';
-        console.log(id);
+        //console.log(id);
         console.log( vm.list[parseInt(str[1])][str[0]] );
         if (vm.list[parseInt(str[1])][str[0]] != undefined)
         {
@@ -193,19 +199,29 @@ angular.module('userApp')
         	if($localStorage.netlinkid == vm.list[parseInt(str[1])][str[0]]['bookedBy']['netlinkid']){
         		vm.someone = vm.list[parseInt(str[1])][str[0]]['bookedBy']['firstName'];
         		vm.hideDeleteButton = false;
+                vm.hideCreateBooking = true;
+                vm.hideEditButton = false;
+                vm.hideDuration = false;
         		vm.button = 'SAVE';
-        		return;//booked by me
+        	    //booked by me
         	} else {
         		vm.hideCreateBooking = true;
         		vm.hideDeleteButton = true;
+                vm.hideEditButton = true;
+                vm.hideDuration = true;
         		vm.someone = vm.list[parseInt(str[1])][str[0]]['bookedBy']['firstName'];//booking by someone else
-        		return;
+        		
         	}
         }
         else{
+
         	vm.hideDeleteButton = true;
+            vm.hideCreateBooking = false;
         	vm.hideBookedBy = true;
+            vm.hideEditButton = true;
+            vm.hideDuration = false;
         	vm.button = 'Create Booking';
+            
         }
     }
     
@@ -248,7 +264,7 @@ angular.module('userApp')
 		    });
 	} //createBooking
     
-    vm.deleteBooking=function(starttime,id){
+    vm.deleteBooking=function(){
 	 //get ms
 	 //var timeInMS=starttime.getTime();
      var room = vm.bookingRoom;
@@ -278,4 +294,49 @@ angular.module('userApp')
 	    });
 	}
     
+
+     //Edit Booking
+     vm.EditBooking=function(duration){
+        var room = vm.bookingRoom;
+        var starttime = vm.bookingTime;
+        console.log(duration);
+     // var timeInMs = new Date(starttime,0.0).getTime();
+        var year = vm.chosenDate["year"];
+        var month = vm.chosenDate["month"];
+        var date = vm.chosenDate["date"];
+        var time = starttime.split(":");
+        var hour = time[0];
+        var minutes = time[1];
+        var timeInMS=new Date(year, month, date, hour, minutes, 0, 0).getTime();
+
+     console.log(timeInMS);
+     var bookingData={
+            'token':$localStorage.token,
+            'roomid': room,
+            'starttime':timeInMS,
+            'duration':duration
+      };
+     $http.post('/api/booking/update', bookingData)
+      .success(function(data, status, headers, config) {
+            //vm.checkMessage = data.message;
+            //window.alert(data.message);
+        })
+       .error(function(data, status, headers, config) {
+        console.log("there wasn't a booking");
+        });
+
+       
+    } //Editing Booking
 })
+
+
+
+
+
+
+
+
+
+
+
+

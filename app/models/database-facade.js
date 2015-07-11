@@ -405,3 +405,13 @@ exports.userLogin = function(res,netlinkid,password) {
 		}
 	});
 };
+
+
+
+exports.getBookingsByUser = function(res, netlinkid) {
+	getUseridFromNetlinkid(netlinkid, function(userid) {
+		schemaBooking.find({'bookedBy' : userid}, function(err, data){
+			mongoCallback(res, err, {}, data);
+		});
+	});
+};
