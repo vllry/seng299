@@ -73,7 +73,7 @@ top: 40px;
 
 
 .notAvailable {
-	background-color: #7C98BF;
+	background-color: #dc6464; /*#7C98BF*/
 }
 </style>
 
@@ -218,6 +218,7 @@ top: 40px;
               <br>
             <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="home.checkMessage = ''">Cancel</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="home.deleteBooking()">Delete</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal" ng-hide="home.hideCreateBooking" ng-click="home.createBooking(duration)">{{ home.button }}</button>
       </div>
         

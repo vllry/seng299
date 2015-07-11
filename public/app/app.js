@@ -212,7 +212,14 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
         vm.populateCalendar();
         
     });
-    
+
+    if ($localStorage.token != null) {
+		$rootScope.loggedIn = true;
+	  	} else {
+	  		$rootScope.loggedIn = false;
+		};
+
+	vm.hideCreateBooking = !($rootScope.loggedIn);  
     
     
     /* Response to click */
@@ -241,19 +248,6 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
     }
     
     
-    
-    
-    
-    
-
-
-    if ($localStorage.token != null) {
-		$rootScope.loggedIn = true;
-	  } else {
-	  	$rootScope.loggedIn = false;
-	};
-
-	vm.hideCreateBooking = !($rootScope.loggedIn);
 
 	vm.createBooking = function(duration) {
 		var year = vm.chosenDate["year"];
@@ -286,7 +280,35 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 		    });
 	} //createBooking
     
-    
+    vm.deleteBooking=function(starttime,id){
+	 //get ms
+	 //var timeInMS=starttime.getTime();
+     var room = vm.bookingRoom;
+     var starttime = vm.bookingTime;
+	 // var timeInMs = new Date(starttime,0.0).getTime();
+	var year = vm.chosenDate["year"];
+	var month = vm.chosenDate["month"];
+	var date = vm.chosenDate["date"];
+	var time = starttime.split(":");
+	var hour = time[0];
+	var minutes = time[1];
+	var timeInMS=new Date(year, month, date, hour, minutes, 0, 0).getTime();
+
+	 console.log(timeInMS);
+     var bookingData={
+     		'token' : $localStorage.token,
+     		'roomid': room,
+     		'starttime':timeInMS
+      };
+     $http.post('/api/booking/delete', bookingData)
+      .success(function(data, status, headers, config) {
+            //vm.checkMessage = data.message;
+            window.alert(data.message);
+	    })
+       .error(function(data, status, headers, config) {
+	  	console.log("there wasn't a booking");
+	    });
+}
     
    
     
