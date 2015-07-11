@@ -212,8 +212,9 @@ angular.module('userApp', ['app.routes', 'ngStorage', 'ngDialog'])
 		};
 
 	vm.hideCreateBooking = !($rootScope.loggedIn);  
-    
-    
+    vm.hideDeleteButton = false;
+    vm.hideBookedBy = true;
+
     /* Response to click */
     vm.click = function(id) {
     	vm.checkMessage = "";
@@ -228,15 +229,21 @@ angular.module('userApp', ['app.routes', 'ngStorage', 'ngDialog'])
 
         	if($localStorage.netlinkid == vm.list[parseInt(str[1])][str[0]]['bookedBy']['netlinkid']){
         		vm.someone = vm.list[parseInt(str[1])][str[0]]['bookedBy']['firstName'];
+        		vm.hideDeleteButton = false;
         		vm.button = 'SAVE';
-        		return;
+        		return;//booked by me
         	} else {
         		vm.hideCreateBooking = true;
-        		vm.someone = vm.list[parseInt(str[1])][str[0]]['bookedBy']['firstName'];
+        		vm.hideDeleteButton = true;
+        		vm.someone = vm.list[parseInt(str[1])][str[0]]['bookedBy']['firstName'];//booking by someone else
         		return;
         	}
         }
-        else vm.button = 'Create Booking';
+        else{
+        	vm.hideDeleteButton = true;
+        	vm.hideBookedBy = true;
+        	vm.button = 'Create Booking';
+        }
     }
     
     if ($localStorage.token != null) {

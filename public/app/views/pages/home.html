@@ -75,6 +75,10 @@ top: 40px;
 .notAvailable {
 	background-color: #dc6464; /*#7C98BF*/
 }
+
+#delete {
+  background-color: #dc6464;
+}
 </style>
 
 
@@ -190,7 +194,7 @@ top: 40px;
 
           <br>
 
-          <label style="color:#354d7d"> Booked by: {{ home.someone }}</label>
+          <label ng-hide="home.hideBookedBy;"style="color:#354d7d"> Booked by: {{ home.someone }}</label>
 
           </div>
 
@@ -218,7 +222,7 @@ top: 40px;
               <br>
             <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="home.checkMessage = ''">Cancel</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="home.deleteBooking()">Delete</button>
+        <button id="delete" style="color:white" type="button" class="btn btn-default" data-dismiss="modal" ng-click="home.deleteBooking()" ng-hide="home.hideDeleteButton">Delete</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal" ng-hide="home.hideCreateBooking" ng-click="home.createBooking(duration)">{{ home.button }}</button>
       </div>
         
