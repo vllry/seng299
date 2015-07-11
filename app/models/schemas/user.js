@@ -15,6 +15,8 @@ var UserSchema   = new Schema({
 	bookingRestriction: Date
 });
 
+
+
 // hash the password before the user is saved
 UserSchema.pre('save', function(next) {
 	var user = this;
@@ -33,11 +35,25 @@ UserSchema.pre('save', function(next) {
 	});
 });
 
+
+
+UserSchema.methods.hashPassword = function() {
+var schemaUser		= require('./user');
+
+	var user = this;
+	bcrypt.hash(user.password, null, null, function(err, hash) {
+		if (err) return err;
+		schemaUser.findOneAndUpdate(user.netlinkid, {'password':hash});
+	});
+};
+
+
 // method to compare a given password with the database hash
 UserSchema.methods.comparePassword = function(password) {
 	var user = this;
-
 	return bcrypt.compareSync(password, user.password);
 };
+
+
 
 module.exports = mongoose.model('User', UserSchema);

@@ -5,6 +5,7 @@ Maintainer: Vallery
 */
 
 var async		= require('async');
+var bcrypt 		 = require('bcrypt-nodejs');
 var jwt			= require('jsonwebtoken');
 var mongoose		= require('mongoose');
 
@@ -195,6 +196,19 @@ function bookingValidate(bookingData, fn) {
 
 
 
+function actuallyUpdateUserDetails(res, netlinkid, userData) {
+	schemaUser.findOneAndUpdate({'netlinkid' : netlinkid}, userData, function(err, data) {
+		if (data) {
+			mongoCallback(res, err, {}, {'success' : true, 'message' : data});
+		}
+		else {
+			res.json({'success' : false, 'message' : 'No user with netlinkid ' + netlinkid});
+		}
+	});
+}
+
+
+
 //Internal functions, intended for use in this file only, are above this point
 //Exported functions, IE functions called by api.js, are below this point
 
@@ -268,6 +282,22 @@ exports.getUserDetails = function(res, netlinkid) {
 	schemaUser.findOne({'netlinkid' : netlinkid}, function(err, user) {
 		mongoCallback(res, err, {}, user);
 	});
+};
+
+
+
+exports.updateUserDetails = function(res, netlinkid, userData) {
+	if (userData['password']) {
+		bcrypt.hash(userData['password'], null, null, function(err, hash) {
+			if (err) return err;
+			userData['password'] = hash;
+			actuallyUpdateUserDetails(res, netlinkid, userData);
+		});
+	}
+	else {
+		actuallyUpdateUserDetails(res, netlinkid, userData);
+	}
+
 };
 
 

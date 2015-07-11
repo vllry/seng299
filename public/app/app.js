@@ -3,18 +3,18 @@
 
 //declare modules
 
-angular.module('userApp', ['app.routes', 'ngStorage'])
+angular.module('userApp', ['app.routes', 'ngStorage', 'ngDialog'])
 
 .controller('navbarController', function($localStorage, $scope, $rootScope, $location) {
 	  var vm = this;
 
 	  if ($localStorage.token != null) {
-		$rootScope.loggedIn = true;
+		$localStorage.loggedIn = true;
 	  } else {
-	  	$rootScope.loggedIn = false;
+	  	$localStorage.loggedIn = false;
 	  };
 
-	  console.log("loggedIn = " + $rootScope.loggedIn);
+	  console.log("loggedIn = " + $localStorage.loggedIn);
 	  
 	  $scope.menuLeft = [
 	    {label:'Home', route:'/', glyphicon:'glyphicon glyphicon-home'},
@@ -23,28 +23,21 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 	   ]
 
 	  $scope.menuRight = [
-	    {label:'SignUp', route:'/signup', glyphicon:'glyphicon glyphicon-user', hide:$rootScope.loggedIn},
-	    {label:'Login', route:'/login', glyphicon:'glyphicon glyphicon-log-in', hide:$rootScope.loggedIn}, 
-	    {label:'Profile', route:'/profile', glyphicon:'glyphicon glyphicon-user', hide:!($rootScope.loggedIn)}
+	    {label:'SignUp', route:'/signup', glyphicon:'glyphicon glyphicon-user', hide:$localStorage.loggedIn},
+	    {label:'Login', route:'/login', glyphicon:'glyphicon glyphicon-log-in', hide:$localStorage.loggedIn}, 
+	    {label:'Profile', route:'/profile', glyphicon:'glyphicon glyphicon-user', hide:!($localStorage.loggedIn)}
 	  ]
 
-	  vm.hideLogout = !($rootScope.loggedIn);
+	  vm.hideLogout = !($localStorage.loggedIn);
 	  console.log("logoutHide = " + vm.hideLogout);
 	  
-	  
-	  $scope.menuActive = '/';
-	  
-	  $rootScope.$on('$routeChangeSuccess', function(e, curr, prev) {
-              $scope.menuActive = $location.path();
-          });
 
           vm.logout = function() {
 	      $localStorage.token = null;
-	      $rootScope.loggedIn = false;
-	      console.log("after log out, $rootScope.loggedIn = " + $rootScope.loggedIn);
-
+	      $localStorage.loggedIn = false;
+	      console.log("after log out, $localStorage.loggedIn = " + $localStorage.loggedIn);
 	  };
-
+	  
 })
 
 .controller('homeController', function($http, $localStorage, $rootScope){
@@ -166,7 +159,6 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 			var bookingData = "/api/booking/byroom/" + room.toString() + "/" + date.getTime(); //Example: /api/booking/byroom/1/1436042817000
 			
 			$http.get(bookingData).
-
 			success(function(data, status, headers, config) {
 				console.log(status);
 				for (var timeSlot = 16; timeSlot <= 43; timeSlot++) {
@@ -247,7 +239,13 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
         else vm.button = 'Create Booking';
     }
     
-    
+    if ($localStorage.token != null) {
+		$localStorage.loggedIn = true;
+	  } else {
+	  	$localStorage.loggedIn = false;
+	};
+
+	vm.hideCreateBooking = !($localStorage.loggedIn);
 
 	vm.createBooking = function(duration) {
 		var year = vm.chosenDate["year"];
@@ -317,10 +315,10 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 
 })
 
-.controller('aboutController', function($rootScope){
+.controller('aboutController', function($localStorage, $rootScope){
 	var vm = this;
 
-	vm.message = $rootScope.loggedIn;
+	vm.message = $localStorage.loggedIn;
 
 })
 
@@ -339,8 +337,8 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 
 		    //delete this
 		    console.log("user token = " + $localStorage.token);
-		    $rootScope.loggedIn = true;
-		    console.log("(in login controller) $rootScope.loggedIn = " + $rootScope.loggedIn);
+		    $localStorage.loggedIn = true;
+		    console.log("(in login controller) $localStorage.loggedIn = " + $localStorage.loggedIn);
 		    
 		    return;
 		};
@@ -359,9 +357,7 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 
 				$localStorage.token = data.token;
 				$localStorage.netlinkid = user.username;
-				$rootScope.loggedIn = true;
-
-				console.log("local token = " + data.token);
+				$localStorage.loggedIn = true;
 				
 			//username no in database
 			} else if (data.message == "User does not exist") {
@@ -408,6 +404,7 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 		      'password' : user.password,
 		      'firstname' : user.firstname,
 		      'lastname' : user.lastname,
+		      'studentid' : user.studentid,
 		      'usertype' : user.type,
 		      'department' : user.department,
 		      'role' : 'user'
@@ -415,6 +412,12 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 		$http.post('/api/user/register', userData).
 		    success(function(data, status, headers, config) {
 		    	console.log("SUCCESS. data = " + data + ", status = " + status);
+
+			window.alert(data.message);
+			if (data.success == true) {
+				//REDIRECT TO MAIN PAGE
+				location.href = "/";
+			};
 		    }).
 		    error(function(data, status, headers, config) {
 		  	console.log("ERROR. data = " + data + ", status = " + status);
@@ -428,14 +431,73 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 
 }])
 
-.controller('profileController', function($http) {
+.controller('profileController', function($http, $localStorage) {
 	var vm = this;
-	vm.name = "THIS IS A NAME"
-	vm.password = "THIS IS A PASSWORD"
-	vm.email = "THIS IS AN EMAIL"
-	vm.type = "THIS IS A TYPE"
-	vm.department = "THIS IS A DEPARTMENT"
 
+	console.log("this user's token: " + $localStorage.token);
+	console.log("this user's netlinkid: " + $localStorage.netlinkid);
+
+	var postURL = '/api/user/'.concat($localStorage.netlinkid);
+	var token = {
+		'token' : $localStorage.token
+	};
+
+	vm.getProfileInfo = function() {
+		$http.post(postURL, token).
+			    success(function(data, status, headers, config) {
+			    	console.log("get user data success");
+			    	console.log("first name = " + data.firstName);
+			    	console.log("last name = " + data.lastName);
+			    	console.log("user type = " + data.userType);
+
+				vm.netlinkid = $localStorage.netlinkid;
+				vm.firstName = data.firstName;
+				vm.lastName = data.lastName;
+				vm.password = "********";
+				vm.email = $localStorage.netlinkid.concat("@uvic.ca");
+				vm.type = data.userType;
+				vm.department = data.department;
+			  
+			    }).
+			    error(function(data, status, headers, config) {
+			  	console.log("ERROR. data = " + data + ", status = " + status);
+			    });
+	};
+
+	vm.update = function() {
+		var updateInfo = {
+			'token' : $localStorage.token,
+			'firstname' : vm.firstName,
+			'lastname' : vm.lastName,
+			'department' : vm.department,
+		};
+
+		if (vm.password != "********") {
+			updateInfo['password'] = (vm.password);
+		} 
+
+		console.log(updateInfo);
+		$http.put(postURL, updateInfo).
+			success(function(data, status, headers, config) {
+			
+		    	console.log("AFTER CHANGES:");
+			console.log("netlinkid = " + vm.netlinkid);
+			console.log("first name = " + vm.firstName);
+			console.log("last name = " + vm.lastName);
+			console.log("password = " + vm.password);
+			console.log("email = " + vm.email);
+			console.log("user type = " + vm.type);
+			console.log("department = " + vm.department);
+		  
+		    }).
+		    error(function(data, status, headers, config) {
+		  	console.log("ERROR. data = " + data + ", status = " + status);
+		    });
+	};
+
+	//post to /api/users/[netlinkid] with parameter token: $localStorage.token
+
+	
 
 });
 

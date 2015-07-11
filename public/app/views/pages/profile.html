@@ -1,21 +1,33 @@
 <link href="assets/css/profile.css" rel="stylesheet">
-
+<link rel="stylesheet" href="assets/css/login.css">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad">
 
           <div class="panel panel-info">
             <div class="panel-heading">
-              <h3 class="panel-title">Account Information</h3>
+              <div style="display: inline-block" align="left"> <h3 class="panel-title">Account Information</h3> </div>
+              <div style="display: inline-block" align="right"> <a href="#" style="text-decoration:none;" align="right" data-toggle="modal" data-target="#textModal" ng-click="profile.displayBefore()"><span class="glyphicon glyphicon-pencil"></span> edit</a> </div>
             </div>
-            <div class="panel-body">
+            
+            <div class="panel-body" ng-init="profile.getProfileInfo()">
               <div class="row">
                 
                 <div class=" col-md-9 col-lg-9 "> 
                   <table class="table table-user-information">
                     <tbody>
                       <tr>
-                        <td>Name</td>
-                        <td>{{ profile.name }}</td>
+                        <td>Username (netlinkID)</td>
+                        <td>{{ profile.netlinkid }}</td>
+                      </tr>
+                      <tr>
+                        <td>First Name</td>
+                        <td>{{ profile.firstName }}</td>
+                      </tr>
+                      <tr>
+                        <td>Last Name</td>
+                        <td>{{ profile.lastName }}</td>
                       </tr>
                       <tr>
                         <td>Password</td>
@@ -25,9 +37,7 @@
                         <td>Email</td>
                         <td>{{ profile.email }}</td>
                       </tr>
-                   
-                         <tr>
-                             <tr>
+                      <tr>
                         <td>User Type</td>
                         <td>{{ profile.type }}</td>
                       </tr>
@@ -48,3 +58,47 @@
         </div>
       </div>
     </div>
+
+<!-- Text Modal -->
+<div class="modal fade" id="textModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Change Profile Information</h4>
+      </div>
+      <div class="modal-body">
+          
+          <form class="form-signin">
+                First Name:
+                <input type="text" id="inputFirstName" class="form-control" ng-model="profile.firstName" ng-initial required> <br>
+
+                Last Name:
+                <input type="text" id="inputLastName" class="form-control" ng-model="profile.lastName" ng-initial required> <br>
+
+                Password:
+                <input type="password" id="inputPassword" class="form-control" ng-model="profile.password" ng-initial required> <br>
+
+		<div class="form-group">
+		  <label for="sel1">Department (select one):</label>
+		  <select class="form-control" id="sel1" ng-model="profile.department" ng-initial required>
+		<option>Engineering</option>
+		<option>Boring Stuff</option>
+		<option>Something Dumb</option>
+		<option>Unknown</option>
+		  </select>
+		  <br>
+		</div>
+	</div>
+              
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="profile.update()">Save Changes</button>
+      </div>
+        
+            </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END Text Modal -->
