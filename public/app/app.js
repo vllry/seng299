@@ -214,7 +214,7 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
     });
     
     
-    vm.durations= ["30", "60", "90", "120", "150"];
+    
     /* Response to click */
     vm.click = function(id) {
     	vm.checkMessage = "";
@@ -232,6 +232,8 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
         		vm.button = 'SAVE';
         		return;
         	} else {
+        		vm.hideCreateBooking = true;
+        		vm.someone = vm.list[parseInt(str[1])][str[0]]['bookedBy']['firstName'];
         		return;
         	}
         }
