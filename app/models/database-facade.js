@@ -228,7 +228,7 @@ exports.bookingCreate = function(res, bookingData) {
 		bookingData.bookedBy = userid;
 		bookingValidate(bookingData, function(result) {
 			if (result['success']) {
-				bokingData['endTime'] = calculateEndTime(bookingData['startTime'], bookingData['duration']);
+				bookingData['endTime'] = calculateEndTime(bookingData['startTime'], bookingData['duration']);
 				var booking = new schemaBooking(bookingData);
 				booking.save(function(err) {
 					var errors = {11000 : { success: false, message: 'A booking at that time already exists'}};
