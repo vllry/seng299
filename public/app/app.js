@@ -37,7 +37,7 @@ angular.module('userApp', ['app.routes', 'ngStorage', 'ngDialog'])
 	      $localStorage.loggedIn = false;
 	      console.log("after log out, $localStorage.loggedIn = " + $localStorage.loggedIn);
 	  };
-
+	  
 })
 
 .controller('homeController', function($http, $localStorage, $rootScope){
@@ -308,9 +308,6 @@ angular.module('userApp', ['app.routes', 'ngStorage', 'ngDialog'])
 				$localStorage.token = data.token;
 				$localStorage.netlinkid = user.username;
 				$localStorage.loggedIn = true;
-
-				//delete this
-				console.log("local token = " + data.token);
 				
 			//username no in database
 			} else if (data.message == "User does not exist") {
@@ -360,7 +357,6 @@ angular.module('userApp', ['app.routes', 'ngStorage', 'ngDialog'])
 		      'studentid' : user.studentid,
 		      'usertype' : user.type,
 		      'department' : user.department,
-		      'email' : user.email,
 		      'role' : 'user'
 		};
 		$http.post('/api/user/register', userData).
@@ -370,6 +366,7 @@ angular.module('userApp', ['app.routes', 'ngStorage', 'ngDialog'])
 			window.alert(data.message);
 			if (data.success == true) {
 				//REDIRECT TO MAIN PAGE
+				location.href = "/";
 			};
 		    }).
 		    error(function(data, status, headers, config) {
