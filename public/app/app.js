@@ -214,9 +214,7 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
     });
     
     
-    //vm.durations= ["30", "60", "90", "120", "150"];
-    
-    
+    vm.durations= ["30", "60", "90", "120", "150"];
     /* Response to click */
     vm.click = function(id) {
     	vm.checkMessage = "";
@@ -227,7 +225,16 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
         console.log(id);
         console.log( vm.list[parseInt(str[1])][str[0]] );
         if (vm.list[parseInt(str[1])][str[0]] != undefined)
-        {vm.button = 'edit';}
+        {
+
+        	if($localStorage.netlinkid == vm.list[parseInt(str[1])][str[0]]['bookedBy']['netlinkid']){
+        		vm.someone = vm.list[parseInt(str[1])][str[0]]['bookedBy']['firstName'];
+        		vm.button = 'SAVE';
+        		return;
+        	} else {
+        		return;
+        	}
+        }
         else vm.button = 'Create Booking';
     }
     
