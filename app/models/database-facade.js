@@ -275,6 +275,15 @@ exports.getUserDetails = function(res, netlinkid) {
 exports.updateUserDetails = function(res, netlinkid, userData) {
 	schemaUser.findOneAndUpdate({'netlinkid' : netlinkid}, userData, function(err, data) {
 		if (data) {
+			schemaUser.findOne({'netlinkid': netlinkid}).select('password').exec(function(err, user) {
+				if(err) throw err;
+				if(!user) {
+					console.log('What even happened???');
+				}
+				else {
+					user.hashPassword();
+				}
+			});
 			mongoCallback(res, err, {}, {'success' : true, 'message' : data});
 		}
 		else {

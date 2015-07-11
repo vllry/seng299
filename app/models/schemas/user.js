@@ -37,28 +37,24 @@ UserSchema.pre('save', function(next) {
 });
 
 
-// hash the password before the user is saved
-UserSchema.post('update', function(next) {
+
+UserSchema.methods.hashPassword = function() {
+var schemaUser		= require('./user');
+
 	var user = this;
-	console.log(user.netlinkid);
-
-	// generate the hash
 	bcrypt.hash(user.password, null, null, function(err, hash) {
-		if (err) return next(err);
-
-		// change the password to the hashed version
-		user.password = hash;
-		next();
+		if (err) return err;
+		schemaUser.findOneAndUpdate(user.netlinkid, {'password':hash});
 	});
-});
-
+};
 
 
 // method to compare a given password with the database hash
 UserSchema.methods.comparePassword = function(password) {
 	var user = this;
-
 	return bcrypt.compareSync(password, user.password);
 };
+
+
 
 module.exports = mongoose.model('User', UserSchema);
