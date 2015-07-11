@@ -1,7 +1,6 @@
 'use strict';
-//$http.post('/someUrl', data).success(successCallback);
 
-//declare modules
+//declare angular app
 
 angular.module('userApp', ['app.routes', 'ngStorage', 'ngDialog']);
 
