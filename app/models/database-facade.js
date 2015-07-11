@@ -5,6 +5,7 @@ Maintainer: Vallery
 */
 
 var async		= require('async');
+var bcrypt 		 = require('bcrypt-nodejs');
 var jwt			= require('jsonwebtoken');
 var mongoose		= require('mongoose');
 
@@ -195,6 +196,19 @@ function bookingValidate(bookingData, fn) {
 
 
 
+function actuallyUpdateUserDetails(res, netlinkid, userData) {
+	schemaUser.findOneAndUpdate({'netlinkid' : netlinkid}, userData, function(err, data) {
+		if (data) {
+			mongoCallback(res, err, {}, {'success' : true, 'message' : data});
+		}
+		else {
+			res.json({'success' : false, 'message' : 'No user with netlinkid ' + netlinkid});
+		}
+	});
+}
+
+
+
 //Internal functions, intended for use in this file only, are above this point
 //Exported functions, IE functions called by api.js, are below this point
 
@@ -273,23 +287,17 @@ exports.getUserDetails = function(res, netlinkid) {
 
 
 exports.updateUserDetails = function(res, netlinkid, userData) {
-	schemaUser.findOneAndUpdate({'netlinkid' : netlinkid}, userData, function(err, data) {
-		if (data) {
-			schemaUser.findOne({'netlinkid': netlinkid}).select('password').exec(function(err, user) {
-				if(err) throw err;
-				if(!user) {
-					console.log('What even happened???');
-				}
-				else {
-					user.hashPassword();
-				}
-			});
-			mongoCallback(res, err, {}, {'success' : true, 'message' : data});
-		}
-		else {
-			res.json({'success' : false, 'message' : 'No user with netlinkid ' + netlinkid});
-		}
-	});
+	if (userData['password']) {
+		bcrypt.hash(userData['password'], null, null, function(err, hash) {
+			if (err) return err;
+			userData['password'] = hash;
+			actuallyUpdateUserDetails(res, netlinkid, userData);
+		});
+	}
+	else {
+		actuallyUpdateUserDetails(res, netlinkid, userData);
+	}
+
 };
 
 
