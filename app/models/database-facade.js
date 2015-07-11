@@ -72,6 +72,15 @@ function getUseridFromNetlinkid(netlinkid, fn) {
 
 
 
+function calculateEndTime(startTime, duration) {
+	var endTime = new Date();
+	endTime.setTime(startTime.getTime());
+	endTime.setMinutes(startTime.getMinutes() + 30*duration);
+	return endTime;
+}
+
+
+
 function bookingValidate(bookingData, fn) {
 	console.log(bookingData.roomid);
 	if (['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'].indexOf(bookingData.roomid) === -1) {
@@ -219,6 +228,7 @@ exports.bookingCreate = function(res, bookingData) {
 		bookingData.bookedBy = userid;
 		bookingValidate(bookingData, function(result) {
 			if (result['success']) {
+				bokingData['endTime'] = calculateEndTime(bookingData['startTime'], bookingData['duration']);
 				var booking = new schemaBooking(bookingData);
 				booking.save(function(err) {
 					var errors = {11000 : { success: false, message: 'A booking at that time already exists'}};
@@ -249,6 +259,7 @@ exports.bookingDelete = function(res, roomid, startTime) {
 
 exports.bookingUpdate = function(res, bookingData) {
 	bookingValidate(bookingData, function(result) {
+		bookingData['endTime'] = calculateEndTime(bookingData['startTime'], bookingData['duration']);
 		if (result['success']) {
 			schemaBooking.findOneAndUpdate({'roomid' : bookingData['roomid'], 'startTime' : bookingData['startTime']},
 					{'duration' : bookingData['duration']},
