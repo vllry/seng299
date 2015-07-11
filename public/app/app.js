@@ -3,7 +3,7 @@
 
 //declare modules
 
-angular.module('userApp', ['app.routes', 'ngStorage'])
+angular.module('userApp', ['app.routes', 'ngStorage', 'ngDialog'])
 
 .controller('navbarController', function($localStorage, $scope, $rootScope, $location) {
 	  var vm = this;
@@ -366,7 +366,11 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 		$http.post('/api/user/register', userData).
 		    success(function(data, status, headers, config) {
 		    	console.log("SUCCESS. data = " + data + ", status = " + status);
-		    	console.log(data.success);
+
+			window.alert(data.message);
+			if (data.success == true) {
+				//REDIRECT TO MAIN PAGE
+			};
 		    }).
 		    error(function(data, status, headers, config) {
 		  	console.log("ERROR. data = " + data + ", status = " + status);
