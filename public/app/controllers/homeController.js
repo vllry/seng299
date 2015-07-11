@@ -179,15 +179,8 @@ angular.module('userApp')
     vm.hideEditButton = false;  
     vm.hideDeleteButton = false;
     vm.hideBookedBy = false;
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
     vm.hideDuration = false;
->>>>>>> origin/master
-=======
-    vm.hideDuration = false;
->>>>>>> origin/master
     /* Response to click */
     vm.click = function(id) {
     	vm.checkMessage = "";
