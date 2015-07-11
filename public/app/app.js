@@ -357,7 +357,6 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 		      'password' : user.password,
 		      'firstname' : user.firstname,
 		      'lastname' : user.lastname,
-		      'studentid' : user.studentid,
 		      'usertype' : user.type,
 		      'department' : user.department,
 		      'email' : user.email,
@@ -366,7 +365,6 @@ angular.module('userApp', ['app.routes', 'ngStorage'])
 		$http.post('/api/user/register', userData).
 		    success(function(data, status, headers, config) {
 		    	console.log("SUCCESS. data = " + data + ", status = " + status);
-		    	console.log(data.success);
 		    }).
 		    error(function(data, status, headers, config) {
 		  	console.log("ERROR. data = " + data + ", status = " + status);
