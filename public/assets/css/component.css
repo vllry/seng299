@@ -18,9 +18,10 @@
 	overflow: hidden;
 }
 
-.modal-content {
-	width: 450px;
+#myModal{
+	
 }
+
 .component .filler {
 	font-family: "Blokk", Arial, sans-serif;
 	color: #d3d3d3;

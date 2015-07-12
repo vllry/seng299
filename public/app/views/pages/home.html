@@ -75,7 +75,9 @@ top: 40px;
 .notAvailable {
 	background-color: #dc6464; /*#7C98BF*/
 }
-
+.notAvailable1 {
+  color: white; /*#7C98BF*/
+}
 #delete {
   background-color: #dc6464;
 }
@@ -173,35 +175,35 @@ top: 40px;
           <label class="control-label col-md-3">Booking Time: {{ home.bookingTime }}, Booking Room: {{ home.bookingRoom }}</label>
           <label class="control-label col-md-2">Booked by: {{ home.someone }}</label> -->
 
-          <div class="control-label col-md-4">
+                <div class="control-label col-md-4">
 
-          <label style="color:#354d7d"> Booking Date: {{ home.months[home.chosenDate["month"]]}} {{ home.chosenDate["date"] }}</label>
-          <br>
+                        <label style="color:#354d7d"> Booking Date: {{ home.months[home.chosenDate["month"]]}} {{ home.chosenDate["date"] }}</label>
+                        <br>
 
-          <label style="color:#354d7d"> Booking Time: {{ home.bookingTime }} Booking Room: {{ home.bookingRoom }} </label>
+                        <label style="color:#354d7d"> Booking Time: {{ home.bookingTime }} Booking Room: {{ home.bookingRoom }} </label>
 
-          <br>
+                        <br>
 
-          <label ng-hide="home.hideBookedBy;" style="color:#354d7d"> Booked by: {{ home.someone }}</label>
+                        <label ng-hide="home.hideBookedBy;" style="color:#354d7d"> Booked by: {{ home.someone }}</label>
 
-          </div>
+                </div>
 
           <div>
 
-          <br>
-          <form class="control-label col-md-4" name="commentform">
+        
+          <!-- <form class="control-label col-md-4" name="commentform"> -->
             <div class="form-group" ng-hide="home.hideDuration">
-            <!-- <label class="control-label col-md-3">Duration (minutes)</label> -->
-            <label style="color:#354d7d" ng-hide="home.hideDuration"> Duration (minutes)</label>
-                <select style="position:relative; width:50px; padding-left:12px;" ng-model="duration" required>
-                  <option>30</option>
-                  <option>60</option>
-                  <option>90</option>
-                  <option>120</option>
-                  <option>150</option>
-		      </select>
+                <!-- <label class="control-label col-md-3">Duration (minutes)</label> -->
+                <label style="color:#354d7d" ng-hide="home.hideDuration"> Duration (minutes)</label>
+                    <select style="position:relative; width:50px; padding-left:12px;" ng-model="duration" required>
+                      <option>30</option>
+                      <option>60</option>
+                      <option>90</option>
+                      <option>120</option>
+                      <option>150</option>
+    		            </select>
+                </div>
             </div>
-          </div>
             <div class="checkbox">
                 <label style="color:#354d7d"><input ng-model="home.proj" value="1" type="checkbox">Need a projector?</label>
                  <label style="color:#354d7d"><input ng-model="home.laptop" value="1" type="checkbox">Need a laptop?</label>
@@ -215,7 +217,7 @@ top: 40px;
         <button type="button" class="btn btn-primary" data-dismiss="modal" ng-hide="home.hideEditButton" ng-click="home.EditBooking(duration)">{{ home.button }}</button>
       </div>
         
-            </form>
+            <!-- </form> -->
       </div>
     </div>
   </div>
