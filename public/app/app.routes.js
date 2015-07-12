@@ -31,10 +31,10 @@ angular.module('app.routes', ['ngRoute'])
 	  	controllerAs: 'signup'
 
 	  })
-	  .when("/book",{
+	  .when("/bookings",{
 	  	templateUrl: '/app/views/pages/bookings.html',
 	  	controller: 'bookingsController',
-	  	controllerAs: 'bookings'
+	  	controllerAs: 'booking'
 	  })
 
 	  .when("/profile", {

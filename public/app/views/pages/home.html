@@ -191,9 +191,9 @@ top: 40px;
 
           <br>
           <form class="form-horizontal " name="commentform">
-            <div class="form-group" ng-hide="home.hideCreateBooking">
+            <div class="form-group" ng-hide="home.hideDuration">
             <!-- <label class="control-label col-md-3">Duration (minutes)</label> -->
-            <label style="color:#354d7d" ng-hide="home.hideCreateBooking"> Duration (minutes)</label>
+            <label style="color:#354d7d" ng-hide="home.hideDuration"> Duration (minutes)</label>
                 <select style="position:relative; width:50px; padding-left:12px;" ng-model="duration" required>
                   <option>30</option>
                   <option>60</option>
@@ -213,6 +213,7 @@ top: 40px;
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="home.checkMessage = ''">Cancel</button>
         <button id="delete" style="color:white" type="button" class="btn btn-default" data-dismiss="modal" ng-click="home.deleteBooking()" ng-hide="home.hideDeleteButton">Delete</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal" ng-hide="home.hideCreateBooking" ng-click="home.createBooking(duration)">{{ home.button }}</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-hide="home.hideEditButton" ng-click="home.EditBooking(duration)">{{ home.button }}</button>
       </div>
         
             </form>
