@@ -271,20 +271,27 @@ angular.module('userApp')
 		  	console.log("booking create error");
 	    });
 	} //createBooking
-    
-    vm.deleteBooking=function(){
+    vm.timeGenerator=function(year,month,date,time){
+        var time1 = time.split(":");
+        var hour = time1[0];
+        var minutes = time1[1];
+        var timeInMS=new Date(year, month, date, hour, minutes, 0, 0).getTime();
+        return timeInMS;
+    }
+    vm.deleteBooking=function(room,year,month,date,starttime){
 	 //get ms
 	 //var timeInMS=starttime.getTime();
-     var room = vm.bookingRoom;
-     var starttime = vm.bookingTime;
+     /*var room = vm.bookingRoom;
+     var starttime = vm.bookingTime;*/
+     var timeInMS = vm.timeGenerator(vm.chosenDate["year"],vm.chosenDate["month"],vm.chosenDate["date"],starttime);
 	 // var timeInMs = new Date(starttime,0.0).getTime();
-	var year = vm.chosenDate["year"];
+	/*var year = vm.chosenDate["year"];
 	var month = vm.chosenDate["month"];
 	var date = vm.chosenDate["date"];
 	var time = starttime.split(":");
 	var hour = time[0];
 	var minutes = time[1];
-	var timeInMS=new Date(year, month, date, hour, minutes, 0, 0).getTime();
+	var timeInMS=new Date(year, month, date, hour, minutes, 0, 0).getTime();*/
 
 	 console.log(timeInMS);
      var bookingData={
