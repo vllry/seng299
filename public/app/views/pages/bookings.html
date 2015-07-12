@@ -11,20 +11,18 @@
               
             </div>
             
-            <div class="panel-body"> ng-init="profile.getProfileInfo()">
+            <div class="panel-body" ng-init="bookings.getBookingsInfo()">
             	<ul class="list-group">
-		   <li class="list-group-item">Free Domain Name Registration</li>
-		   <li class="list-group-item">Free Window Space hosting</li>
-		   <li class="list-group-item">Number of Images</li>
-		   <li class="list-group-item">
-		      <span class="badge">New</span>
-		      24*7 support
-		   </li>
-		   <li class="list-group-item">Renewal cost per year</li>
-		   <li class="list-group-item">
-		      <span class="badge">New</span>
-		      Disocunt Offer
-		   </li>
+            	
+		   <div ng-hide="bookings.hideMessage"> You do not have any bookings. </div>
+
+		   <li ng-repeat="item in bookings.List" class="list-group-item">
+		      <span class="badge" style="background-color:red">DELETE</span>
+		      <span class="badge" style="background-color:blue">EDIT</span>
+		   Room {{ item.roomid }} - {{ item.startMonth }} {{ item.startDate }} from {{ item.startTime }} to {{ item.endTime }}
+
+ 		   </li>
+ 		   
 		</ul>
               
             </div>

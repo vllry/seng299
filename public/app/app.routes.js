@@ -34,7 +34,7 @@ angular.module('app.routes', ['ngRoute'])
 	  .when("/bookings",{
 	  	templateUrl: '/app/views/pages/bookings.html',
 	  	controller: 'bookingsController',
-	  	controllerAs: 'booking'
+	  	controllerAs: 'bookings'
 	  })
 
 	  .when("/profile", {
