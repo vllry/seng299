@@ -207,7 +207,7 @@ module.exports = function(app, express) {
 		.post(function(req, res) {
 			start = new Date();
 			start.setTime(req.body.starttime);
-			var bookingData = {,
+			var bookingData = {
 				bookedBy: req.body.netlinkid,
 				startTime: start, //Time in ms. Use the Javascript Date object to generate
 				duration: Number(req.body.duration)/30, //Time in minutes -> time in half-hour blocks
