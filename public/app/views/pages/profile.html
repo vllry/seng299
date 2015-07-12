@@ -8,13 +8,13 @@
           <div class="panel panel-info">
             <div class="panel-heading">
               <div style="display: inline-block" align="left"> <h3 class="panel-title">Account Information</h3> </div>
-              <div style="display: inline-block" align="right"> <a href="#" style="text-decoration:none;" align="right" data-toggle="modal" data-target="#textModal" ng-click="profile.displayBefore()"><span class="glyphicon glyphicon-pencil"></span> edit</a> </div>
+              <div class="pull-right" style="display: inline-block" align="right"> <a href="#" style="text-decoration:none;" align="right" data-toggle="modal" data-target="#textModal" ng-click="profile.displayBefore()"><span class="glyphicon glyphicon-pencil"></span> edit</a> </div>
             </div>
             
             <div class="panel-body" ng-init="profile.getProfileInfo()">
               <div class="row">
                 
-                <div class=" col-md-9 col-lg-9 "> 
+                <div class=" col-md-9 col-lg-9"> 
                   <table class="table table-user-information">
                     <tbody>
                       <tr>
@@ -82,10 +82,15 @@
 		<div class="form-group">
 		  <label for="sel1">Department (select one):</label>
 		  <select class="form-control" id="sel1" ng-model="profile.department" ng-initial required>
+		<option>Business</option>
+		<option>Education</option>
 		<option>Engineering</option>
-		<option>Boring Stuff</option>
-		<option>Something Dumb</option>
-		<option>Unknown</option>
+		<option>Human and Social Development</option>
+		<option>Humanities</option>
+		<option>Law</option>
+		<option>Medical Sciences</option>
+		<option>Sciences</option>
+		<option>Social Sciences</option>
 		  </select>
 		  <br>
 		</div>

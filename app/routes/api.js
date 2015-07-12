@@ -14,13 +14,14 @@ GET /api					API test message
 	/booking
 		POST /create*			netlinkid, starttime (in ms, use Date()), duration (in minutes), roomid, requestlaptop, requestprojector - Attempts to create a booking
 		POST /delete*			roomid, starttime (in ms) - Deletes the booking in the specified room at the specified time
-		POST /update*			roomid, starttime (in ms), duration (in minutes) - Update the details of an existing booking
+		POST /update*			roomid, starttime (in ms), duration (in minutes), requestlaptop, requestprojector - Update the details of an existing booking
 		GET /byroom/<room id>/<day in ms>	Returns a dictionary with time blocks (12:00, 12:30, etc) as keys, and either null or booking data as the values.
 	POST /user*				Lists all users
 		POST /login			netlinkid, password - Logs the user in, returns a token
 		POST /register			netlinkid, password, firstname, lastname, usertype (student, staff, or facaulty), [studentid], [department] - Registers the user
 		GET /<netlinkid>*
 		PUT /<netlinkid>*		[password], [firstname], [lastname], [department], [studentid], [email] - Updates the specified parameters for the user
+		GET /<netlinkid>/bookings	Returns a list of booking objects booked by owner netlinkid
 
 * Denotes API that requires a token
 
@@ -116,6 +117,15 @@ module.exports = function(app, express) {
 	apiRouter.get('/me', function(req, res) {
 		res.send(req.decoded);
 	});
+
+
+
+	apiRouter.route('/user/:netlinkid/bookings')
+
+		// get the user with that id
+		.get(function(req, res) {
+			databaseFacade.getBookingsByUser(res, req.params.netlinkid);
+		})
 
 
 
@@ -229,7 +239,7 @@ module.exports = function(app, express) {
 				'duration': Number(req.body.duration)/30 //Time in minutes -> time in half-hour blocks
 			};
 
-			databaseFacade.bookingUpdate(res, bookingData);
+			databaseFacade.bookingUpdate(res, bookingData, Number(req.body.requestlaptop), Number(req.body.requestprojector));
 		});
 
 

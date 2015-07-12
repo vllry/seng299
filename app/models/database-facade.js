@@ -113,7 +113,7 @@ function handleEquipment(res, bookingData, requestedLaptop, requestedProjector, 
 					console.log(available);
 
 					if (!requestedLaptop) {
-						bookingData['laptop'] = undefined;
+						bookingData['laptop'] = '';
 					}
 					else if (requestedLaptop && !bookingData['laptop'] && available['laptop'].length) {
 						bookingData['laptop'] = available['laptop'][0];
@@ -125,7 +125,7 @@ function handleEquipment(res, bookingData, requestedLaptop, requestedProjector, 
 					}
 
 					if (!requestedProjector) {
-						bookingData['projector'] = undefined;
+						bookingData['projector'] = '';
 					}
 					else if (requestedProjector && !bookingData['projector'] && available['projector'].length) {
 						bookingData['projector'] = available['projector'][0];
@@ -145,8 +145,8 @@ function handleEquipment(res, bookingData, requestedLaptop, requestedProjector, 
 		}
 	}
 	else {
-		bookingData['laptop'] = undefined;
-		bookingData['projector'] = undefined;
+		bookingData['laptop'] = '';
+		bookingData['projector'] = '';
 		fn(bookingData);
 	}
 }
@@ -305,12 +305,14 @@ exports.bookingCreate = function(res, bookingData, requestedLaptop, requestedPro
 		bookingValidate(bookingData, function(result) {
 			if (result['success']) {
 				bookingData['endTime'] = calculateEndTime(bookingData['startTime'], bookingData['duration']);
+
 				handleEquipment(res, bookingData, requestedLaptop, requestedProjector, function(data) {
 					var booking = new schemaBooking(data);
 					booking.save(function(err) {
 						var errors = {11000 : { success: false, message: 'A booking at that time already exists'}};
 						mongoCallback(res, err, errors, { success : true, message: 'Booking created' });
 					});
+
 				});
 			}
 			else {
@@ -335,11 +337,13 @@ exports.bookingDelete = function(res, roomid, startTime) {
 
 
 
-exports.bookingUpdate = function(res, bookingData) {
+exports.bookingUpdate = function(res, bookingData, requestedLaptop, requestedProjector) {
 	bookingValidate(bookingData, function(result) {
 		bookingData['endTime'] = calculateEndTime(bookingData['startTime'], bookingData['duration']);
 		if (result['success']) {
+
 			handleEquipment(res, bookingData, requestedLaptop, requestedProjector, function(updatedBookingData) {
+				console.log(updatedBookingData);
 				schemaBooking.findOneAndUpdate({'roomid' : bookingData['roomid'], 'startTime' : updatedBookingData['startTime']},
 						{'duration' : updatedBookingData['duration'],
 						'endTime' : updatedBookingData['endTime'],
@@ -347,10 +351,16 @@ exports.bookingUpdate = function(res, bookingData) {
 						'projector' : updatedBookingData['projector']},
 						function(err, data) {
 							if (data) {
+								console.log(data);
 								mongoCallback(res, err, {}, {'success' : true, 'message' : data});
 							}
 							else {
-								res.json({'success' : false, 'message' : 'No booking in room ' + bookingData['roomid'] + ' at ' + bookingData['startTime'].toString()});
+								if (err) {
+									res.json({'success' : false, 'message' : err});
+								}
+								else {
+									res.json({'success' : false, 'message' : 'No booking in room ' + bookingData['roomid'] + ' at ' + bookingData['startTime'].toString()});
+								}
 							}
 						}
 				);
@@ -486,5 +496,15 @@ exports.userLogin = function(res,netlinkid,password) {
 				});
 			}
 		}
+	});
+};
+
+
+
+exports.getBookingsByUser = function(res, netlinkid) {
+	getUseridFromNetlinkid(netlinkid, function(userid) {
+		schemaBooking.find({'bookedBy' : userid}, function(err, data){
+			mongoCallback(res, err, {}, data);
+		});
 	});
 };
