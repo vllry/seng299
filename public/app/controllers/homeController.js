@@ -212,6 +212,7 @@ angular.module('userApp')
 	  	$localStorage.loggedIn = false;
 	    };
 
+	    vm.hideCreateBooking = !($localStorage.loggedIn); 
             vm.hideBookedBy = true;
             vm.hideEditButton = true;
             vm.hideDuration = false;
@@ -222,7 +223,7 @@ angular.module('userApp')
     
    
 
-	vm.hideCreateBooking = !($localStorage.loggedIn); 
+
 
 	vm.createBooking = function(duration) {
 		var year = vm.chosenDate["year"];
