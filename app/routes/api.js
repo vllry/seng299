@@ -7,14 +7,12 @@ API urls are ALL LOWERCASE, with the same attribute names as in the schemas
 
 
 Maintainer: Vallery
-Maintainer: Frances
-Note to editors of this file: Please LOOK AT THE SCHEMAS in app/models/schemas before referring to them! Mongo may not give an error if you use the wrong name, and it can mess up the database.
 
 
 
 GET /api					API test message
 	/booking
-		POST /create*			netlinkid, starttime (in ms, use Date()), duration (in minutes), roomid - Attempts to create a booking
+		POST /create*			netlinkid, starttime (in ms, use Date()), duration (in minutes), roomid, requestlaptop, requestprojector - Attempts to create a booking
 		POST /delete*			roomid, starttime (in ms) - Deletes the booking in the specified room at the specified time
 		POST /update*			roomid, starttime (in ms), duration (in minutes) - Update the details of an existing booking
 		GET /byroom/<room id>/<day in ms>	Returns a dictionary with time blocks (12:00, 12:30, etc) as keys, and either null or booking data as the values.
@@ -206,7 +204,7 @@ module.exports = function(app, express) {
 				roomid: req.body.roomid
 			};
 
-			databaseFacade.bookingCreate(res, bookingData);
+			databaseFacade.bookingCreate(res, bookingData, Number(req.body.requestlaptop), Number(req.body.requestprojector));
 		});
 
 

@@ -13,8 +13,7 @@ var config		= require('../../config');
 var schemaBooking	= require('./schemas/booking');
 var schemaUser		= require('./schemas/user');
 
-var listOfLaptops	= ['Laptop1', 'Laptop2', 'Laptop3', 'Laptop4', 'Laptop5'];
-var listOfprojectors	= ['Projector1', 'Projector2', 'Projector3', 'Projector4', 'Projector5'];
+
 
 
 
@@ -84,42 +83,71 @@ function calculateEndTime(startTime, duration) {
 
 
 
-function getEquipmentOfPrev(roomidToExclude, callback) {
-	var q = schemaBooking.find({ //Get the previous booking in the same room
-		/*'roomid' : bookingData.roomid,*/
-		'startTime' : {$lt : bookingData.startTime}
-	}).lean().sort({'startTime': -1}).limit(1);
-	q.exec(function(err, data) {
-		results = {'laptop' : undefined, 'projector' : undefined}
-		if (data.length) {
-			var start = data[0]['startTime'];
-			var durationInms = data[0]['duration'] * 30 * 60 * 1000 - 1000;
-			var endOfPrevious = new Date();
-			endOfPrevious.setTime(start.getTime() + durationInms);
+function handleEquipment(bookingData, requestedLaptop, requestedProjector, fn, res) {
+	if (requestedLaptop || requestedProjector) {
+		if ((requestedLaptop && !bookingData['laptop']) || (requestedProjector && !bookingData['projector'])) {
+			schemaBooking.find({ //Finds all bookings in other rooms that overlap with this booking's time.
+				'startTime' : {$lt : bookingData['endTime']},
+				'endTime' : {$gt : bookingData['startTime']},
+				'roomid' : {$ne : bookingData['roomid']}
+				},
+				function(err, bookings) {
+					var available = {'laptop' : ['Laptop1', 'Laptop2', 'Laptop3', 'Laptop4', 'Laptop5'], 'projector' : ['Projector1', 'Projector2', 'Projector3', 'Projector4', 'Projector5']};
+					for (var i in bookings) {
+						var booking = bookings[i];
+						if (booking['laptop']) {
+							console.log('laptop');
+							console.log(booking['laptop']);
+							var index = available['laptop'].indexOf(booking['laptop']);
+							if (index != -1) {
+								available['laptop'].splice(index, 1); //Remove this device
+							}
+						}
+						if (booking['projector']) {
+							var index = available['projector'].indexOf(booking['projector']);
+							if (index != -1) {
+								available['projector'].splice(index, 1); //Remove this device
+							}
+						}
+					}
+					console.log(available);
 
-			if (endOfPrevious > bookingData.startTime) {
-				if
-			}
+					if (!requestedLaptop) {
+						bookingData['laptop'] = undefined;
+					}
+					else if (requestedLaptop && !bookingData['laptop'] && available['laptop'].length) {
+						bookingData['laptop'] = available['laptop'][0];
+					}
+					else if (!bookingData['laptop']) {
+						//Uh oh
+						res.json({'success' : false, 'message' : 'A laptop was requested, but no laptop is avaialble.'});
+						return;
+					}
+
+					if (!requestedProjector) {
+						bookingData['projector'] = undefined;
+					}
+					else if (requestedProjector && !bookingData['projector'] && available['projector'].length) {
+						bookingData['projector'] = available['projector'][0];
+					}
+					else if (!bookingData['projector']) {
+						//Uh oh
+						res.json({'success' : false, 'message' : 'A projector was requested, but no projector is avaialble.'});
+						return;
+					}
+
+					fn(bookingData);
+				}
+			);
 		}
-		callback(null, results);
-	});
-}
-
-
-
-function handleEquipment(bookingData, requestLaptop,) {
-	if (!requestDevice) {
-		bookingData['laptop'] = undefined;
+		else {
+			fn(bookingData);
+		}
 	}
 	else {
-		var i;
-		for (i = 1; i <= 10; i++) {
-			var room = i.toString();
-			if (room == bookingData['roomid']) {
-				continue;
-			}
-			var l = getLaptopOfPrev();
-		}
+		bookingData['laptop'] = undefined;
+		bookingData['projector'] = undefined;
+		fn(bookingData);
 	}
 }
 
@@ -262,22 +290,28 @@ function actuallyUpdateUserDetails(res, netlinkid, userData) {
 
 
 
+
+
 //Internal functions, intended for use in this file only, are above this point
 //Exported functions, IE functions called by api.js, are below this point
 
 
 
-exports.bookingCreate = function(res, bookingData) {
+
+
+exports.bookingCreate = function(res, bookingData, requestedLaptop, requestedProjector) {
 	getUseridFromNetlinkid(bookingData.bookedBy, function(userid) {
 		bookingData.bookedBy = userid;
 		bookingValidate(bookingData, function(result) {
 			if (result['success']) {
-				bokingData['endTime'] = calculateEndTime(bookingData['startTime'], bookingData['duration']);
-				var booking = new schemaBooking(bookingData);
-				booking.save(function(err) {
-					var errors = {11000 : { success: false, message: 'A booking at that time already exists'}};
-					mongoCallback(res, err, errors, { success : true, message: 'Booking created' });
-				});
+				bookingData['endTime'] = calculateEndTime(bookingData['startTime'], bookingData['duration']);
+				handleEquipment(bookingData, requestedLaptop, requestedProjector, function(data) {
+					var booking = new schemaBooking(data);
+					booking.save(function(err) {
+						var errors = {11000 : { success: false, message: 'A booking at that time already exists'}};
+						mongoCallback(res, err, errors, { success : true, message: 'Booking created' });
+					});
+				}, res);
 			}
 			else {
 				res.json(result);
