@@ -81,13 +81,12 @@ angular.module('userApp')
     var maxNumberOfElementinaRow = 10;
     vm.table[0] = vm.rooms;
     for(var i = 1; i < vm.times.length; i++) {
-        var tempIndex = i;
-        vm.table[tempIndex] = [];
-        var temp = {"link":vm.times[tempIndex] , "id": vm.times[tempIndex], "htmlClass": ""};
-        vm.table[tempIndex][0] = temp;
+        vm.table[i] = [];
+        var temp = {"link":vm.times[i] , "id": vm.times[i], "htmlClass": ""};
+        vm.table[i][0] = temp;
         for(var j = 1; j < maxNumberOfElementinaRow + 1; j++) {
             temp = {"link": "+", "id": vm.ids[index], "htmlClass": "available"};
-            vm.table[tempIndex][j] = temp;
+            vm.table[i][j] = temp;
             index++;
         }
     }
@@ -143,7 +142,6 @@ angular.module('userApp')
 					if (curBlock['bookedBy'] != undefined) {
 						vm.list[curBlock['roomid']][hours+':'+minutes] = curBlock;
 						console.log('booking in ' + curBlock['roomid'] + ' at ' + hours+':'+minutes);
-						//HERE is where you should insert your code or function call to re-colour booked slots in the table
                         
                         var id = hours + ':' + minutes + '-' + curBlock['roomid'];
                         changeHtmlClass(id); //Update table cell to reflect (un)availability
