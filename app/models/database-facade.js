@@ -13,6 +13,9 @@ var config		= require('../../config');
 var schemaBooking	= require('./schemas/booking');
 var schemaUser		= require('./schemas/user');
 
+var listOfLaptops	= ['Laptop1', 'Laptop2', 'Laptop3', 'Laptop4', 'Laptop5'];
+var listOfprojectors	= ['Projector1', 'Projector2', 'Projector3', 'Projector4', 'Projector5'];
+
 
 
 function numTwoDigits(num) {
@@ -77,6 +80,47 @@ function calculateEndTime(startTime, duration) {
 	endTime.setTime(startTime.getTime());
 	endTime.setMinutes(startTime.getMinutes() + 30*duration);
 	return endTime;
+}
+
+
+
+function getEquipmentOfPrev(roomidToExclude, callback) {
+	var q = schemaBooking.find({ //Get the previous booking in the same room
+		/*'roomid' : bookingData.roomid,*/
+		'startTime' : {$lt : bookingData.startTime}
+	}).lean().sort({'startTime': -1}).limit(1);
+	q.exec(function(err, data) {
+		results = {'laptop' : undefined, 'projector' : undefined}
+		if (data.length) {
+			var start = data[0]['startTime'];
+			var durationInms = data[0]['duration'] * 30 * 60 * 1000 - 1000;
+			var endOfPrevious = new Date();
+			endOfPrevious.setTime(start.getTime() + durationInms);
+
+			if (endOfPrevious > bookingData.startTime) {
+				if
+			}
+		}
+		callback(null, results);
+	});
+}
+
+
+
+function handleEquipment(bookingData, requestLaptop,) {
+	if (!requestDevice) {
+		bookingData['laptop'] = undefined;
+	}
+	else {
+		var i;
+		for (i = 1; i <= 10; i++) {
+			var room = i.toString();
+			if (room == bookingData['roomid']) {
+				continue;
+			}
+			var l = getLaptopOfPrev();
+		}
+	}
 }
 
 
@@ -147,11 +191,11 @@ function bookingValidate(bookingData, fn) {
 				//console.log(data);
 				if (data.length) {
 					var start = data[0]['startTime'];
-					console.log("Previous booking starts at " + start + " and has length " + data[0]['duration']);
+					//console.log("Previous booking starts at " + start + " and has length " + data[0]['duration']);
 					var durationInms = data[0]['duration'] * 30 * 60 * 1000 - 1000;
 					var endOfPrevious = new Date();
 					endOfPrevious.setTime(start.getTime() + durationInms);
-					console.log("Previous booking ends at " + endOfPrevious);
+					//console.log("Previous booking ends at " + endOfPrevious);
 					if (endOfPrevious > bookingData.startTime) {
 						callback(null, {'success' : false, 'message' : 'The start time overlaps with the previous booking'});
 						return;
