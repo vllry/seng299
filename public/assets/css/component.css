@@ -21,6 +21,10 @@
 	font-family: "Blokk", Arial, sans-serif;
 	color: #d3d3d3;
 }
+a {
+	cursor: pointer;
+}
+
 table {
     border-collapse: collapse;
     margin-bottom: 3em;
