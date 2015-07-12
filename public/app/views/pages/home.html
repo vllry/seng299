@@ -189,7 +189,7 @@ top: 40px;
           <div>
 
           <br>
-          <form class="form-horizontal " name="commentform">
+          <form class="control-label col-md-4" name="commentform">
             <div class="form-group" ng-hide="home.hideDuration">
             <!-- <label class="control-label col-md-3">Duration (minutes)</label> -->
             <label style="color:#354d7d" ng-hide="home.hideDuration"> Duration (minutes)</label>
@@ -203,8 +203,8 @@ top: 40px;
             </div>
           </div>
             <div class="checkbox">
-                <label style="color:#354d7d"><input type="checkbox">Need a projector?</label>
-                 <label style="color:#354d7d"><input type="checkbox">Need a laptop?</label>
+                <label style="color:#354d7d"><input ng-model="home.proj" value="1" type="checkbox">Need a projector?</label>
+                 <label style="color:#354d7d"><input ng-model="home.laptop" value="1" type="checkbox">Need a laptop?</label>
             </div>
 <!--            <label class="control-label" id="checkStatus" >Check Booking Status: {{ home.checkMessage }}</label>-->
               <br>
