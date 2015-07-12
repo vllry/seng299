@@ -9,8 +9,8 @@ var BookingSchema   = new Schema({
 	endTime: { type: Date, required: true },
 	duration: {type: Number, min: 1, max: 6}, //Represents length of time in half-hour blocks (IE, duration:3 is 1.5 hours)
 	roomid: { type: String, required: true },
-	projectorid: Number,
-	laptopid: Number
+	projector: String,
+	laptop: String
 });
 
 BookingSchema.index({ roomid: 1, startTime: 1}, { unique: true }); 
