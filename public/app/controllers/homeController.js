@@ -222,8 +222,8 @@ angular.module('userApp')
     }
     
    
-
-
+        vm.proj = 0;
+        vm.laptop = 0;
 
 	vm.createBooking = function(duration) {
 		var year = vm.chosenDate["year"];
@@ -233,7 +233,18 @@ angular.module('userApp')
 		var time = startTime.split(":");
 		var hour = time[0];
 		var minutes = time[1];
-		
+
+		if (vm.proj == true || 1) {
+			vm.proj = 1;
+		} else {
+			vm.proj = 0;
+		}
+
+		if (vm.laptop == true || 1) {
+			vm.laptop = 1;
+		} else {
+			vm.laptop = 0;
+		}
 
 		//startTime raw date
 		var start = new Date(year, month, date, hour, minutes, 0, 0).getTime();
@@ -243,10 +254,12 @@ angular.module('userApp')
 			'netlinkid' : $localStorage.netlinkid,
 			'starttime' : start,
 			'duration' : duration,
-			'roomid' : vm.bookingRoom
+			'roomid' : vm.bookingRoom,
+			'requestlaptop' : vm.laptop,
+			'requestprojector' : vm.proj
 		};
 
-		$http.post('/api/booking/create', bookingData)
+	$http.post('/api/booking/create', bookingData)
            .success(function(data, status, headers, config) {
                 //vm.checkMessage = data.message;
                 window.alert(data.message);
