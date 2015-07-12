@@ -34,6 +34,7 @@ angular.module('userApp')
           vm.logout = function() {
 	      $localStorage.token = null;
 	      $localStorage.loggedIn = false;
+	      $localStorage.netlinkid = null;
 	      console.log("after log out, $localStorage.loggedIn = " + $localStorage.loggedIn);
 	  };
 	  
