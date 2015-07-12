@@ -305,7 +305,8 @@ function userSetDateRestriction(netlinkid, now) {
 exports.bookingCreate = function(res, bookingData, requestedLaptop, requestedProjector) {
 	schemaUser.findOne({'netlinkid' : bookingData['bookedBy']}, function(err, user) {
 		var now = new Date();
-		if (now > user['bookingRestriction']) {
+		console.log(user);
+		if (user['bookingRestriction'] == undefined || now > user['bookingRestriction']) {
 			getUseridFromNetlinkid(bookingData.bookedBy, function(userid) {
 				bookingData.bookedBy = userid;
 				bookingValidate(bookingData, function(result) {
