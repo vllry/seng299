@@ -11,7 +11,7 @@ var UserSchema   = new Schema({
 	lastName: { type: String, required: true },
 	userType: { type: String, enum : ['student', 'staff', 'faculty'], required: true },
 	department: String,
-	role: { type: String, enum : ['user', 'admin', 'superAdmin'], default : 'user', required: true},
+	role: { type: String, enum : ['user', 'admin'], default : 'user', required: true},
 	bookingRestriction: Date
 });
 

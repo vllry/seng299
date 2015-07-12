@@ -286,6 +286,13 @@ function actuallyUpdateUserDetails(res, netlinkid, userData) {
 
 
 
+function userSetDateRestriction(netlinkid, now) {
+	now.setDate(now.getDate()+1);
+	schemaUser.update({'netlinkid' : netlinkid}, {'bookingRestriction' : now});
+}
+
+
+
 
 
 //Internal functions, intended for use in this file only, are above this point
@@ -296,37 +303,52 @@ function actuallyUpdateUserDetails(res, netlinkid, userData) {
 
 
 exports.bookingCreate = function(res, bookingData, requestedLaptop, requestedProjector) {
-	getUseridFromNetlinkid(bookingData.bookedBy, function(userid) {
-		bookingData.bookedBy = userid;
-		bookingValidate(bookingData, function(result) {
-			if (result['success']) {
-				bookingData['endTime'] = calculateEndTime(bookingData['startTime'], bookingData['duration']);
+	schemaUser.findOne({'netlinkid' : bookingData['bookedBy']}, function(err, user) {
+		var now = new Date();
+		if (now > user['bookingRestriction']) {
+			getUseridFromNetlinkid(bookingData.bookedBy, function(userid) {
+				bookingData.bookedBy = userid;
+				bookingValidate(bookingData, function(result) {
+					if (result['success']) {
+						bookingData['endTime'] = calculateEndTime(bookingData['startTime'], bookingData['duration']);
 
-				handleEquipment(res, bookingData, requestedLaptop, requestedProjector, function(data) {
-					var booking = new schemaBooking(data);
-					booking.save(function(err) {
-						var errors = {11000 : { success: false, message: 'A booking at that time already exists'}};
-						mongoCallback(res, err, errors, { success : true, message: 'Booking created' });
-					});
+						handleEquipment(res, bookingData, requestedLaptop, requestedProjector, function(data) {
+							var booking = new schemaBooking(data);
+							booking.save(function(err) {
+								var errors = {11000 : { success: false, message: 'A booking at that time already exists'}};
+								mongoCallback(res, err, errors, { success : true, message: 'Booking created' });
+							});
 
+						});
+					}
+					else {
+						res.json(result);
+					}
 				});
-			}
-			else {
-				res.json(result);
-			}
-		});
+			});
+		}
+		else {
+			res.json({'success' : false, 'message' : 'As you deleted a booking within 5 hours of its start, you cannot create new bookings before ' + user['bookingrestriction']});
+		}
 	});
 };
 
 
 
-exports.bookingDelete = function(res, roomid, startTime) {
-	schemaBooking.remove({'roomid' : roomid, 'startTime' : startTime}, function(err,numRemoved) {
-		if (numRemoved === 0) {
-			res.json({'success' : false, 'message' : 'There wasn\'t a booking in room ' + roomid + ' at ' + startTime.toString()});
+exports.bookingDelete = function(res, roomid, startTime, netlinkid) {
+	schemaBooking.findOne({'roomid' : roomid, 'startTime' : startTime}).populate('bookedBy', 'netlinkid userType').exec(function(err, data) {
+		if (data) {
+			schemaBooking.remove({'roomid' : roomid, 'startTime' : startTime}, function(err) {
+				var now = new Date();
+				if (data['bookedBy']['netlinkid'] == netlinkid && data['bookedBy']['userType'] == 'student' && (startTime - now) / 3600000 <= 5) {
+					console.log(netlinkid + ' deleted a booking within 5 hours of the start');
+					userSetDateRestriction(netlinkid, now);
+				}
+				mongoCallback(res, err, {}, {'success' : true, 'message' : 'Booking deleted'});
+			});
 		}
 		else {
-			mongoCallback(res, err, {}, {'success' : true, 'message' : 'Booking deleted'});
+			res.json({'success' : false, 'message' : 'There wasn\'t a booking in room ' + roomid + ' at ' + startTime.toString()});
 		}
 	});
 }

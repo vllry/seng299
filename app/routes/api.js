@@ -224,7 +224,7 @@ module.exports = function(app, express) {
 			start = new Date();
 			start.setTime(req.body.starttime);
 
-			databaseFacade.bookingDelete(res, req.body.roomid, start);
+			databaseFacade.bookingDelete(res, req.body.roomid, start, req.body.netlinkid);
 		});
 
 
