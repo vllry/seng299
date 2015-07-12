@@ -336,11 +336,11 @@ exports.bookingCreate = function(res, bookingData, requestedLaptop, requestedPro
 
 
 exports.bookingDelete = function(res, roomid, startTime, netlinkid) {
-	schemaBooking.findOne({'roomid' : roomid, 'startTime' : startTime}).populate('bookedBy', 'netlinkid userType').exec(function(err, data) {
+	schemaBooking.findOne({'roomid' : roomid, 'startTime' : startTime}).populate('bookedBy', 'netlinkid').exec(function(err, data) {
 		if (data) {
 			schemaBooking.remove({'roomid' : roomid, 'startTime' : startTime}, function(err) {
 				var now = new Date();
-				if (data['bookedBy']['netlinkid'] == netlinkid && data['bookedBy']['userType'] == 'student' && (startTime - now) / 3600000 <= 5) {
+				if (data['bookedBy']['netlinkid'] == netlinkid && (startTime - now) / 3600000 <= 5) {
 					console.log(netlinkid + ' deleted a booking within 5 hours of the start');
 					userSetDateRestriction(netlinkid, now);
 				}
