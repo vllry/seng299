@@ -96,8 +96,6 @@ function handleEquipment(res, bookingData, requestedLaptop, requestedProjector, 
 					for (var i in bookings) {
 						var booking = bookings[i];
 						if (booking['laptop']) {
-							console.log('laptop');
-							console.log(booking['laptop']);
 							var index = available['laptop'].indexOf(booking['laptop']);
 							if (index != -1) {
 								available['laptop'].splice(index, 1); //Remove this device
@@ -110,7 +108,6 @@ function handleEquipment(res, bookingData, requestedLaptop, requestedProjector, 
 							}
 						}
 					}
-					console.log(available);
 
 					if (!requestedLaptop) {
 						bookingData['laptop'] = '';
@@ -154,7 +151,6 @@ function handleEquipment(res, bookingData, requestedLaptop, requestedProjector, 
 
 
 function bookingValidate(bookingData, fn) {
-	console.log(bookingData.roomid);
 	if (['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'].indexOf(bookingData.roomid) === -1) {
 		fn({'success' : false, 'message' : bookingData.roomid + ' is not a valid roomid'});
 		return;
@@ -244,10 +240,10 @@ function bookingValidate(bookingData, fn) {
 				if (data.length) {
 					var duration = data[0]['duration'];
 					var startOfNext = data[0].startTime;
-					console.log("Next booking starts at " + startOfNext);
+					//console.log("Next booking starts at " + startOfNext);
 					endOfNew = new Date();
 					endOfNew.setTime(bookingData.startTime.getTime() + bookingData['duration'] * 30 * 60 * 1000 - 1000); //Start time + duration - 1 second (just in case of ms rounding issues)
-					console.log("New booking ends at " + endOfNew);
+					//console.log("New booking ends at " + endOfNew);
 					if (startOfNext < endOfNew) {
 						callback(null, {'success' : false, 'message' : 'The end time overlaps with the next booking'});
 						return;
@@ -343,7 +339,6 @@ exports.bookingUpdate = function(res, bookingData, requestedLaptop, requestedPro
 		if (result['success']) {
 
 			handleEquipment(res, bookingData, requestedLaptop, requestedProjector, function(updatedBookingData) {
-				console.log(updatedBookingData);
 				schemaBooking.findOneAndUpdate({'roomid' : bookingData['roomid'], 'startTime' : updatedBookingData['startTime']},
 						{'duration' : updatedBookingData['duration'],
 						'endTime' : updatedBookingData['endTime'],
@@ -351,7 +346,6 @@ exports.bookingUpdate = function(res, bookingData, requestedLaptop, requestedPro
 						'projector' : updatedBookingData['projector']},
 						function(err, data) {
 							if (data) {
-								console.log(data);
 								mongoCallback(res, err, {}, {'success' : true, 'message' : data});
 							}
 							else {
@@ -407,7 +401,7 @@ exports.updateUserDetails = function(res, netlinkid, userData) {
 
 
 exports.userRegister = function(res, user) {
-	console.log(user);
+	console.log(user + ' registered');
 	user.save(function(err) {
 		var errors = {11000 : { success: false, message: 'A user with that netlinkid already exists'}};
 		mongoCallback(res, err, errors, { success : true, message: 'User created' });
@@ -441,8 +435,8 @@ exports.scheduleByRoomAndDay = function(roomid, dayInms, fn) {
 		dayEnd.setDate(dayStart.getDate()+1);
 	}
 	dayEnd.setTime(dayEnd.getTime()-1000);
-	console.log(dayStart);
-	console.log(dayEnd);
+	//console.log(dayStart);
+	//console.log(dayEnd);
 
 	//Query for all bookings in that room and range
 	schemaBooking.find({'roomid' : roomid, 'startTime' : {$lt : dayEnd, $gt : dayStart}}).populate('bookedBy', 'netlinkid firstName').exec(function(err, bookings) {
