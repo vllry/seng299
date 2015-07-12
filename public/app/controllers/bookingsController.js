@@ -138,6 +138,7 @@ angular.module('userApp')
 	 //var timeInMS=starttime.getTime();
      /*var room = vm.bookingRoom;
      var starttime = vm.bookingTime;*/
+     console.log("starttime"+starttime);
      var timeInMS = vm.timeGenerator(vm.chosenDate["year"],vm.chosenDate["month"],vm.chosenDate["date"],starttime);
 	 // var timeInMs = new Date(starttime,0.0).getTime();
 	/*var year = vm.chosenDate["year"];

@@ -17,7 +17,7 @@
 		   <div ng-hide="bookings.hideMessage"> You do not have any bookings. </div>
 
 		   <li ng-repeat="n in bookings.range(0,bookings.listLength)" class="list-group-item">
-		      <span class="badge" ng-click="bookings.deleteBooking(item.roomid,bookings.chosenDate['year'],bookings.chosenDate['month'],bookings.chosenDate['date'],item.startTime)" style="background-color:#dc6464">DELETE</span>
+		      <span class="badge" ng-click="bookings.deleteBooking(item.roomid,bookings.chosenDate['year'],bookings.chosenDate['month'],bookings.chosenDate['date'],bookings.List[n].startTime)" style="background-color:#dc6464">DELETE</span>
 		      <span class="badge"  data-toggle="modal" data-target="#myModal" ng-click="bookings.getOneBookingsInfo(n)" style="background-color:#5693d6">EDIT</span>
 		   Room {{ bookings.List[n].roomid }} - {{ bookings.List[n].startMonth }} {{ bookings.List[n].startDate }} from {{ bookings.List[n].startTime }} to {{ bookings.List[n].endTime }}
 
@@ -45,7 +45,7 @@
 
           <div class="control-label col-md-4">
 
-          <label style="color:#354d7d"> Booking Date: {{ bookings.months[home.chosenDate["month"]]}} {{ bookings.chosenDate["date"] }}</label>
+          <label style="color:#354d7d"> Booking Date:  {{ bookings.chosenDate["date"] }}</label>
           <br>
 
           <label style="color:#354d7d"> Booking Time: {{ bookings.List1[0].startTime }} Booking Room: {{ bookings.List1[0].roomid }} </label>
