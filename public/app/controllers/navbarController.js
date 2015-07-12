@@ -12,7 +12,9 @@ angular.module('userApp')
 	  	$localStorage.loggedIn = false;
 	  };
 
+	  //delete this
 	  console.log("loggedIn = " + $localStorage.loggedIn);
+	  console.log("netlinkid = " + $localStorage.netlinkid);
 	  
 	  $scope.menuLeft = [
 	    {label:'Home', route:'/', glyphicon:'glyphicon glyphicon-home'},
