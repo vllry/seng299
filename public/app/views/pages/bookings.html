@@ -16,10 +16,10 @@
             	
 		   <div ng-hide="bookings.hideMessage"> You do not have any bookings. </div>
 
-		   <li ng-repeat="item in bookings.List" class="list-group-item">
-		      <span class="badge" style="background-color:red">DELETE</span>
-		      <span class="badge" style="background-color:blue">EDIT</span>
-		   Room {{ item.roomid }} - {{ item.startMonth }} {{ item.startDate }} from {{ item.startTime }} to {{ item.endTime }}
+		   <li ng-repeat="n in bookings.range(0,bookings.listLength)" class="list-group-item">
+		      <span class="badge" ng-click="bookings.deleteBooking(item.roomid,bookings.chosenDate['year'],bookings.chosenDate['month'],bookings.chosenDate['date'],item.startTime)" style="background-color:#dc6464">DELETE</span>
+		      <span class="badge"  data-toggle="modal" data-target="#myModal" ng-click="bookings.getOneBookingsInfo(n)" style="background-color:#5693d6">EDIT</span>
+		   Room {{ bookings.List[n].roomid }} - {{ bookings.List[n].startMonth }} {{ bookings.List[n].startDate }} from {{ bookings.List[n].startTime }} to {{ bookings.List[n].endTime }}
 
  		   </li>
  		   
@@ -29,5 +29,64 @@
                 
           </div>
         </div>
+
+ <!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Booking Details</h4>
+      </div>
+      <div class="modal-body" style="background-image:url(./../../../assets/images/popup-bg.jpg)">
+         <!--  <label class="control-label col-md-4">Booking Month: {{ home.months[home.chosenDate["month"]]}}, Booking Date: {{ home.chosenDate["date"] }}</label>
+          <label class="control-label col-md-3">Booking Time: {{ home.bookingTime }}, Booking Room: {{ home.bookingRoom }}</label>
+          <label class="control-label col-md-2">Booked by: {{ home.someone }}</label> -->
+
+          <div class="control-label col-md-4">
+
+          <label style="color:#354d7d"> Booking Date: {{ bookings.months[home.chosenDate["month"]]}} {{ bookings.chosenDate["date"] }}</label>
+          <br>
+
+          <label style="color:#354d7d"> Booking Time: {{ bookings.List1[0].startTime }} Booking Room: {{ bookings.List1[0].roomid }} </label>
+
+          <br>
+
+          <label ng-hide="home.hideBookedBy;" style="color:#354d7d"> Booked by: {{ bookings.someone }}</label>
+
+          </div>
+
+          <div>
+
+          <br>
+          <form class="form-horizontal " name="commentform">
+            <div class="form-group" ng-hide="home.hideDuration">
+            <!-- <label class="control-label col-md-3">Duration (minutes)</label> -->
+            <label style="color:#354d7d" ng-hide="home.hideDuration"> Duration (minutes)</label>
+                <select style="position:relative; width:50px; padding-left:12px;" ng-model="duration" required>
+                  <option>30</option>
+                  <option>60</option>
+                  <option>90</option>
+                  <option>120</option>
+                  <option>150</option>
+          </select>
+            </div>
+          </div>
+            <div class="checkbox">
+                <label style="color:#354d7d"><input type="checkbox">Need a projector?</label>
+                 <label style="color:#354d7d"><input type="checkbox">Need a laptop?</label>
+            </div>
+<!--            <label class="control-label" id="checkStatus" >Check Booking Status: {{ home.checkMessage }}</label>-->
+              <br>
+            <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="home.checkMessage = ''">Cancel</button>
+        <button id="delete" style="color:white; background-color:#dc6464" type="button" class="btn btn-default" data-dismiss="modal" ng-click="bookings.deleteBooking(item.roomid,bookings.chosenDate['year'],bookings.chosenDate['month'],bookings.chosenDate['date'],item.startTime)">Delete</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-hide="home.hideEditButton" ng-click="home.EditBooking(duration)">SAVE</button>
+      </div>
+        
+            </form>
       </div>
     </div>
+  </div>
+</div>
+<!-- END MODAL -->
