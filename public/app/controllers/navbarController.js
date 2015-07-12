@@ -23,7 +23,6 @@ angular.module('userApp')
 	  $scope.menuRight = [
 	    {label:'SignUp', route:'/signup', glyphicon:'glyphicon glyphicon-user', hide:$localStorage.loggedIn},
 	    {label:'Login', route:'/login', glyphicon:'glyphicon glyphicon-log-in', hide:$localStorage.loggedIn}, 
-	    {label:'My Bookings', route:'/bookings', glyphicon:'glyphicon glyphicon-list-alt', hide:!($localStorage.loggedIn)}, 
 	    {label:'Profile', route:'/profile', glyphicon:'glyphicon glyphicon-user', hide:!($localStorage.loggedIn)}
 	  ]
 

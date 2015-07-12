@@ -174,11 +174,10 @@ angular.module('userApp')
 	  		$rootScope.loggedIn = false;
 		};
 
-	vm.hideCreateBooking = !($rootScope.loggedIn);
-    vm.hideEditButton = false;  
+	vm.hideCreateBooking = !($rootScope.loggedIn);  
     vm.hideDeleteButton = false;
-    vm.hideBookedBy = false;
-    vm.hideDuration = false;
+    vm.hideBookedBy = true;
+
     /* Response to click */
     vm.click = function(id) {
     	vm.checkMessage = "";
@@ -186,7 +185,7 @@ angular.module('userApp')
         vm.bookingTime = str[0]; // booking time
         vm.bookingRoom = str[1]; // booking room
         vm.button = '';
-        //console.log(id);
+        console.log(id);
         console.log( vm.list[parseInt(str[1])][str[0]] );
         if (vm.list[parseInt(str[1])][str[0]] != undefined)
         {
@@ -194,29 +193,19 @@ angular.module('userApp')
         	if($localStorage.netlinkid == vm.list[parseInt(str[1])][str[0]]['bookedBy']['netlinkid']){
         		vm.someone = vm.list[parseInt(str[1])][str[0]]['bookedBy']['firstName'];
         		vm.hideDeleteButton = false;
-                vm.hideCreateBooking = true;
-                vm.hideEditButton = false;
-                vm.hideDuration = false;
         		vm.button = 'SAVE';
-        	    //booked by me
+        		return;//booked by me
         	} else {
         		vm.hideCreateBooking = true;
         		vm.hideDeleteButton = true;
-                vm.hideEditButton = true;
-                vm.hideDuration = true;
         		vm.someone = vm.list[parseInt(str[1])][str[0]]['bookedBy']['firstName'];//booking by someone else
-        		
+        		return;
         	}
         }
         else{
-
         	vm.hideDeleteButton = true;
-            vm.hideCreateBooking = false;
         	vm.hideBookedBy = true;
-            vm.hideEditButton = true;
-            vm.hideDuration = false;
         	vm.button = 'Create Booking';
-            
         }
     }
     
@@ -259,7 +248,7 @@ angular.module('userApp')
 		    });
 	} //createBooking
     
-    vm.deleteBooking=function(){
+    vm.deleteBooking=function(starttime,id){
 	 //get ms
 	 //var timeInMS=starttime.getTime();
      var room = vm.bookingRoom;
@@ -289,49 +278,4 @@ angular.module('userApp')
 	    });
 	}
     
-
-     //Edit Booking
-     vm.EditBooking=function(duration){
-        var room = vm.bookingRoom;
-        var starttime = vm.bookingTime;
-        console.log(duration);
-     // var timeInMs = new Date(starttime,0.0).getTime();
-        var year = vm.chosenDate["year"];
-        var month = vm.chosenDate["month"];
-        var date = vm.chosenDate["date"];
-        var time = starttime.split(":");
-        var hour = time[0];
-        var minutes = time[1];
-        var timeInMS=new Date(year, month, date, hour, minutes, 0, 0).getTime();
-
-     console.log(timeInMS);
-     var bookingData={
-            'token':$localStorage.token,
-            'roomid': room,
-            'starttime':timeInMS,
-            'duration':duration
-      };
-     $http.post('/api/booking/update', bookingData)
-      .success(function(data, status, headers, config) {
-            //vm.checkMessage = data.message;
-            //window.alert(data.message);
-        })
-       .error(function(data, status, headers, config) {
-        console.log("there wasn't a booking");
-        });
-
-       
-    } //Editing Booking
 })
-
-
-
-
-
-
-
-
-
-
-
-

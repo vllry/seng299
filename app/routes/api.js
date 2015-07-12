@@ -23,7 +23,6 @@ GET /api					API test message
 		POST /register			netlinkid, password, firstname, lastname, usertype (student, staff, or facaulty), [studentid], [department] - Registers the user
 		GET /<netlinkid>*
 		PUT /<netlinkid>*		[password], [firstname], [lastname], [department], [studentid], [email] - Updates the specified parameters for the user
-		GET /<netlinkid>/bookings	Returns a list of booking objects booked by owner netlinkid
 
 * Denotes API that requires a token
 
@@ -119,15 +118,6 @@ module.exports = function(app, express) {
 	apiRouter.get('/me', function(req, res) {
 		res.send(req.decoded);
 	});
-
-
-
-	apiRouter.route('/user/:netlinkid/bookings')
-
-		// get the user with that id
-		.get(function(req, res) {
-			databaseFacade.getBookingsByUser(res, req.params.netlinkid);
-		})
 
 
 
