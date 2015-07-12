@@ -29,13 +29,14 @@ table {
 }
 td, th {
     padding: 0.75em 1.5em !important;
-    text-align: right !important;
+    text-align: center !important;
 }
 th {
     background-color: #5392d8 ; /*table color #31bc86*/
     font-weight: bold !important;
     color: #fff !important;
     white-space: nowrap !important;
+    width: 100px;
 }
 tbody th {
 	background-color: #4d90d8; /*2ea879*/
