@@ -250,10 +250,13 @@ angular.module('userApp')
            .success(function(data, status, headers, config) {
                 //vm.checkMessage = data.message;
                 window.alert(data.message);
-		    })
+                if (data.success == true) {
+                	location.href = ("/");
+                }
+	    })
            .error(function(data, status, headers, config) {
 		  	console.log("booking create error");
-		    });
+	    });
 	} //createBooking
     
     vm.deleteBooking=function(){
@@ -280,10 +283,11 @@ angular.module('userApp')
       .success(function(data, status, headers, config) {
             //vm.checkMessage = data.message;
             window.alert(data.message);
-	    })
+            location.href = ("/");
+	})
        .error(function(data, status, headers, config) {
 	  	console.log("there wasn't a booking");
-	    });
+	});
 	}
     
 
@@ -312,10 +316,13 @@ angular.module('userApp')
       .success(function(data, status, headers, config) {
             //vm.checkMessage = data.message;
             //window.alert(data.message);
-        })
-       .error(function(data, status, headers, config) {
-        console.log("there wasn't a booking");
-        });
+            if (data.success == true) {
+            	location.href = ("/");
+            }
+      })
+      .error(function(data, status, headers, config) {
+            console.log("there wasn't a booking");
+      });
 
        
     } //Editing Booking
