@@ -5,7 +5,7 @@ Maintainer: Vallery
 */
 
 var async		= require('async');
-var bcrypt 		 = require('bcrypt-nodejs');
+var bcrypt 		= require('bcrypt-nodejs');
 var jwt			= require('jsonwebtoken');
 var mongoose		= require('mongoose');
 

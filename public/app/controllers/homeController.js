@@ -3,7 +3,7 @@
 
 angular.module('userApp')
 
-.controller('homeController', function($http, $localStorage, $rootScope){
+.controller('homeController', function($http, $localStorage){
 	var vm = this;
 	vm.title ="Library Study Room Booking";
 
@@ -167,12 +167,13 @@ angular.module('userApp')
     });
 
     if ($localStorage.token != null) {
-		$rootScope.loggedIn = true;
-	  	} else {
-	  		$rootScope.loggedIn = false;
-		};
+	$localStorage.loggedIn = true;
+    } else {
+	$localStorage.loggedIn = false;
+    };
 
-	vm.hideCreateBooking = !($rootScope.loggedIn);
+    vm.hideCreateBooking = !($localStorage.loggedIn);
+    
     vm.hideEditButton = false;  
     vm.hideDeleteButton = false;
     vm.hideBookedBy = false;
@@ -188,29 +189,34 @@ angular.module('userApp')
         console.log( vm.list[parseInt(str[1])][str[0]] );
         if (vm.list[parseInt(str[1])][str[0]] != undefined)
         {
-
+		vm.hideBookedBy = false;
+		vm.hideCreateBooking = true;
+		
         	if($localStorage.netlinkid == vm.list[parseInt(str[1])][str[0]]['bookedBy']['netlinkid']){
-        		vm.someone = vm.list[parseInt(str[1])][str[0]]['bookedBy']['firstName'];
-        		vm.hideDeleteButton = false;
-                vm.hideCreateBooking = true;
+        	vm.someone = vm.list[parseInt(str[1])][str[0]]['bookedBy']['firstName'];
+        	vm.hideDeleteButton = false;
                 vm.hideEditButton = false;
                 vm.hideDuration = false;
         		vm.button = 'SAVE';
         	    //booked by me
         	} else {
-        		vm.hideCreateBooking = true;
-        		vm.hideDeleteButton = true;
+        	vm.hideDeleteButton = true;
                 vm.hideEditButton = true;
                 vm.hideDuration = true;
         		vm.someone = vm.list[parseInt(str[1])][str[0]]['bookedBy']['firstName'];//booking by someone else
         		
         	}
-        }
-        else{
+        } else {
 
-        	vm.hideDeleteButton = true;
-            vm.hideCreateBooking = false;
-        	vm.hideBookedBy = true;
+            vm.hideDeleteButton = true;
+            
+	    if ($localStorage.token != null) {
+		$localStorage.loggedIn = true;
+	    } else {
+	  	$localStorage.loggedIn = false;
+	    };
+
+            vm.hideBookedBy = true;
             vm.hideEditButton = true;
             vm.hideDuration = false;
         	vm.button = 'Create Booking';
@@ -218,13 +224,9 @@ angular.module('userApp')
         }
     }
     
-    if ($localStorage.token != null) {
-		$localStorage.loggedIn = true;
-	  } else {
-	  	$localStorage.loggedIn = false;
-	};
+   
 
-	vm.hideCreateBooking = !($localStorage.loggedIn);
+	vm.hideCreateBooking = !($localStorage.loggedIn); 
 
 	vm.createBooking = function(duration) {
 		var year = vm.chosenDate["year"];
