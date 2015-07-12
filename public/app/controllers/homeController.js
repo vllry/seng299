@@ -180,11 +180,7 @@ angular.module('userApp')
     vm.hideDeleteButton = false;
     vm.hideBookedBy = false;
 <<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
-    vm.hideDuration = false;
->>>>>>> origin/master
 =======
     vm.hideDuration = false;
 >>>>>>> origin/master
