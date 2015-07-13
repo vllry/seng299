@@ -310,10 +310,10 @@ exports.bookingCreate = function(res, bookingData, requestedLaptop, requestedPro
 			console.log('restrictions checked');
 			getUseridFromNetlinkid(bookingData.bookedBy, function(userid) {
 				console.log(userid);
-				schemaUser.findOne({'bookedBy' : userid, 'roomid' : bookingData['roomid'], 'endTime' : bookingData['startTime']}, function(err, data) {
-					console.log(err);
-					console.log(data);
-					schemaUser.find({'_id' : userid}, function(userInfo) {
+				schemaBooking.findOne({'bookedBy' : userid}, function(err, data) {
+					console.log(bookingData);
+					schemaUser.find({'netlinkid' : bookingData['bookedBy']}, 'userType', function(userInfo) {
+						console.log('User object');
 						console.log(userInfo);
 						if (data && userInfo['userType'] == 'student' && (bookingData['startTime'] - now) % 3600000 > 2) { //If the user has a back-to-back booking in the same room and it's more than 2 hours until the start time
 							res.json({'success' : false, 'message' : 'Students may only create a back-to-back booking in the same room within 2 hours of the booking\'s start.'});
