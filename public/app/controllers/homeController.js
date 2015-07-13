@@ -19,7 +19,7 @@ angular.module('userApp')
     vm.date = currentDate.getDate();
     
     vm.dates = [];
-    var numberOfDatestoBeDisplayed = 14;
+    var numberOfDatestoBeDisplayed = 17;
     for(var i = 0; i < numberOfDatestoBeDisplayed; i++) {
         var tempDate = new Date();
         tempDate.setDate(tempDate.getDate() + i);
@@ -32,21 +32,28 @@ angular.module('userApp')
     }
     
     
+
     vm.chosenDate = {
     		"year": vm.year,
             "month": vm.month,
             "date": vm.date,
             "message": "(default)"
         }
-    vm.getChosenDate = function(year, month, date) {
+/*    vm.getChosenDate = function(year, month, date) {
         vm.chosenDate = {
             "year": year,
             "month": month,
             "date": date,
             "message": ""
         }
+        console.log(vm.chosenDate);
+        changeHtmlClass1();
+        vm.populateCalendar();
+        $("#main").load(document);
+        
+
         //window.alert("month = " + month + "\ndate = " + date);
-    }
+    }*/
 
 
 
@@ -98,7 +105,33 @@ angular.module('userApp')
             }
         }
     }
-    
+
+    var changeHtmlClass1 = function(id) {
+        for(var i = 1; i < vm.table.length; i++) {
+            for(var j = 0; j < vm.table[0].length; j++) {
+                
+                    vm.table[i][j]["htmlClass"] = "Available";
+                    vm.table[i][j]["htmlClass1"] = "Available1";
+            }
+        }
+    }
+
+    vm.getChosenDate = function(year, month, date) {
+        vm.chosenDate = {
+            "year": year,
+            "month": month,
+            "date": date,
+            "message": ""
+        }
+        console.log(vm.chosenDate);
+        changeHtmlClass1();
+        vm.populateCalendar();
+        $("#main").load(document);
+        
+
+        //window.alert("month = " + month + "\ndate = " + date);
+    }
+
 	function Create2DArray(rows) {
   		var arr = [];
 
@@ -115,7 +148,9 @@ angular.module('userApp')
 		vm.list = Create2DArray(43);
 		for (var room = 1; room <= 10; room++) { //For each room
 			var date = new Date();
-			var bookingData = "/api/booking/byroom/" + room.toString() + "/" + date.getTime(); //Example: /api/booking/byroom/1/1436042817000
+            var time1 = vm.timeGenerator(vm.chosenDate["year"],vm.chosenDate["month"],vm.chosenDate["date"],'8:00');
+            console.log(time1);
+			var bookingData = "/api/booking/byroom/" + room.toString() + "/" + time1; //Example: /api/booking/byroom/1/1436042817000
 			
 			$http.get(bookingData).
 			success(function(data, status, headers, config) {
@@ -141,7 +176,7 @@ angular.module('userApp')
 						console.log('booking in ' + curBlock['roomid'] + ' at ' + hours+':'+minutes);
                         
                         var id = hours + ':' + minutes + '-' + curBlock['roomid'];
-                        changeHtmlClass(id); //Update table cell to reflect (un)availability
+                            changeHtmlClass(id); //Update table cell to reflect (un)availability
 					}
 				}
 			}).
@@ -155,10 +190,11 @@ angular.module('userApp')
     
     
   
-    
+
 
 	//This runs populateCalendar() once the page has loaded.
     angular.element(document).ready(function () {
+        
         vm.populateCalendar();
         
     });

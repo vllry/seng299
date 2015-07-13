@@ -78,6 +78,13 @@ top: 40px;
 .notAvailable1 {
   color: white; /*#7C98BF*/
 }
+
+.Available {
+  background-color:rgb(0,0,0,0); /*#7C98BF*/
+}
+.Available1 {
+  color: #5091d6; /*#7C98BF*/
+
 #delete {
   background-color: #dc6464;
 }
@@ -128,8 +135,8 @@ top: 40px;
     
     
     <!-- table -->
-      <div class="container">   
-            <table class="">
+      <div id="table" class="container">   
+            <table id="main" class="">
               
               <thead>
                   <tr ng-repeat="row in home.header">
@@ -142,7 +149,7 @@ top: 40px;
                     
                  <tr ng-repeat="i in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]">
                         <th>{{ home.times[i]}}</th>
-                        <td ng-repeat="j in [1,2,3,4,5,6,7,8,9,10]" class="{{ home.table[i][j]['htmlClass'] }}"  id="{{ home.table[i][j]['id'] }}" data-toggle="modal" data-target="#myModal" ng-click="home.click(home.table[i][j]['id'])">
+                        <td ng-repeat="j in [1,2,3,4,5,6,7,8,9,10]" class="{{ home.table[i][j]['htmlClass'] }} "  id="{{ home.table[i][j]['id'] }}" data-toggle="modal" data-target="#myModal" ng-click="home.click(home.table[i][j]['id'])">
                         <a  class="{{ home.table[i][j]['htmlClass1'] }}" id="{{ home.table[i][j]['id'] }}"> {{ home.table[i][j]["link"]}}</a>                        
                         </td>
                  </tr>
