@@ -13,7 +13,10 @@ angular.module('userApp')
 		vm.submitted = true;
 
 		// If form is invalid, return and let AngularJS show validation errors.
-		if (user.$invalid) {
+		if (user.netlinkid == null ||
+		    user.password == null ||
+		    user.firstname == null ||
+		    user.lastname == null) {
 		    return;
 		}
 	
