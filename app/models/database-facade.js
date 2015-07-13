@@ -207,10 +207,12 @@ function bookingValidate(bookingData, fn) {
 
 		//Check that the user has no other bookings at this time
 		function (callback) {
+			console.log("_" + calculateEndTime(bookingData['startTime'], bookingData['duration']).toString());
 			schemaBooking.findOne({
 								'bookedBy' : bookingData.bookedBy,
 								'startTime' : {$lt : calculateEndTime(bookingData['startTime'], bookingData['duration'])},
-								'endTime' : {$gt : bookingData['startTime']},
+								'endTime' : {$gt : bookingData['startTime'],
+								$ne : {'roomid' : bookingData['roomid']}},
 			} ,function(err, data) {
 				if (data) {
 					callback(null, {'success' : false, 'message' : 'You may not have concurrent bookings.'});
@@ -385,34 +387,44 @@ exports.bookingDelete = function(res, roomid, startTime, netlinkid) {
 
 
 exports.bookingUpdate = function(res, bookingData, requestedLaptop, requestedProjector) {
-	bookingValidate(bookingData, function(result) {
-		bookingData['endTime'] = calculateEndTime(bookingData['startTime'], bookingData['duration']);
-		if (result['success']) {
+	schemaBooking.findOne({'roomid' : bookingData['roomid'], 'startTime' : bookingData['startTime']}, function(err, data) {
+		if (data) {
+			bookingData['bookedBy'] = data['bookedBy'];
+			//console.log(bookingData);
+			bookingValidate(bookingData, function(result) {
+				bookingData['endTime'] = calculateEndTime(bookingData['startTime'], bookingData['duration']);
+				//console.log(result);
+				if (result['success']) {
 
-			handleEquipment(res, bookingData, requestedLaptop, requestedProjector, function(updatedBookingData) {
-				schemaBooking.findOneAndUpdate({'roomid' : bookingData['roomid'], 'startTime' : updatedBookingData['startTime']},
-						{'duration' : updatedBookingData['duration'],
-						'endTime' : updatedBookingData['endTime'],
-						'laptop' : updatedBookingData['laptop'],
-						'projector' : updatedBookingData['projector']},
-						function(err, data) {
-							if (data) {
-								mongoCallback(res, err, {}, {'success' : true, 'message' : data});
-							}
-							else {
-								if (err) {
-									res.json({'success' : false, 'message' : err});
+					handleEquipment(res, bookingData, requestedLaptop, requestedProjector, function(updatedBookingData) {
+						//console.log(updatedBookingData);
+						schemaBooking.findOneAndUpdate({'roomid' : bookingData['roomid'], 'startTime' : bookingData['startTime']},
+								{'duration' : updatedBookingData['duration'],
+								'endTime' : updatedBookingData['endTime'],
+								'laptop' : updatedBookingData['laptop'],
+								'projector' : updatedBookingData['projector']},
+								function(err, data) {
+									//console.log('--');
+									//console.log(err);
+									//console.log(data);
+									mongoCallback(res, err, {}, {'success' : true, 'message' : data});
 								}
-								else {
-									res.json({'success' : false, 'message' : 'No booking in room ' + bookingData['roomid'] + ' at ' + bookingData['startTime'].toString()});
-								}
-							}
-						}
-				);
+						);
+					});
+				}
+				else {
+					res.json(result);
+				}
 			});
 		}
 		else {
-			res.json(result);
+			if (err) {
+				res.json({'success' : false, 'message' : err});
+			}
+			else {
+				console.log('No booking in room ' + bookingData['roomid'] + ' at ' + bookingData['startTime'].toString());
+				res.json({'success' : false, 'message' : 'No booking in room ' + bookingData['roomid'] + ' at ' + bookingData['startTime'].toString()});
+			}
 		}
 	});
 };
