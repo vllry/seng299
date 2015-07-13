@@ -205,6 +205,22 @@ function bookingValidate(bookingData, fn) {
 			});
 		},
 
+		//Check that the user has no other bookings at this time
+		function (callback) {
+			schemaBooking.findOne({
+								'bookedBy' : bookingData.bookedBy,
+								'startTime' : {$lt : calculateEndTime(bookingData['startTime'], bookingData['duration'])},
+								'endTime' : {$gt : bookingData['startTime']},
+			} ,function(err, data) {
+				if (data) {
+					callback(null, {'success' : false, 'message' : 'You may not have concurrent bookings.'});
+				}
+				else {
+					callback(null, {'success' : true});
+				}
+			});
+		},
+
 		//Check that this doesn't overlap with the previous booking
 		function (callback) {
 			var q = schemaBooking.find({ //Get the previous booking in the same room
@@ -263,6 +279,9 @@ function bookingValidate(bookingData, fn) {
 		}
 		else if (!results[2]['success']) {
 			fn(results[2]);
+		}
+		else if (!results[3]['success']) {
+			fn(results[3]);
 		}
 		else {
 			fn({'success' : true});
