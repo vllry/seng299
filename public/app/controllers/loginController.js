@@ -62,6 +62,10 @@ angular.module('userApp')
 		console.log("LOGIN BUTTON CLICKED");
 
 	};
+
+	vm.displayMessage = function() {
+		window.alert("Please contact an administrator.");
+	};
 	
 
 }])
