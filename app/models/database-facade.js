@@ -305,25 +305,18 @@ function userSetDateRestriction(netlinkid, now) {
 exports.bookingCreate = function(res, bookingData, requestedLaptop, requestedProjector) {
 	schemaUser.findOne({'netlinkid' : bookingData['bookedBy']}, function(err, user) {
 		var now = new Date();
-		console.log('about to check restrictions');
 		if (user['bookingRestriction'] == undefined || now > user['bookingRestriction']) {
-			console.log('restrictions checked');
 			getUseridFromNetlinkid(bookingData.bookedBy, function(userid) {
-				console.log(userid);
-				schemaUser.findOne({'bookedBy' : userid, 'roomid' : bookingData['roomid'], 'endTime' : bookingData['startTime']}, function(err, data) {
-					console.log(err);
-					console.log(data);
-					schemaUser.find({'_id' : userid}, function(userInfo) {
-						console.log(userInfo);
-						if (data && userInfo['userType'] == 'student' && (bookingData['startTime'] - now) % 3600000 > 2) { //If the user has a back-to-back booking in the same room and it's more than 2 hours until the start time
+				schemaBooking.findOne({'bookedBy' : userid, 'roomid' : bookingData['roomid'], 'endTime' : bookingData['startTime']}, function(err, bookingbefore) {
+					schemaUser.find({'netlinkid' : bookingData['bookedBy']}, 'userType', function(err, userInfo) {
+						if (bookingbefore && userInfo[0]['userType'] == 'student' && ((bookingData['startTime'] - now) / 3600000) > 2) { //If the user has a back-to-back booking in the same room and it's more than 2 hours until the start time
+							console.log('Student prevented from making a back to back booking');
 							res.json({'success' : false, 'message' : 'Students may only create a back-to-back booking in the same room within 2 hours of the booking\'s start.'});
 						}
 						else {
 							bookingData.bookedBy = userid;
-							console.log('about to validate;');
 							bookingValidate(bookingData, function(result) {
 								if (result['success']) {
-									console.log("we're validated captain");
 									bookingData['endTime'] = calculateEndTime(bookingData['startTime'], bookingData['duration']);
 
 									handleEquipment(res, bookingData, requestedLaptop, requestedProjector, function(data) {
