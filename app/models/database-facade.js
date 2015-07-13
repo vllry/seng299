@@ -305,26 +305,42 @@ function userSetDateRestriction(netlinkid, now) {
 exports.bookingCreate = function(res, bookingData, requestedLaptop, requestedProjector) {
 	schemaUser.findOne({'netlinkid' : bookingData['bookedBy']}, function(err, user) {
 		var now = new Date();
-		console.log(user);
+		console.log('about to check restrictions');
 		if (user['bookingRestriction'] == undefined || now > user['bookingRestriction']) {
+			console.log('restrictions checked');
 			getUseridFromNetlinkid(bookingData.bookedBy, function(userid) {
-				bookingData.bookedBy = userid;
-				bookingValidate(bookingData, function(result) {
-					if (result['success']) {
-						bookingData['endTime'] = calculateEndTime(bookingData['startTime'], bookingData['duration']);
+				console.log(userid);
+				schemaUser.findOne({'bookedBy' : userid, 'roomid' : bookingData['roomid'], 'endTime' : bookingData['startTime']}, function(err, data) {
+					console.log(err);
+					console.log(data);
+					schemaUser.find({'_id' : userid}, function(userInfo) {
+						console.log(userInfo);
+						if (data && userInfo['userType'] == 'student' && (bookingData['startTime'] - now) % 3600000 > 2) { //If the user has a back-to-back booking in the same room and it's more than 2 hours until the start time
+							res.json({'success' : false, 'message' : 'Students may only create a back-to-back booking in the same room within 2 hours of the booking\'s start.'});
+						}
+						else {
+							bookingData.bookedBy = userid;
+							console.log('about to validate;');
+							bookingValidate(bookingData, function(result) {
+								if (result['success']) {
+									console.log("we're validated captain");
+									bookingData['endTime'] = calculateEndTime(bookingData['startTime'], bookingData['duration']);
 
-						handleEquipment(res, bookingData, requestedLaptop, requestedProjector, function(data) {
-							var booking = new schemaBooking(data);
-							booking.save(function(err) {
-								var errors = {11000 : { success: false, message: 'A booking at that time already exists'}};
-								mongoCallback(res, err, errors, { success : true, message: 'Booking created' });
+									handleEquipment(res, bookingData, requestedLaptop, requestedProjector, function(data) {
+										var booking = new schemaBooking(data);
+										booking.save(function(err) {
+											var errors = {11000 : { success: false, message: 'A booking at that time already exists'}};
+											mongoCallback(res, err, errors, { success : true, message: 'Booking created' });
+										});
+
+									});
+								}
+								else {
+									res.json(result);
+								}
 							});
-
-						});
-					}
-					else {
-						res.json(result);
-					}
+						}
+					});
 				});
 			});
 		}
