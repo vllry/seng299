@@ -166,7 +166,7 @@ angular.module('userApp')
        location.reload();
 	}	
 
-		vm.proj = 0;
+		    vm.proj = 0;
         vm.laptop = 0;
 
         vm.EditBooking=function(duration,room,year,month,date,starttime){
@@ -185,7 +185,7 @@ angular.module('userApp')
         var minutes = time[1];
         var timeInMS=new Date(year, month, date, hour, minutes, 0, 0).getTime();*/
         
-		console.log("starttime"+starttime);
+		 console.log("starttime"+starttime);
      	var timeInMS = vm.timeGenerator(vm.chosenDate["year"],vm.chosenDate["month"],vm.chosenDate["date"],starttime);
 
         if (vm.proj == true || vm.proj==1) {
