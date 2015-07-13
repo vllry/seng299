@@ -336,7 +336,7 @@ angular.module('userApp')
     
 
      //Edit Booking
-     vm.EditBooking=function(duration){
+/*     vm.EditBooking=function(duration){
         var room = vm.bookingRoom;
         var starttime = vm.bookingTime;
         console.log(duration);
@@ -382,6 +382,59 @@ angular.module('userApp')
             console.log("there wasn't a booking");
       });
 
+       
+    } //Editing Booking*/
+
+
+
+
+
+    vm.EditBooking=function(duration){
+        //vm.laptop=0;
+        //vm.proj=0;
+        
+        var room = vm.bookingRoom;
+        var starttime = vm.bookingTime;
+        console.log(duration);
+     // var timeInMs = new Date(starttime,0.0).getTime();
+        var year = vm.chosenDate["year"];
+        var month = vm.chosenDate["month"];
+        var date = vm.chosenDate["date"];
+        var time = starttime.split(":");
+        var hour = time[0];
+        var minutes = time[1];
+        var timeInMS=new Date(year, month, date, hour, minutes, 0, 0).getTime();
+        
+        if (vm.proj == true || vm.proj==1) {
+            vm.proj = 1;
+        } else {
+            vm.proj = 0;
+        }
+        if (vm.laptop == true || vm.laptop==1) {
+            vm.laptop = 1;
+        } else {
+            vm.laptop = 0;
+        }
+     //console.log(timeInMS);
+     var bookingData={
+            'token':$localStorage.token,
+            'roomid': room,
+            'starttime':timeInMS,
+            'duration':duration,
+            'requestlaptop' : vm.laptop,
+            'requestprojector' : vm.proj
+      };
+     $http.post('/api/booking/update', bookingData)
+      .success(function(data, status, headers, config) {
+            //vm.checkMessage = data.message;
+            //window.alert(data.message);
+            if (data.success == true) {
+                location.href = ("/");
+            }
+      })
+      .error(function(data, status, headers, config) {
+            console.log("there wasn't a booking");
+      });
        
     } //Editing Booking
 })
