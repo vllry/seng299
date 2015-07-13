@@ -257,7 +257,21 @@ angular.module('userApp')
                 vm.hideEditButton = true;
                 vm.hideDuration = true;
         		vm.someone = vm.list[parseInt(str[1])][str[0]]['bookedBy']['netlinkid'];//booking by someone else
-        		
+        		if(vm.list[parseInt(str[1])][str[0]]['projector'] != ""){
+                console.log("has proj");
+                document.getElementById("projector").checked = true;
+            }else{
+                console.log("dont have proj");
+                document.getElementById("projector").checked = false;
+            }
+
+            if(vm.list[parseInt(str[1])][str[0]]['laptop'] != ""){
+                console.log("has laptop");
+                document.getElementById("laptop").checked = true;
+            }else{
+                console.log("dont have laptop");
+                document.getElementById("laptop").checked = false;
+            }
         	}
         } else {
 
