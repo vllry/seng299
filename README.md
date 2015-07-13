@@ -1,22 +1,9 @@
-=== File structure ===
+=== Group 5's Project Implimentation ===
 
-	config.js
-	server.js
-	package.json
-	app/
-		models/
-			database-facade.js - Facade for api.js to interact with thd database
-			schemas/
-				mongo collection schema files
-		routes/
-			api.js - routes and logic for the api
-	public/
-		app/
-			controllers/
-				???
-			services/
-				???
-			views/
-				Angular html file tree
-		assets/
-			Static site content (css/fonts/js)
+To run this application, unzip seng299-master.zip, and cd to the extracted folder, then run
+
+	$ nodejs server.js
+	
+You will not need to install modules, as they are already provided. The application can be accessed at http://localhost:3000/
+
+Should the server crash at any point during the testing, simply run nodejs server.js again.
