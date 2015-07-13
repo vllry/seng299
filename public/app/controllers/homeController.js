@@ -228,7 +228,7 @@ angular.module('userApp')
 		vm.hideCreateBooking = true;
 		
         	if($localStorage.netlinkid == vm.list[parseInt(str[1])][str[0]]['bookedBy']['netlinkid']){
-        	vm.someone = vm.list[parseInt(str[1])][str[0]]['bookedBy']['firstName'];
+        	vm.someone = vm.list[parseInt(str[1])][str[0]]['bookedBy']['netlinkid'];
             
             if(vm.list[parseInt(str[1])][str[0]]['projector'] != ""){
                 console.log("has proj");
@@ -256,7 +256,7 @@ angular.module('userApp')
         	vm.hideDeleteButton = true;
                 vm.hideEditButton = true;
                 vm.hideDuration = true;
-        		vm.someone = vm.list[parseInt(str[1])][str[0]]['bookedBy']['firstName'];//booking by someone else
+        		vm.someone = vm.list[parseInt(str[1])][str[0]]['bookedBy']['netlinkid'];//booking by someone else
         		
         	}
         } else {
