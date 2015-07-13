@@ -512,7 +512,7 @@ exports.userLogin = function(res,netlinkid,password) {
 	console.log(netlinkid + ' is attempting to log in');
 	schemaUser.findOne({
 		'netlinkid': netlinkid
-	}).select('password').exec(function(err, user) {
+	}).select('password role').exec(function(err, user) {
 		if(err) throw err;
 		if(!user) {
 			res.send({ message: "User does not exist" });
@@ -523,9 +523,10 @@ exports.userLogin = function(res,netlinkid,password) {
 			} else {
 				var token = createToken(user);
 				res.json({
-					success: true,
-					message: "Logged in",
-					token: token
+					'success': true,
+					'message': "Logged in",
+					'token': token,
+					'role': user['role']
 				});
 			}
 		}
