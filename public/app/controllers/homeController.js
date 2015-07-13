@@ -78,10 +78,10 @@ angular.module('userApp')
     vm.table[0] = vm.rooms;
     for(var i = 1; i < vm.times.length; i++) {
         vm.table[i] = [];
-        var temp = {"link":vm.times[i] , "id": vm.times[i], "htmlClass": ""};
+        var temp = {"link":vm.times[i] , "id": vm.times[i], "htmlClass": "", "htmlClass1": ""};
         vm.table[i][0] = temp;
         for(var j = 1; j < maxNumberOfElementinaRow + 1; j++) {
-            temp = {"link": "+", "id": vm.ids[index], "htmlClass": "available"};
+            temp = {"link": "+", "id": vm.ids[index], "htmlClass": "available", "htmlClass1": "available1"};
             vm.table[i][j] = temp;
             index++;
         }
@@ -93,6 +93,7 @@ angular.module('userApp')
             for(var j = 0; j < vm.table[0].length; j++) {
                 if(vm.table[i][j]["id"] === id) {
                     vm.table[i][j]["htmlClass"] = "notAvailable";
+                    vm.table[i][j]["htmlClass1"] = "notAvailable1";
                 }
             }
         }
