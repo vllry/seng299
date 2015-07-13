@@ -227,7 +227,7 @@ angular.module('userApp')
 		vm.hideBookedBy = false;
 		vm.hideCreateBooking = true;
 		
-        	if($localStorage.netlinkid == vm.list[parseInt(str[1])][str[0]]['bookedBy']['netlinkid']){
+        	if($localStorage.netlinkid == vm.list[parseInt(str[1])][str[0]]['bookedBy']['netlinkid'] || $localStorage.admin == true){
         	vm.someone = vm.list[parseInt(str[1])][str[0]]['bookedBy']['netlinkid'];
             
             if(vm.list[parseInt(str[1])][str[0]]['projector'] != ""){

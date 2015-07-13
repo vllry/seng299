@@ -39,6 +39,14 @@ angular.module('userApp')
 				$localStorage.token = data.token;
 				$localStorage.netlinkid = user.username;
 				$localStorage.loggedIn = true;
+
+				if (data.role == "admin") {
+					$localStorage.admin = true;
+				} else {
+					$localStorage.admin = false;
+				} 
+
+				console.log("admin status = " + $localStorage.admin);
 				
 			//username no in database
 			} else if (data.message == "User does not exist") {
