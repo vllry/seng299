@@ -19,7 +19,7 @@ angular.module('userApp')
     vm.date = currentDate.getDate();
     
     vm.dates = [];
-    var numberOfDatestoBeDisplayed = 14;
+    var numberOfDatestoBeDisplayed = 17;
     for(var i = 0; i < numberOfDatestoBeDisplayed; i++) {
         var tempDate = new Date();
         tempDate.setDate(tempDate.getDate() + i);
@@ -32,21 +32,28 @@ angular.module('userApp')
     }
     
     
+
     vm.chosenDate = {
     		"year": vm.year,
             "month": vm.month,
             "date": vm.date,
             "message": "(default)"
         }
-    vm.getChosenDate = function(year, month, date) {
+/*    vm.getChosenDate = function(year, month, date) {
         vm.chosenDate = {
             "year": year,
             "month": month,
             "date": date,
             "message": ""
         }
+        console.log(vm.chosenDate);
+        changeHtmlClass1();
+        vm.populateCalendar();
+        $("#main").load(document);
+        
+
         //window.alert("month = " + month + "\ndate = " + date);
-    }
+    }*/
 
 
 
@@ -98,7 +105,33 @@ angular.module('userApp')
             }
         }
     }
-    
+
+    var changeHtmlClass1 = function(id) {
+        for(var i = 1; i < vm.table.length; i++) {
+            for(var j = 0; j < vm.table[0].length; j++) {
+                
+                    vm.table[i][j]["htmlClass"] = "Available";
+                    vm.table[i][j]["htmlClass1"] = "Available1";
+            }
+        }
+    }
+
+    vm.getChosenDate = function(year, month, date) {
+        vm.chosenDate = {
+            "year": year,
+            "month": month,
+            "date": date,
+            "message": ""
+        }
+        console.log(vm.chosenDate);
+        changeHtmlClass1();
+        vm.populateCalendar();
+        $("#main").load(document);
+        
+
+        //window.alert("month = " + month + "\ndate = " + date);
+    }
+
 	function Create2DArray(rows) {
   		var arr = [];
 
@@ -115,7 +148,9 @@ angular.module('userApp')
 		vm.list = Create2DArray(43);
 		for (var room = 1; room <= 10; room++) { //For each room
 			var date = new Date();
-			var bookingData = "/api/booking/byroom/" + room.toString() + "/" + date.getTime(); //Example: /api/booking/byroom/1/1436042817000
+            var time1 = vm.timeGenerator(vm.chosenDate["year"],vm.chosenDate["month"],vm.chosenDate["date"],'8:00');
+            console.log(time1);
+			var bookingData = "/api/booking/byroom/" + room.toString() + "/" + time1; //Example: /api/booking/byroom/1/1436042817000
 			
 			$http.get(bookingData).
 			success(function(data, status, headers, config) {
@@ -141,7 +176,7 @@ angular.module('userApp')
 						console.log('booking in ' + curBlock['roomid'] + ' at ' + hours+':'+minutes);
                         
                         var id = hours + ':' + minutes + '-' + curBlock['roomid'];
-                        changeHtmlClass(id); //Update table cell to reflect (un)availability
+                            changeHtmlClass(id); //Update table cell to reflect (un)availability
 					}
 				}
 			}).
@@ -155,10 +190,11 @@ angular.module('userApp')
     
     
   
-    
+
 
 	//This runs populateCalendar() once the page has loaded.
     angular.element(document).ready(function () {
+        
         vm.populateCalendar();
         
     });
@@ -192,7 +228,7 @@ angular.module('userApp')
 		vm.hideCreateBooking = true;
 		
         	if($localStorage.netlinkid == vm.list[parseInt(str[1])][str[0]]['bookedBy']['netlinkid']){
-        	vm.someone = vm.list[parseInt(str[1])][str[0]]['bookedBy']['firstName'];
+        	vm.someone = vm.list[parseInt(str[1])][str[0]]['bookedBy']['netlinkid'];
             
             if(vm.list[parseInt(str[1])][str[0]]['projector'] != ""){
                 console.log("has proj");
@@ -220,7 +256,7 @@ angular.module('userApp')
         	vm.hideDeleteButton = true;
                 vm.hideEditButton = true;
                 vm.hideDuration = true;
-        		vm.someone = vm.list[parseInt(str[1])][str[0]]['bookedBy']['firstName'];//booking by someone else
+        		vm.someone = vm.list[parseInt(str[1])][str[0]]['bookedBy']['netlinkid'];//booking by someone else
         		
         	}
         } else {
@@ -336,7 +372,7 @@ angular.module('userApp')
     
 
      //Edit Booking
-     vm.EditBooking=function(duration){
+/*     vm.EditBooking=function(duration){
         var room = vm.bookingRoom;
         var starttime = vm.bookingTime;
         console.log(duration);
@@ -382,6 +418,59 @@ angular.module('userApp')
             console.log("there wasn't a booking");
       });
 
+       
+    } //Editing Booking*/
+
+
+
+
+
+    vm.EditBooking=function(duration){
+        //vm.laptop=0;
+        //vm.proj=0;
+        
+        var room = vm.bookingRoom;
+        var starttime = vm.bookingTime;
+        console.log(duration);
+     // var timeInMs = new Date(starttime,0.0).getTime();
+        var year = vm.chosenDate["year"];
+        var month = vm.chosenDate["month"];
+        var date = vm.chosenDate["date"];
+        var time = starttime.split(":");
+        var hour = time[0];
+        var minutes = time[1];
+        var timeInMS=new Date(year, month, date, hour, minutes, 0, 0).getTime();
+        
+        if (vm.proj == true || vm.proj==1) {
+            vm.proj = 1;
+        } else {
+            vm.proj = 0;
+        }
+        if (vm.laptop == true || vm.laptop==1) {
+            vm.laptop = 1;
+        } else {
+            vm.laptop = 0;
+        }
+     //console.log(timeInMS);
+     var bookingData={
+            'token':$localStorage.token,
+            'roomid': room,
+            'starttime':timeInMS,
+            'duration':duration,
+            'requestlaptop' : vm.laptop,
+            'requestprojector' : vm.proj
+      };
+     $http.post('/api/booking/update', bookingData)
+      .success(function(data, status, headers, config) {
+            //vm.checkMessage = data.message;
+            //window.alert(data.message);
+            if (data.success == true) {
+                location.href = ("/");
+            }
+      })
+      .error(function(data, status, headers, config) {
+            console.log("there wasn't a booking");
+      });
        
     } //Editing Booking
 })

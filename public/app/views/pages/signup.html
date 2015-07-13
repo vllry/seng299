@@ -20,25 +20,25 @@
             <!-- FORM -->
             <form class="form-signin">
 
-                <input type="text" id="inputID" class="form-control" placeholder="Netlink ID" ng-model="user.netlinkid" required autofocus>
-                <input type="password" id="inputPassword" class="form-control" placeholder="Password" ng-model="user.password" required>
-                <input type="text" id="inputStudentNum" class="form-control" placeholder="Student Number" ng-model="user.studentid" required>
-                <input type="text" id="inputFirstName" class="form-control" placeholder="First Name" ng-model="user.firstname" required>
-                <input type="text" id="inputLastName" class="form-control" placeholder="Last Name" ng-model="user.lastname" required>
+                <input type="text" id="inputID" class="form-control" placeholder="Netlink ID*" ng-model="user.netlinkid" required autofocus>
+                <input type="password" id="inputPassword" class="form-control" placeholder="Password*" ng-model="user.password" required>
+                <input type="text" id="inputStudentNum" class="form-control" placeholder="Student Number" ng-model="user.studentid">
+                <input type="text" id="inputFirstName" class="form-control" placeholder="First Name*" ng-model="user.firstname" required>
+                <input type="text" id="inputLastName" class="form-control" placeholder="Last Name*" ng-model="user.lastname" required>
                 
 				<label class="radio-inline">
-				  <input type="radio" name="userType" ng-model="user.type" value="student"  required>Student
+				  <input type="radio" name="userType" ng-model="user.type" value="student">Student
 				</label>
 				<label class="radio-inline">
-				  <input type="radio" name="userType" ng-model="user.type" value="faculty" required>Faculty
+				  <input type="radio" name="userType" ng-model="user.type" value="faculty">Faculty
 				</label>
 				<label class="radio-inline">
-				  <input type="radio" name="userType" ng-model="user.type" value="staff" required>Staff
+				  <input type="radio" name="userType" ng-model="user.type" value="staff">Staff
 				</label>
   
 				<div class="form-group">
 				  <label for="sel1">Department (select one):</label>
-				  <select class="form-control" id="sel1" ng-model="user.department" required>
+				  <select class="form-control" id="sel1" ng-model="user.department">
 				<option>Business</option>
 				<option>Education</option>
 				<option>Engineering</option>
