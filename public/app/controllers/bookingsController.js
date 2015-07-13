@@ -163,6 +163,7 @@ angular.module('userApp')
        .error(function(data, status, headers, config) {
 	  	console.log("there wasn't a booking");
 	    });
+       location.reload();
 	}
 
     vm.EditBooking=function(duration,room,year,month,date,starttime){

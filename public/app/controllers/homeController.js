@@ -177,6 +177,8 @@ angular.module('userApp')
     vm.hideDuration = false;
     /* Response to click */
     vm.click = function(id) {
+        document.getElementById("laptop").checked = false;
+        document.getElementById("projector").checked = false;
     	vm.checkMessage = "";
         var str = id.split("-");
         vm.bookingTime = str[0]; // booking time
@@ -191,7 +193,25 @@ angular.module('userApp')
 		
         	if($localStorage.netlinkid == vm.list[parseInt(str[1])][str[0]]['bookedBy']['netlinkid']){
         	vm.someone = vm.list[parseInt(str[1])][str[0]]['bookedBy']['firstName'];
-        	vm.hideDeleteButton = false;
+            
+            if(vm.list[parseInt(str[1])][str[0]]['projector'] != ""){
+                console.log("has proj");
+                document.getElementById("projector").checked = true;
+            }else{
+                console.log("dont have proj");
+                document.getElementById("projector").checked = false;
+            }
+
+            if(vm.list[parseInt(str[1])][str[0]]['laptop'] != ""){
+                console.log("has laptop");
+                document.getElementById("laptop").checked = true;
+            }else{
+                console.log("dont have laptop");
+                document.getElementById("laptop").checked = false;
+            }
+        	
+
+            vm.hideDeleteButton = false;
                 vm.hideEditButton = false;
                 vm.hideDuration = false;
         		vm.button = 'SAVE';
@@ -225,6 +245,7 @@ angular.module('userApp')
    
         vm.proj = 0;
         vm.laptop = 0;
+        
 
 	vm.createBooking = function(duration) {
 		var year = vm.chosenDate["year"];
@@ -235,13 +256,13 @@ angular.module('userApp')
 		var hour = time[0];
 		var minutes = time[1];
 
-		if (vm.proj == true || 1) {
+		if (vm.proj == true || vm.proj == 1) {
 			vm.proj = 1;
 		} else {
 			vm.proj = 0;
 		}
 
-		if (vm.laptop == true || 1) {
+		if (vm.laptop == true || vm.laptop == 1) {
 			vm.laptop = 1;
 		} else {
 			vm.laptop = 0;
@@ -265,7 +286,9 @@ angular.module('userApp')
                 //vm.checkMessage = data.message;
                 window.alert(data.message);
                 if (data.success == true) {
-                	location.href = ("/");
+                	vm.proj = 0;
+                    vm.laptop = 0;
+                    location.href = ("/");
                 }
 	    })
            .error(function(data, status, headers, config) {
@@ -326,12 +349,26 @@ angular.module('userApp')
         var minutes = time[1];
         var timeInMS=new Date(year, month, date, hour, minutes, 0, 0).getTime();
 
+        if (vm.proj == true || 1) {
+            vm.proj = 1;
+        } else {
+            vm.proj = 0;
+        }
+
+        if (vm.laptop == true || 1) {
+            vm.laptop = 1;
+        } else {
+            vm.laptop = 0;
+        }
+
      console.log(timeInMS);
      var bookingData={
             'token':$localStorage.token,
             'roomid': room,
             'starttime':timeInMS,
-            'duration':duration
+            'duration':duration,
+            'requestprojector': vm.proj,
+            'requestlaptop': vm.laptop
       };
      $http.post('/api/booking/update', bookingData)
       .success(function(data, status, headers, config) {
