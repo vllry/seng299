@@ -3,7 +3,7 @@
 
 angular.module('userApp')
 
-.controller('contactController', function($localStorage, $rootScope){
+.controller('aboutController', function($localStorage, $rootScope){
 	var vm = this;
 
 	vm.message = $localStorage.loggedIn;

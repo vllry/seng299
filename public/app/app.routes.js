@@ -42,6 +42,12 @@ angular.module('app.routes', ['ngRoute'])
 	  	controller: 'profileController',
 	  	controllerAs: 'profile'
 	  })
+	  .when("/contact",{
+	  	templateUrl:'/app/views/pages/contact.html',
+	  	controller: 'contactController',
+	  	controllerAs: 'contact'
+	  })
+	  
 
 	  .otherwise('/');
 	  
