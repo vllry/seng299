@@ -271,7 +271,7 @@ angular.module('userApp')
             }else{
                 console.log("dont have laptop");
                 document.getElementById("laptop").checked = false;
-            }
+                 }
         	}
         } else {
 
