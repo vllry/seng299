@@ -367,15 +367,11 @@ exports.bookingCreate = function(res, bookingData, requestedLaptop, requestedPro
 
 
 exports.bookingDelete = function(res, roomid, startTime, netlinkid) {
-	schemaBooking.findOne({ //Assume startTime may be in the middle of the booking
-		'startTime' : {$lte : startTime},
-		'endTime' : {$gt : startTime},
-		'roomid' : roomid
-	}).populate('bookedBy', 'netlinkid').exec(function(err, data) {
+	schemaBooking.findOne({'roomid' : roomid, 'startTime' : startTime}).populate('bookedBy', 'netlinkid').exec(function(err, data) {
 		if (data) {
-			schemaBooking.remove({'roomid' : roomid, 'startTime' : data['startTime']}, function(err) {
+			schemaBooking.remove({'roomid' : roomid, 'startTime' : startTime}, function(err) {
 				var now = new Date();
-				if (data['bookedBy']['netlinkid'] == netlinkid && (data['startTime'] - now) / 3600000 <= 5) {
+				if (data['bookedBy']['netlinkid'] == netlinkid && (startTime - now) / 3600000 <= 5) {
 					console.log(netlinkid + ' deleted a booking within 5 hours of the start');
 					userSetDateRestriction(netlinkid, now);
 				}
@@ -391,15 +387,10 @@ exports.bookingDelete = function(res, roomid, startTime, netlinkid) {
 
 
 exports.bookingUpdate = function(res, bookingData, requestedLaptop, requestedProjector) {
-	schemaBooking.findOne({ //Assume startTime may be in the middle of the booking
-		'startTime' : {$lte : bookingData['startTime']},
-		'endTime' : {$gt : bookingData['startTime']},
-		'roomid' : bookingData['roomid']
-	}, function(err, data) {
+	schemaBooking.findOne({'roomid' : bookingData['roomid'], 'startTime' : bookingData['startTime']}, function(err, data) {
 		if (data) {
 			bookingData['bookedBy'] = data['bookedBy'];
-			bookingData['startTime'] = data['startTime']; //May be different
-			console.log(bookingData);
+			//console.log(bookingData);
 			bookingValidate(bookingData, function(result) {
 				bookingData['endTime'] = calculateEndTime(bookingData['startTime'], bookingData['duration']);
 				//console.log(result);
@@ -422,7 +413,6 @@ exports.bookingUpdate = function(res, bookingData, requestedLaptop, requestedPro
 					});
 				}
 				else {
-					console.log(result);
 					res.json(result);
 				}
 			});
