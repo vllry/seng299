@@ -83,22 +83,6 @@ function calculateEndTime(startTime, duration) {
 
 
 
-function getBookingAtTime(time, fn) {
-	schemaBooking.findOne({ //Finds all bookings in other rooms that overlap with this booking's time.
-		'startTime' : {$lt : bookingData['endTime']},
-		'endTime' : {$gt : bookingData['startTime']},
-		'roomid' : {$ne : bookingData['roomid']}
-		},
-		function(err, booking) {
-			console.log("Vallery's debug: ");
-			console.log(booking);
-			fn();
-		}
-	);
-}
-
-
-
 function handleEquipment(res, bookingData, requestedLaptop, requestedProjector, fn) {
 	if (requestedLaptop || requestedProjector) {
 		if ((requestedLaptop && !bookingData['laptop']) || (requestedProjector && !bookingData['projector'])) {
