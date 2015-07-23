@@ -25,6 +25,10 @@ a {
 	text-decoration: none;
 }
 
+
+div #about {
+	color: black !important;
+}
 a:hover, a:focus {
 	color: #7c8d87;
 }
