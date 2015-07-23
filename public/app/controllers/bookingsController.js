@@ -74,8 +74,8 @@ angular.module('userApp')
 						startMonth: monthNames[start.getMonth()],
 						startDate: start.getDate(),
 						startTime: start.getHours().toString().concat(":").concat(twodigits(start.getMinutes()).toString()),
-						endTime: end.getHours().toString().concat(":").concat(twodigits(end.getMinutes()).toString()),
-						startTimeReal: start.getTime()
+
+						endTime: end.getHours().toString().concat(":").concat(twodigits(end.getMinutes()).toString())
 					}
 						
 					vm.List.push(bookingInfo);
@@ -133,13 +133,13 @@ angular.module('userApp')
         var timeInMS=new Date(year, month, date, hour, minutes, 0, 0).getTime();
         return timeInMS;
     }
-    vm.deleteBooking=function(room,startTime){
+    vm.deleteBooking=function(room,year,month,date,starttime){
 	 //get ms
 	 //var timeInMS=starttime.getTime();
      /*var room = vm.bookingRoom;
      var starttime = vm.bookingTime;*/
-     //console.log("starttime"+starttime);
-     //var timeInMS = vm.timeGenerator(vm.chosenDate["year"],vm.chosenDate["month"],vm.chosenDate["date"],starttime);
+     console.log("starttime"+starttime);
+     var timeInMS = vm.timeGenerator(vm.chosenDate["year"],vm.chosenDate["month"],vm.chosenDate["date"],starttime);
 	 // var timeInMs = new Date(starttime,0.0).getTime();
 	/*var year = vm.chosenDate["year"];
 	var month = vm.chosenDate["month"];
@@ -149,11 +149,11 @@ angular.module('userApp')
 	var minutes = time[1];
 	var timeInMS=new Date(year, month, date, hour, minutes, 0, 0).getTime();*/
 
-	 //console.log(timeInMS);
+	 console.log(timeInMS);
      var bookingData={
      		'token' : $localStorage.token,
      		'roomid': room,
-     		'starttime':startTime
+     		'starttime':timeInMS
       };
      $http.post('/api/booking/delete', bookingData)
       .success(function(data, status, headers, config) {
