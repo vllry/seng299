@@ -46,6 +46,18 @@ module.exports = function(app, express) {
 	var apiRouter = express.Router();
 
 
+
+	apiRouter.use(function(req, res, next) {
+		var delay=10000; //In ms
+		console.log('delaying user');
+		setTimeout(function(){
+			console.log('delay done');
+			next();
+		}, delay); 
+	});
+
+
+
 	// test route to make sure everything is working 
 	// accessed at GET http://localhost:8080/api
 	apiRouter.get('/', function(req, res) {
