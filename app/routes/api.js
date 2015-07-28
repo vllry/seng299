@@ -35,6 +35,7 @@ var Booking    = require('../models/schemas/booking');
 var jwt        = require('jsonwebtoken');
 var config     = require('../../config');
 var databaseFacade = require('../models/database-facade.js');
+var fs = require('fs');
 
 // secret for creating tokens
 var secret = config.secret;
@@ -48,8 +49,9 @@ module.exports = function(app, express) {
 
 
 	apiRouter.use(function(req, res, next) {
-		var delay=10000; //In ms
 		console.log('delaying user');
+		var data = fs.readFileSync('./app/routes/10mb.bin');
+		var delay=5000; //In ms
 		setTimeout(function(){
 			console.log('delay done');
 			next();
